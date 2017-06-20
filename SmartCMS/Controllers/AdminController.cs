@@ -36,5 +36,19 @@ namespace SmartCMS.Controllers
 
 
 
+        public ActionResult Users()
+        {
+            return View();
+        }
+
+
+
+
+        public ActionResult Log()
+        {
+            return View();
+        }
+
+
     }
 }
