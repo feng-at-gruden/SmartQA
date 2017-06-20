@@ -37,7 +37,7 @@ namespace SmartCMS.Controllers
         }
 
 
-
+        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN + "," + Configurations.Roles.ROLE_EDITOR )]
         public ActionResult Categories()
         {
             return View();
@@ -52,13 +52,6 @@ namespace SmartCMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCategory()
-        {
-            return View();
-        }
-
-
-
-        public ActionResult Users()
         {
             return View();
         }
