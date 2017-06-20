@@ -1,5 +1,33 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model SmartCMS.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "客服QA系统";
 }
 
-<h2>Index</h2>
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                
+            </hgroup>
+        </div>
+    </section>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        @ViewBag.Title
+    </div>
+    <div class="panel-body">
+        
+    </div>
+    <!-- /.panel-body -->
+    <div class="panel-footer">
+        &nbsp;
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
