@@ -29,7 +29,7 @@ namespace SmartCMS.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCategory(int pid)
+        public ActionResult AddCategory()
         {
             return View();
         }
