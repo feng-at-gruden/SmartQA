@@ -1,16 +1,124 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-</head>
-<body>
-    @RenderBody()
+﻿@using SmartCMS.Models
 
-    @Scripts.Render("~/bundles/jquery")
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @Configurations.APP_NAME</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/site.css")
+    <!-- DataTables CSS -->
+    @Styles.Render("~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css")
+    @Styles.Render("~/Content/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- jQuery -->
+    @Scripts.Render("~/Content/bower_components/jquery/dist/jquery.min.js")
+    @Scripts.Render("~/Content/js/jquery-ui.min.js") <!-- jQuery UI -->
+    @Scripts.Render("~/Content/js/jquery.easing.1.3.js") <!-- jQuery Easing - Requirred for Lightbox + Pie Charts-->
+    <!-- Bootstrap -->
+    @Scripts.Render("~/Content/bower_components/bootstrap/dist/js/bootstrap.min.js")
+    <!-- Charts -->
+    @Scripts.Render("~/Content/js/charts/jquery.flot.min.js") <!-- Flot Main -->
+    @Scripts.Render("~/Content/js/charts/jquery.flot.categories.min.js")
+    @Scripts.Render("~/Content/js/charts/jquery.flot.pie.min.js")
+    @Scripts.Render("~/Content/js/charts/jquery.flot.time.js") <!-- Flot sub -->
+    @Scripts.Render("~/Content/js/charts/jquery.flot.animator.min.js") <!-- Flot sub -->
+    @Scripts.Render("~/Content/js/charts/jquery.flot.resize.min.js") <!-- Flot sub - for repaint when resizing the screen -->
+    @Scripts.Render("~/Content/bower_components/jquery.cookie.js")
+    <!-- DataTables JavaScript -->
+    @Scripts.Render("~/Content/bower_components/datatables/media/js/jquery.dataTables.js")
+    @Scripts.Render("~/Content/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js")
+    @Scripts.Render("~/Content/js/sparkline.min.js") <!-- Sparkline - Tiny charts -->
+    @Scripts.Render("~/Content/js/easypiechart.js") <!-- EasyPieChart - Animated Pie Charts -->
+    @Scripts.Render("~/Content/js/charts.js") <!-- All the above chart related functions -->
+    <!-- DatePicker-->
+    <!-- DateTimePicker-->
+    @Styles.Render("~/Content/bower_components/datetimepicker/jquery.datetimepicker.css")
+    @Scripts.Render("~/Content/bower_components/datetimepicker/build/jquery.datetimepicker.full.js")
+</head>
+@{
+    var logoUrl = "http://www.hisense.com/images/backstage/c2159f29b69440d88aaa3396871d2f88.png";
+}
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left" style="margin-bottom:5px;">
+                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;"></a>@Html.ActionLink(Configurations.APP_NAME, "Index", "Home")</p>
+            </div>
+            <div class="float-right" style="margin: 20px 15px 0 0;">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <nav class="navbar navbar-default" role="navigation" style="clear:both;">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#"></a>
+                        </div>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (User.IsInRole(Configurations.Roles.ROLE_ADMIN))
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        系统设置 <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu ">
+                                        <li><a href="/account/userlist"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/tools/configuration"><span class="glyphicon glyphicon-cog"></span> 系统参数</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/tools/log"><span class="glyphicon glyphicon-list-alt"></span> 系统日志</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            <li><a href="/account/logoff" style="padding: 15px 10px !important; margin-right:5px;"><span class="glyphicon glyphicon-log-out"></span> 注销</a></li>
+                        </ul>
+                        <div>
+                            <ul class="nav navbar-nav navbar-left">
+                                @if (User.IsInRole(Configurations.Roles.ROLE_ADMIN)
+                                        || User.IsInRole(Configurations.Roles.ROLE_EDITOR))
+                                {
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            内容维护 <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu ">
+                                            <li>@Html.ActionLink("分类管理", "import", "tools")</li>
+                                            <li class="divider"></li>
+                                            <li>@Html.ActionLink("问题管理", "DailyRoomBooking", "Report")</li>
+                                            <li class="divider"></li>
+                                            <li>@Html.ActionLink("热词统计", "RoomBookingHistory", "Report")</li>
+                                        </ul>
+                                    </li>
+                                }
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            }
+
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="center">
+                <br />
+                <p>&copy; @DateTime.Now.Year - @Configurations.APP_NAME</p>
+            </div>
+        </div>
+    </footer>
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,0 +1,5 @@
+﻿@if (Request.IsAuthenticated) {
+    <text>
+        你好，@Html.ActionLink(((SmartCMS.Models.SmartCMSPrincipal)User).RealName, "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "个人资料" })
+    </text>
+}
