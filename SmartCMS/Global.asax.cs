@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SmartCMS.Models;
 
 namespace SmartCMS
 {
@@ -23,5 +24,15 @@ namespace SmartCMS
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
+        {
+            var app = (HttpApplication)sender;
+            if (app.User.Identity.IsAuthenticated)
+            {
+                HttpContext.Current.User = SmartCMSPrincipal.GetUser(HttpContext.Current);
+            }
+        }
+
     }
 }

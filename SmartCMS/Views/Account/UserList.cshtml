@@ -49,7 +49,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (OneCard.Models.UserViewModel item in Model)
+                    @foreach (SmartCMS.Models.UserViewModel item in Model)
                     {
                         <tr class="odd">
                             <td style="text-align: center; font-weight: bold;"><a href="/account/userinfo?id=@item.ID" style="padding:5px;">@Html.DisplayFor(modelItem => item.ID)</a></td>

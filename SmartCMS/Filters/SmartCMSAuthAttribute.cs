@@ -39,17 +39,16 @@ namespace SmartCMS.Filters
         // 返回用户对应的角色， 在实际中， 可以从SQL数据库中读取用户的角色信息  
         private string GetRole(string name)
         {
-            return null;
-            /*
-            using (onecardEntities db = new onecardEntities())
+            
+            using (SmartCMSEntities db = new SmartCMSEntities())
             {
                 var u = db.Users.FirstOrDefault(m => m.UserName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
                 if (u != null)
-                    return u.UserRole.Role;
+                    return u.UserRoles.Role;
                 else
                     return null;
             }
-            */
+            
         }
 
 

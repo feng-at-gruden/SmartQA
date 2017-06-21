@@ -18,11 +18,11 @@ namespace SmartCMS.Controllers
         }
 
 
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         public ActionResult Log()
         {
             DateTime et = DateTime.Now.AddMonths(-1);
-            var model = from row in db.Log
+            var model = from row in db.Logs
                         where row.ActionTime >= et
                         orderby row.ActionTime descending
                         select new LogViewModel
@@ -37,7 +37,7 @@ namespace SmartCMS.Controllers
         }
 
 
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN + "," + Configurations.Roles.ROLE_EDITOR )]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR )]
         public ActionResult Categories()
         {
             return View();
@@ -59,11 +59,7 @@ namespace SmartCMS.Controllers
 
 
 
-        public ActionResult Log()
-        {
-            return View();
-        }
-
+       
 
     }
 }

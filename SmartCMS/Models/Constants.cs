@@ -6,7 +6,7 @@ using System.Web;
 namespace SmartCMS.Models
 {
 
-    public class Configurations 
+    public class Constants 
     {
 
         public const string APP_NAME = "智库QA系统";

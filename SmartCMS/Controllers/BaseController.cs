@@ -6,31 +6,13 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Data.Entity;
 using SmartCMS.Helpers;
+using SmartCMS.Models;
 
 namespace SmartCMS.Controllers
 {
     public class BaseController : Controller
     {
-
-        public class DB
-        {
-            public class Log
-            {
-                public void add() { }
-            }
-
-            public class Users
-            {
-                public void FirstOrDefault() { }
-            }
-
-            public void Dispose(){}
-        };
-
-        DB db = new DB();
-
-        public class User { };
-
+        protected SmartCMSEntities db = new SmartCMSEntities();
 
 
         protected override void Dispose(bool disposing)
@@ -49,8 +31,8 @@ namespace SmartCMS.Controllers
             get
             {
                 FormsIdentity fi = System.Web.HttpContext.Current.User.Identity as FormsIdentity;
-                //var u = db.Users.FirstOrDefault(m => m.UserName.Equals(fi.Name, StringComparison.CurrentCultureIgnoreCase));
-                return null;
+                var u = db.Users.FirstOrDefault(m => m.UserName.Equals(fi.Name, StringComparison.CurrentCultureIgnoreCase));
+                return u;
             }
         }
 
@@ -65,8 +47,8 @@ namespace SmartCMS.Controllers
             String ip = NetworkHelper.GetClientIPv4Address();
             String userClient = Request.Browser.Browser + " " + Request.Browser.Version + " (" + Request.Browser.Platform + ")";
 
-            /*
-            db.Log.Add(new Log
+            
+            db.Logs.Add(new Log
             {
                 UserId = u.Id,
                 Action = action,
@@ -75,7 +57,6 @@ namespace SmartCMS.Controllers
                 Client = userClient
             });
             db.SaveChanges();
-             * */
         }
 
        

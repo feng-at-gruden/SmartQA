@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - @Configurations.APP_NAME</title>
+    <title>@ViewBag.Title - @Constants.APP_NAME</title>
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     @Styles.Render("~/Content/site.css")
@@ -45,7 +45,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left" style="margin-bottom:5px;">
-                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;"></a>@Html.ActionLink(Configurations.APP_NAME, "Index", "Home")</p>
+                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
             </div>
             <div class="float-right" style="margin: 20px 15px 0 0;">
                 <section id="login">
@@ -61,7 +61,7 @@
                         </div>
 
                         <ul class="nav navbar-nav navbar-right">
-                            @if (User.IsInRole(Configurations.Roles.ROLE_ADMIN))
+                            @if (User.IsInRole(Constants.Roles.ROLE_ADMIN))
                             {
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -70,9 +70,9 @@
                                     <ul class="dropdown-menu ">
                                         <li><a href="/account/userlist"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="/tools/configuration"><span class="glyphicon glyphicon-cog"></span> 系统参数</a></li>
+                                        <li><a href="/admin/configuration"><span class="glyphicon glyphicon-cog"></span> 系统参数</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="/tools/log"><span class="glyphicon glyphicon-list-alt"></span> 系统日志</a></li>
+                                        <li><a href="/admin/log"><span class="glyphicon glyphicon-list-alt"></span> 系统日志</a></li>
                                     </ul>
                                 </li>
                             }
@@ -80,8 +80,8 @@
                         </ul>
                         <div>
                             <ul class="nav navbar-nav navbar-left">
-                                @if (User.IsInRole(Configurations.Roles.ROLE_ADMIN)
-                                        || User.IsInRole(Configurations.Roles.ROLE_EDITOR))
+                                @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+                                        || User.IsInRole(Constants.Roles.ROLE_EDITOR))
                                 {
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -115,7 +115,7 @@
         <div class="content-wrapper">
             <div class="center">
                 <br />
-                <p>&copy; @DateTime.Now.Year - @Configurations.APP_NAME</p>
+                <p>&copy; @DateTime.Now.Year - @Constants.APP_NAME</p>
             </div>
         </div>
     </footer>

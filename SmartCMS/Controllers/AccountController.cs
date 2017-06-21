@@ -26,7 +26,7 @@ namespace SmartCMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            /*
+            
             var u = db.Users.FirstOrDefault(m => m.UserName.Equals(model.UserName, StringComparison.CurrentCultureIgnoreCase) && m.Password.Equals(model.Password));
             if (u != null)
             {
@@ -39,16 +39,16 @@ namespace SmartCMS.Controllers
                 FormsAuthentication.SetAuthCookie(model.UserName, false);
                 FormsAuthentication.RedirectFromLoginPage(u.UserName, false);
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, u.UserName, DateTime.Now,
-                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}", u.UserRole.Role.ToString(), u.RealName));
+                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}", u.UserRoles.Role.ToString(), u.RealName));
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 Response.Cookies.Add(cookie);
-                HttpContext.User = new SmartCMSPrincipal(u.UserRole.Role.ToString(), u.RealName, HttpContext.User.Identity);
+                HttpContext.User = new SmartCMSPrincipal(u.UserRoles.Role.ToString(), u.RealName, HttpContext.User.Identity);
 
                 u.LastLoginTime = DateTime.Now;
                 Log("登录系统", u);                
                 return RedirectToLocal(returnUrl);
-            }*/
+            }
 
             ModelState.AddModelError("", "提供的用户名或密码不正确。");
             return View(model);
@@ -117,7 +117,7 @@ namespace SmartCMS.Controllers
             return View(model);
         }
 
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         public ActionResult UserList()
         {
             var model = from row in db.Users
@@ -127,7 +127,7 @@ namespace SmartCMS.Controllers
                             UserName = row.UserName,
                             RealName = row.RealName,
                             RoleId = row.RoleId.Value,
-                            RoleName = row.UserRole.Role,
+                            RoleName = row.UserRoles.Role,
                             Password = row.Password,
                             LastLoginTime = row.LastLoginTime,
                             RegisterTime = row.RegisterTime,
@@ -136,14 +136,14 @@ namespace SmartCMS.Controllers
             return View(model);
         }
 
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         public ActionResult UserInfo(int id)
         {
             return View(getUserInfoViewModel(id));
         }
 
         [HttpPost]
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         [ValidateAntiForgeryToken]
         public ActionResult UserInfo(UserViewModel model)
         {
@@ -170,7 +170,7 @@ namespace SmartCMS.Controllers
         {
             var model = new UserViewModel
             {
-                Roles = from r in db.UserRole
+                Roles = from r in db.UserRoles
                         select new UserRoleViweModel
                         {
                             ID = r.Id,
@@ -181,7 +181,7 @@ namespace SmartCMS.Controllers
         }
 
         [HttpPost]
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserViewModel model)
         {
@@ -220,7 +220,7 @@ namespace SmartCMS.Controllers
                     Log("添加用户:" + model.UserName);
                 }
             }
-            model.Roles = from r in db.UserRole
+            model.Roles = from r in db.UserRoles
                           select new UserRoleViweModel
                           {
                               ID = r.Id,
@@ -231,7 +231,7 @@ namespace SmartCMS.Controllers
 
 
         [HttpPost]
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
@@ -251,7 +251,7 @@ namespace SmartCMS.Controllers
         }
 
         [HttpPost]
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         [ValidateAntiForgeryToken]
         public ActionResult Lock(int id)
         {
@@ -271,7 +271,7 @@ namespace SmartCMS.Controllers
         }
 
         [HttpPost]
-        [SmartCMSAuth(Roles = Configurations.Roles.ROLE_ADMIN)]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         [ValidateAntiForgeryToken]
         public ActionResult Unlock(int id)
         {
@@ -307,12 +307,12 @@ namespace SmartCMS.Controllers
                 UserName = row.UserName,
                 RealName = row.RealName,
                 RoleId = row.RoleId.Value,
-                RoleName = row.UserRole.Role,
+                RoleName = row.UserRoles.Role,
                 Password = row.Password,
                 LastLoginTime = row.LastLoginTime,
                 RegisterTime = row.RegisterTime,
                 Email = row.Email,
-                Roles = from r in db.UserRole
+                Roles = from r in db.UserRoles
                         select new UserRoleViweModel
                         {
                             ID = r.Id,
