@@ -1,62 +1,135 @@
 ﻿@model SmartCMS.Models.LoginViewModel
 
 @{
-    ViewBag.Title = "用户登录";
+    ViewBag.Title = "智能客服";
 }
 
-
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                
-            </hgroup>
-        </div>
-    </section>
-}
 
 <div class="panel panel-default">
     <div class="panel-heading">
         @ViewBag.Title
     </div>
-    <div class="panel-body">
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger">
-                @Html.ValidationSummary(true)
-            </div>
-        }
-        @using (Html.BeginForm(new { role = "form", ReturnUrl = ViewBag.ReturnUrl }))
-        {
-            @Html.AntiForgeryToken()
+    <div class="panel-body-null">
+        
+        <div id="chat-container">
 
-            <div style="width:400px; margin:auto; text-align:center;">
-                <div class="form-group">
-                    <div class='input-group date'>
-                        <input type='text' class="form-control" name="UserName" placeholder="用户名" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-user"></span>
-                        </span>
+            <div class="chat-left">
+                <div id="chat-content-container">
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br/>
+                            智库1.0为您服务
+                        </div>
+                    </div>                    
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class='input-group date'>
-                        <input type='password' class="form-control" name="Password" placeholder="密码" />
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-lock"></span>
-                        </span>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
                     </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+
+
+
+                    <a id="msg_end" name="end" href="#end">&nbsp;</a>
                 </div>
-                <button type="submit" class="btn btn-success">登 录</button>
+
+
+                <div id="chat-input-container">
+
+                    <button onclick="ask()">提问</button>
+                </div>
             </div>
-        }
+
+            <div class="chat-right">
+
+            </div>
     </div>
+
+    <div class="clear" ></div>
     <!-- /.panel-body -->
-    <div class="panel-footer">
-        &nbsp;
-    </div>
+    
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+<script>
+
+
+    $(document).ready(function () {
+        
+        //
+    });
+
+
+    function ask()
+    {
+        var html = $("#chat-content-container").html() + "<p>AAAAAAAAA</p>";
+        $("#chat-content-container").html(html);
+
+
+        $("#msg_end").click();
+        alert($("#msg_end").attr('href'));
+    }
+</script>
