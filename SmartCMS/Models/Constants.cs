@@ -9,7 +9,7 @@ namespace SmartCMS.Models
     public class Constants 
     {
 
-        public const string APP_NAME = "智库QA系统";
+        public const string APP_NAME = "海信智库客服系统";
 
         public class Roles
         {

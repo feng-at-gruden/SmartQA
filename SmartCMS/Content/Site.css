@@ -137,7 +137,7 @@ footer {
 
 .site-title a, .site-title a:hover, .site-title a:active {
     background: none;
-    color: #c8c8c8;
+    color: #009EA1;
     outline: none;
     text-decoration: none;
 }
@@ -796,13 +796,13 @@ tr.pager td {
 
 ul.dropdown-menu 
 {
-    border: solid 2px #4f9c33;
+    border: solid 2px #009EA1;
     padding: 0px 0;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover
 {
-    border: solid 2px #4f9c33;
-    background-color: #4f9c33 !important;
+    border: solid 2px #009EA1;
+    background-color: #009EA1 !important;
     color:white !important;
     border-bottom:none;
 }
@@ -830,6 +830,10 @@ ul.dropdown-menu
     clear:both;
     height:0px;
     line-height:0px;
+}
+
+.chat-panel{
+    margin-top:-30px;
 }
 
 .chat-right{

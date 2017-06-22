@@ -1,33 +1,135 @@
 ﻿@model SmartCMS.Models.LoginViewModel
 
 @{
-    ViewBag.Title = "客服QA系统";
+    ViewBag.Title = "智能客服";
 }
 
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                
-            </hgroup>
-        </div>
-    </section>
-}
-
-<div class="panel panel-default">
+<div class="panel panel-default chat-panel">
     <div class="panel-heading">
         @ViewBag.Title
     </div>
-    <div class="panel-body">
+    <div class="panel-body-null">
         
+        <div id="chat-container">
+
+            <div class="chat-left">
+                <div id="chat-content-container">
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br/>
+                            智库1.0为您服务
+                        </div>
+                    </div>                    
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+                    <div class="chat-answer">
+                        <span class="answer-name">智能客服 21:45:35</span>
+                        <div class="answer-content">
+                            欢迎使用
+                            <br />
+                            智库1.0为您服务
+                        </div>
+                    </div>
+                    <div class="chat-question">
+                        <span class="question-name">我 21:45:35</span>
+                        <div class="question-content">你好</div>
+                    </div>
+                    <div class="clear"></div>
+
+
+
+
+                    <a id="msg_end" name="end" href="#end">&nbsp;</a>
+                </div>
+
+
+                <div id="chat-input-container">
+
+                    <button onclick="ask()">提问</button>
+                </div>
+            </div>
+
+            <div class="chat-right">
+
+            </div>
     </div>
+
+    <div class="clear" ></div>
     <!-- /.panel-body -->
-    <div class="panel-footer">
-        &nbsp;
-    </div>
+    
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+<script>
+
+
+    $(document).ready(function () {
+        
+        //
+    });
+
+
+    function ask()
+    {
+        var html = $("#chat-content-container").html() + "<p>AAAAAAAAA</p>";
+        $("#chat-content-container").html(html);
+
+
+        $("#msg_end").click();
+        //alert($("#msg_end").attr('href'));
+    }
+</script>
