@@ -70,8 +70,6 @@
                                     <ul class="dropdown-menu ">
                                         <li><a href="/account/userlist"><span class="glyphicon glyphicon-user"></span> 用户管理</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="/admin/configuration"><span class="glyphicon glyphicon-cog"></span> 系统参数</a></li>
-                                        <li class="divider"></li>
                                         <li><a href="/admin/log"><span class="glyphicon glyphicon-list-alt"></span> 系统日志</a></li>
                                     </ul>
                                 </li>
@@ -88,11 +86,9 @@
                                             内容维护 <b class="caret"></b>
                                         </a>
                                         <ul class="dropdown-menu ">
-                                            <li>@Html.ActionLink("分类管理", "import", "tools")</li>
+                                            <li>@Html.ActionLink("问答分类", "Categories", "CMS")</li>
                                             <li class="divider"></li>
-                                            <li>@Html.ActionLink("问题管理", "DailyRoomBooking", "Report")</li>
-                                            <li class="divider"></li>
-                                            <li>@Html.ActionLink("热词统计", "RoomBookingHistory", "Report")</li>
+                                            <li>@Html.ActionLink("热词统计", "Hot", "CMS")</li>
                                         </ul>
                                     </li>
                                 }
@@ -115,7 +111,7 @@
         <div class="content-wrapper">
             <div class="center">
                 <br />
-                <p>&copy; @DateTime.Now.Year - @Constants.APP_NAME</p>
+                <p class="copyrights-footer">&copy; @DateTime.Now.Year - @Constants.APP_NAME</p>
             </div>
         </div>
     </footer>

@@ -10,18 +10,11 @@ namespace SmartCMS.Controllers
 {
     public class AdminController : BaseController
     {
-        
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
 
         [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN)]
         public ActionResult Log()
         {
-            DateTime et = DateTime.Now.AddMonths(-1);
+            DateTime et = DateTime.Now.AddMonths(-3);
             var model = from row in db.Logs
                         where row.ActionTime >= et
                         orderby row.ActionTime descending
@@ -37,24 +30,7 @@ namespace SmartCMS.Controllers
         }
 
 
-        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR )]
-        public ActionResult Categories()
-        {
-            return View();
-        }
-
-
-        public ActionResult AddCategory(int pid)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddCategory()
-        {
-            return View();
-        }
+       
 
 
 

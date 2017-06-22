@@ -132,6 +132,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CMSController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filters\SmartCMSAuthAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -1168,6 +1169,9 @@
     <Content Include="Views\Admin\Configuration.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\CMS\Categories.cshtml" />
+    <Content Include="Views\CMS\Category.cshtml" />
+    <Content Include="Views\CMS\AddCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

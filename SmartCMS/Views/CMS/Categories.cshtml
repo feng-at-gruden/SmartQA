@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SmartCMS.Models.CategoryViewModel>
+
+@{
+    ViewBag.Title = "问答分类";
+}
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title  </h1>
+            </hgroup>
+        </div>
+    </section>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Categories
+    </div>
+    <div class="panel-body">
+        <div class="cms-tool-bar">
+            <a href="~/CMS/AddCategory" class="btn btn-success">添加分类</a>            
+        </div>
+
+        @foreach(SmartCMS.Models.CategoryViewModel category in Model)
+        {            
+            <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
+        }
+    </div>
+    <!-- /.panel-body -->
+    <div class="panel-footer">
+        &nbsp;
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
