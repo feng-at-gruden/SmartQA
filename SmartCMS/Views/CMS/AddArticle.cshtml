@@ -1,13 +1,6 @@
-﻿@model SmartCMS.Models.CategoryViewModel
+﻿@model SmartCMS.Models.ArticleViewModel
 @{
-    if(Model.ParentId !=0)
-    {
-        ViewBag.Title = "添加子分类 - " + ViewBag.Category;
-    }
-    else
-    {
-        ViewBag.Title = "添加问答分类";
-    }
+    ViewBag.Title = "添加问答 - " + ViewBag.Category;    
 }
 
 @section featured {
@@ -20,10 +13,9 @@
     </section>
 }
 
-
 <div class="panel panel-default">
     <div class="panel-heading">
-        ADD NEW CATEGORY
+        ADD NEW QUESTION
     </div>
     <div class="panel-body">
 
@@ -42,14 +34,14 @@
         }
 
 
-        @using (Html.BeginForm("AddCategory", "CMS", FormMethod.Post))
+        @using (Html.BeginForm("AddArticle", "CMS", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m=>m.ParentId)
+            @Html.HiddenFor(m => m.CategoryId)
             <div style="width:400px; margin:auto; text-align:center;">
                 <div class="form-group">
                     <div class='input-group date'>
-                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", value = Model.Name, placeholder = "分类名称", maxlength = 20 })
+                        @Html.TextBoxFor(m => m.Question, new { @class = "form-control", value = Model.Question, placeholder = "问题", maxlength = 50, length = 25 })
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-text-width"></span>
                         </span>
@@ -58,22 +50,23 @@
 
                 <div class="form-group">
                     <div class='input-group date'>
-                        @Html.TextAreaFor(m => m.Comment, new { @class = "form-control", value = Model.Comment, placeholder = "分类描述", maxlength = 100 })
+                        @Html.TextAreaFor(m => m.Answer, new { @class = "form-control", value = Model.Answer, placeholder = "回答内容", maxlength = 100 })
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-th-list"></span>
                         </span>
                     </div>
                 </div>
-                @if(Model.ParentId !=0)
-                {
-                    <a href="~/CMS/Category/@Model.ParentId" class="btn btn-success" style="color:white;">返 回</a>    
-                }
-                else
-                {
-                    <a href="~/CMS/Categories" class="btn btn-success" style="color:white;">返 回</a>    
-                }
+                <div class="form-group">
+                    <div class='input-group date'>
+                        @Html.TextBoxFor(m => m.Keywords, new { @class = "form-control", value = Model.Keywords, placeholder = "关键词", maxlength = 50, length = 25 })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-tags"></span>
+                        </span>
+                    </div>
+                    <div class="keyword-tips">多个关键字以空格隔开</div>
+                </div>
+                <a href="~/CMS/Category/@Model.CategoryId" class="btn btn-success" style="color:white;">返 回</a>
                 
-
                 <button type="submit" class="btn btn-success">保 存</button>
             </div>
 

@@ -19,10 +19,25 @@
         Categories
     </div>
     <div class="panel-body">
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary()
+            </div>
+        }
+
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+
         <div class="cms-tool-bar">
             <a href="~/CMS/AddCategory" class="btn btn-success">添加分类</a>            
         </div>
-
+        <hr/>
         @foreach(SmartCMS.Models.CategoryViewModel category in Model)
         {            
             <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
@@ -33,7 +48,3 @@
         &nbsp;
     </div>
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

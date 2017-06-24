@@ -761,9 +761,8 @@ tr.pager td {
 }
 
 .panel-heading{
-    font-weight:bold;
-    color: #999;
-    font-style: italic;
+    color: #555;
+    font-family: fantasy;
 }
 
 
@@ -895,4 +894,18 @@ ul.dropdown-menu
 {
     font-size:12px;
     margin-top:-10px;
+}
+
+
+
+
+.category-info{
+    font-size: 0.8em;
+    font-style: italic;
+    color: #aaa;
+}
+.keyword-tips{
+    color: #aaa;
+    font-style: italic;
+    text-align: right;
 }

@@ -20,12 +20,30 @@
     </div>
     <div class="panel-body">
         <div class="cms-tool-bar">
-            <a href="~/CMS/DeleteCategory?id=@Model.Id" class="btn btn-warning">删除本分类</a>
-            <a href="~/CMS/EditCategory?id=@Model.Id" class="btn btn-success">编辑本分类</a>
-            <a href="~/CMS/AddCategory?pid=@Model.Id" class="btn btn-success">添加子分类</a>
-            <a href="~/CMS/AddCategory?pid=@Model.Id" class="btn btn-success" >添加问答</a>
-
+            @if(Model.Articles.Count()>0 || Model.SubCategories.Count()>0)
+            {
+                <a href="javascript:uid=@Model.Id; $('#cantDeleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
+            }
+            else
+            {
+                <a href="javascript:uid=@Model.Id; $('#deleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
+            }            
+            <a href="~/CMS/EditCategory/@Model.Id" class="btn btn-success">编辑本分类</a>
+            <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子分类</a>
+            <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加问答</a>
         </div>
+
+        @using (Html.BeginForm("DeleteCategory", "CMS", FormMethod.Post, new { id = "deleteForm_" + Model.Id, style = "display:none;" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+        }
+        
+        @if(Model.SubCategories.Count()>0)
+        {
+            <hr />
+            <p class="sub-category" style="font-weight:bold;">子类别:</p>
+        }
         @foreach(SmartCMS.Models.CategoryViewModel category in Model.SubCategories)
         {            
             <a href="~/CMS/Category?id=@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
@@ -43,7 +61,8 @@
                         <th>问题</th>
                         <th>编辑</th>
                         <th style="text-align: center;">添加时间</th>
-                        <th style="text-align: center;">热度</th>                        
+                        <th style="text-align: center;">热度</th>
+                        <th style="text-align: center;">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,9 +70,18 @@
                     {
                         <tr class="odd">
                             <td style="text-align: left;"><a href="~/CMS/Article/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
-                            <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Hits)</td>
+                            <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
-                            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>                            
+                            <td style="text-align: center;">
+                                <a href="~/CMS/EditArticle/id=@item.Id" title="编辑" style="padding:5px;"><span class="glyphicon glyphicon-edit">编辑</span></a>
+                                @using (Html.BeginForm("DeleteArticle", "CMS", FormMethod.Post, new { id = "deleteArticleForm_" + item.Id, style = "display:none;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                }
+                                <a href="javascript:uid=@item.Id; $('#deleteArticleModal').modal('show');  " title="删除" style="padding:5px;"><span class="glyphicon glyphicon-remove">删除</span></a>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -70,6 +98,56 @@
     </div>
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除分类</h4>
+            </div>
+            <div class="modal-body">确定要删除该分类吗？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" onclick="$('#deleteForm_' + uid).submit();">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="cantDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除分类</h4>
+            </div>
+            <div class="modal-body">该类别不为空，不能删除。请先清空文章及子类别？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除问答</h4>
+            </div>
+            <div class="modal-body">确定要删除该问答吗？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$('#deleteArticleForm_' + uid).submit();">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 
 <script>
     $(document).ready(function () {
@@ -84,3 +162,4 @@
         });
     });
 </script>
+

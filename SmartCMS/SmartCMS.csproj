@@ -1171,6 +1171,8 @@
     <Content Include="Views\CMS\Categories.cshtml" />
     <Content Include="Views\CMS\Category.cshtml" />
     <Content Include="Views\CMS\AddCategory.cshtml" />
+    <Content Include="Views\CMS\EditCategory.cshtml" />
+    <Content Include="Views\CMS\AddArticle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

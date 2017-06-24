@@ -16,7 +16,6 @@ namespace SmartCMS.Models
         public int Id { get; set; }
         public int ParentId { get; set; }
 
-        [Required]
         [Display(Name = "分类名")]
         public string Name { get; set; }
 
@@ -27,6 +26,10 @@ namespace SmartCMS.Models
         public IEnumerable<CategoryViewModel> SubCategories { get; set; }
 
         public IEnumerable<ArticleViewModel> Articles { get; set; }
+
+        public String CreatedBy { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
     }
 
 
@@ -35,18 +38,24 @@ namespace SmartCMS.Models
         public int Id { get; set; }
         public int CategoryId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "请输入问题")]
         [Display(Name = "问题")]
         public string Question { get; set; }
 
+        [Required(ErrorMessage = "请输入解答")]
         [Display(Name = "解答")]
         public string Answer { get; set; }
 
+        [Required(ErrorMessage = "请输入问题关键字")]
         [Display(Name = "关键字")]
         public string Keywords { get; set; }
 
         [Display(Name = "热度")]
         public int Hits { get; set; }
+
+        public String CreatedBy { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
     }
 
 
