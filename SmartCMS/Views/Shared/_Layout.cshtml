@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/site.css")
     <!-- DataTables CSS -->
     @Styles.Render("~/Content/bower_components/bootstrap/dist/css/bootstrap.min.css")
-    @Styles.Render("~/Content/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")
+    @Styles.Render("~/Content/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css")    
     @Scripts.Render("~/bundles/modernizr")
     <!-- jQuery -->
     @Scripts.Render("~/Content/bower_components/jquery/dist/jquery.min.js")
@@ -33,7 +33,13 @@
     @Scripts.Render("~/Content/js/sparkline.min.js") <!-- Sparkline - Tiny charts -->
     @Scripts.Render("~/Content/js/easypiechart.js") <!-- EasyPieChart - Animated Pie Charts -->
     @Scripts.Render("~/Content/js/charts.js") <!-- All the above chart related functions -->
-    <!-- DatePicker-->
+    
+    <!-- RichEditer-->
+    @Styles.Render("~/Content/bower_components/markitup/skins/markitup/style.css")
+    @Styles.Render("~/Content/bower_components/markitup/sets/html/style.css")
+    @Scripts.Render("~/Content/bower_components/markitup/jquery.markitup.js") 
+    @Scripts.Render("~/Content/bower_components/markitup/sets/html/set.js")
+    
     <!-- DateTimePicker-->
     @Styles.Render("~/Content/bower_components/datetimepicker/jquery.datetimepicker.css")
     @Scripts.Render("~/Content/bower_components/datetimepicker/build/jquery.datetimepicker.full.js")

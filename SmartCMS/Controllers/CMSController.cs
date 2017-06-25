@@ -156,8 +156,7 @@ namespace SmartCMS.Controllers
                             CreatedBy = row.Users.RealName,
                         };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
-            return View(newModel.SingleOrDefault());
-            return View(model);
+            return View(newModel.SingleOrDefault());            
         }
 
         [HttpPost]
@@ -250,6 +249,54 @@ namespace SmartCMS.Controllers
                 ModelState.AddModelError("", "找不到指定问答");
             }
             return RedirectToAction("Category", new { id = pid });
+        }
+
+        public ActionResult EditArticle(int id)
+        {
+            var model = from row in db.Articles
+                        where row.Id == id
+                        select new ArticleViewModel
+                        {
+                            Id = row.Id,
+                            Question = row.Question,
+                            Answer = row.Answer,
+                            CategoryId = row.Category.Value,
+                            Keywords = row.Keywords,
+                            Hits = row.Hits.Value,
+                            CreatedAt = row.CreatedAt,
+                            CreatedBy = row.Users.RealName,
+                        };            
+            return View(model.SingleOrDefault());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditArticle(int id, ArticleViewModel model)
+        {            
+            if (ModelState.IsValid)
+            {
+                var c = db.Articles.SingleOrDefault(m => m.Id == model.Id);
+                c.Question = model.Question.Trim();
+                c.Answer = model.Answer.Trim();
+                c.Keywords = model.Keywords.Trim();
+                db.SaveChanges();
+                ViewBag.SuccessMessage = "问答修改成功！";
+                Log("修改问答");
+            }
+            var newModel = from row in db.Articles
+                           where row.Id == id
+                           select new ArticleViewModel
+                           {
+                               Id = row.Id,
+                               Question = row.Question,
+                               Answer = row.Answer,
+                               CategoryId = row.Category.Value,
+                               Keywords = row.Keywords,
+                               Hits = row.Hits.Value,
+                               CreatedAt = row.CreatedAt,
+                               CreatedBy = row.Users.RealName,
+                           };
+            return View(newModel.SingleOrDefault());
         }
 
     }

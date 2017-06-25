@@ -74,7 +74,7 @@
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
                             <td style="text-align: center;">
-                                <a href="~/CMS/EditArticle/id=@item.Id" title="编辑" style="padding:5px;"><span class="glyphicon glyphicon-edit">编辑</span></a>
+                                <a href="~/CMS/EditArticle/@item.Id" title="编辑" style="padding:5px;"><span class="glyphicon glyphicon-edit">编辑</span></a>
                                 @using (Html.BeginForm("DeleteArticle", "CMS", FormMethod.Post, new { id = "deleteArticleForm_" + item.Id, style = "display:none;" }))
                                 {
                                     @Html.AntiForgeryToken()
