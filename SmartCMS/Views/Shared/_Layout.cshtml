@@ -61,11 +61,8 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <nav class="navbar navbar-default" role="navigation" style="clear:both;">
-                    <div class="container-fluid">
-                        <div class="navbar-header">
-                            <a class="navbar-brand" href="#"></a>
-                        </div>
-
+                    <div class="container-fluid" style="padding-left:0px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        
                         <ul class="nav navbar-nav navbar-right">
                             @if (User.IsInRole(Constants.Roles.ROLE_ADMIN))
                             {

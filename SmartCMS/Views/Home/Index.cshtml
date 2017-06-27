@@ -5,15 +5,18 @@
 }
 
 
-<div class="panel panel-default chat-panel">
-    <div class="panel-heading">
-        @ViewBag.Title
-    </div>
+<div class="panel panel-default chat-panel" style="border-color: #efeeef; border-bottom: 1px solid #d6d6d6; box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding-top: 10px; background: #efeeef; ">
+    
     <div class="panel-body-null">
         
         <div id="chat-container">
 
             <div class="chat-left">
+
+                <div class="panel-heading" style="padding: 5px 15px 16px 15px; border-bottom: 1px solid #ddd;">
+                    @ViewBag.Title
+                </div>
+
                 <div id="chat-content-container">
 
                     <div class="chat-answer">
@@ -87,31 +90,52 @@
                     <div class="clear"></div>
 
 
-
-
-                    <a id="msg_end" name="end" href="#end">&nbsp;</a>
                 </div>
 
 
                 <div id="chat-input-container">
-
-                    <button onclick="ask()">提问</button>
+                    <div id="current-category">当前问题分类: 交通法规</div>
+                    <div id="question-input-container">
+                        <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题？"/>
+                        <button onclick="ask()" id="sendBtn">提问</button>
+                    </div>
                 </div>
             </div>
 
             <div class="chat-right">
 
+                <div class="tabbable">
+                    
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab">问答分类</a></li>
+                        <li><a href="#tab2" data-toggle="tab">热点问题</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                            <p>问答分类</p>
+                            <p>问答分类</p>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <p>热点问题</p>
+                            <p>热点问题</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
             </div>
     </div>
 
     <div class="clear" ></div>
     <!-- /.panel-body -->
     
+    </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
 
 
 <script>
@@ -128,8 +152,8 @@
         var html = $("#chat-content-container").html() + "<p>AAAAAAAAA</p>";
         $("#chat-content-container").html(html);
 
-
-        $("#msg_end").click();
-        //alert($("#msg_end").attr('href'));
+        var k = $("#chat-content-container")[0].scrollHeight;
+        $("#chat-content-container").scrollTop(k);
+        
     }
 </script>
