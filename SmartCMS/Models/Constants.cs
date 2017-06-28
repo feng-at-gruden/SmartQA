@@ -10,6 +10,7 @@ namespace SmartCMS.Models
     {
 
         public const string APP_NAME = "海信智库客服问答系统";
+        public const string APP_VERSION = "v1.0";
 
         public class Roles
         {

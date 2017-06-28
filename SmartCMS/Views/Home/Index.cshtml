@@ -1,4 +1,4 @@
-﻿@model SmartCMS.Models.LoginViewModel
+﻿@model IEnumerable<SmartCMS.Models.CategoryViewModel>
 
 @{
     ViewBag.Title = "智能客服";
@@ -19,84 +19,12 @@
 
                 <div id="chat-content-container">
 
-                    <div class="chat-answer">
-                        <span class="answer-name">智能客服 21:45:35</span>
-                        <div class="answer-content">
-                            欢迎使用
-                            <br/>
-                            智库1.0为您服务
-                        </div>
-                    </div>                    
-                    <div class="chat-question">
-                        <span class="question-name">我 21:45:35</span>
-                        <div class="question-content">你好</div>
-                    </div>
-                    <div class="clear"></div>
-
-                    <div class="chat-answer">
-                        <span class="answer-name">智能客服 21:45:35</span>
-                        <div class="answer-content">
-                            欢迎使用
-                            <br />
-                            智库1.0为您服务
-                        </div>
-                    </div>
-                    <div class="chat-question">
-                        <span class="question-name">我 21:45:35</span>
-                        <div class="question-content">你好</div>
-                    </div>
-                    <div class="clear"></div>
-
-                    <div class="chat-answer">
-                        <span class="answer-name">智能客服 21:45:35</span>
-                        <div class="answer-content">
-                            欢迎使用
-                            <br />
-                            智库1.0为您服务
-                        </div>
-                    </div>
-                    <div class="chat-question">
-                        <span class="question-name">我 21:45:35</span>
-                        <div class="question-content">你好</div>
-                    </div>
-                    <div class="clear"></div>
-
-                    <div class="chat-answer">
-                        <span class="answer-name">智能客服 21:45:35</span>
-                        <div class="answer-content">
-                            欢迎使用
-                            <br />
-                            智库1.0为您服务
-                        </div>
-                    </div>
-                    <div class="chat-question">
-                        <span class="question-name">我 21:45:35</span>
-                        <div class="question-content">你好</div>
-                    </div>
-                    <div class="clear"></div>
-
-                    <div class="chat-answer">
-                        <span class="answer-name">智能客服 21:45:35</span>
-                        <div class="answer-content">
-                            欢迎使用
-                            <br />
-                            智库1.0为您服务
-                        </div>
-                    </div>
-                    <div class="chat-question">
-                        <span class="question-name">我 21:45:35</span>
-                        <div class="question-content">你好</div>
-                    </div>
-                    <div class="clear"></div>
-
-
                 </div>
 
-
                 <div id="chat-input-container">
-                    <div id="current-category">当前问题分类: 交通法规</div>
+                    <div id="current-category">当前问题分类: 全部分类</div>
                     <div id="question-input-container">
-                        <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题？"/>
+                        <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题"/>
                         <button onclick="ask()" id="sendBtn">提问</button>
                     </div>
                 </div>
@@ -107,13 +35,25 @@
                 <div class="tabbable">
                     
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href="#tab1" data-toggle="tab">问答分类</a></li>
+                        <li class="active"><a href="#TabCategory" data-toggle="tab">问答分类</a></li>
                         <li><a href="#tab2" data-toggle="tab">热点问题</a></li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab1">
-                            <p>问答分类</p>
-                            <p>问答分类</p>
+                        <div class="tab-pane active" id="TabCategory">
+                            @foreach( var category in Model)
+                            {
+                                <a href="javascript:selectCategory('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
+                                if (category.SubCategories != null)
+                                {
+                                    <ul>
+                                        @foreach (var sc in category.SubCategories)
+                                        {
+                                            <li><a href="javascript:selectCategory('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                        }
+                                    </ul>
+                                }
+                                <hr style="border-top: 1px solid #ddd;"/>
+                            }
                         </div>
                         <div class="tab-pane" id="tab2">
                             <p>热点问题</p>
@@ -132,28 +72,17 @@
     </div>
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
 
-
-
+@Scripts.Render("~/Content/js/function.js") 
 <script>
-
-
+    var selectedCategoryId = 0;
     $(document).ready(function () {
-        
-        //
+        displayAnswer("你好，<br/>欢迎使用" + "@SmartCMS.Models.Constants.APP_NAME" + "@SmartCMS.Models.Constants.APP_VERSION");
     });
-
-
-    function ask()
-    {
-        var html = $("#chat-content-container").html() + "<p>AAAAAAAAA</p>";
-        $("#chat-content-container").html(html);
-
-        var k = $("#chat-content-container")[0].scrollHeight;
-        $("#chat-content-container").scrollTop(k);
-        
-    }
+    $('#myQuestion').keydown(function(e){
+        if (e.keyCode == 13) {
+            ask();
+        }
+    });
 </script>
+

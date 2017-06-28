@@ -858,6 +858,7 @@ ul.dropdown-menu
     padding: 10px 15px;
     border-left: 1px solid #ddd;
     height: 440px;
+    overflow: auto;
 }
 .nav-tabs>li>a {
     margin-right: 2px;
@@ -964,4 +965,14 @@ ul.dropdown-menu
 {
     padding-left: 5px;
     font-weight: bold;
+}
+
+#TabCategory h5{
+    font-weight:bold;
+    color:#666;   
+}
+#TabCategory a{
+    padding: 0px;
+    color: #009EA1;
+    text-decoration:none;    
 }

@@ -146,6 +146,7 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChatViewModels.cs" />
     <Compile Include="Models\Configuration.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
@@ -1067,6 +1068,7 @@
     <Content Include="Content\js\feeds.min.js" />
     <Content Include="Content\js\file-manager\elfinder.min.js" />
     <Content Include="Content\js\fileupload.min.js" />
+    <Content Include="Content\js\function.js" />
     <Content Include="Content\js\functions.js" />
     <Content Include="Content\js\html5shiv.js" />
     <Content Include="Content\js\icheck.js" />
