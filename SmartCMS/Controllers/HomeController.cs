@@ -67,6 +67,61 @@ namespace SmartCMS.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult Search(int? id, string keyword)
+        {
+            var model = (from r in db.Articles
+                         where r.Keywords.Contains(keyword)
+                         orderby r.Hits descending
+                         select new ArticleViewModel
+                         {
+                             Id = r.Id,
+                             Question = r.Question,
+                             CategoryId = r.Category.Value
+                         });
+            if(model.Count()<10)
+            {
+                var m2 = (from r in db.Articles
+                          where r.Question.Contains(keyword)
+                          orderby r.Hits descending
+                          select new ArticleViewModel
+                          {
+                              Id = r.Id,
+                              Question = r.Question,
+                              CategoryId = r.Category.Value
+                          });
+                model = model.Concat(m2);
+            }
+            model = model.Distinct();
+
+            if (id > 0)
+                model = model.Where(m => m.CategoryId == id);
+            return Json(model.Take(10), JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public JsonResult View(int id)
+        {
+            var r = db.Articles.SingleOrDefault(m => m.Id == id);
+            if(r!=null)
+            {
+                r.Hits++;
+                db.SaveChanges();
+                var model = new ArticleViewModel
+                {
+                    Id = r.Id,
+                    Question = r.Question,
+                    Answer = r.Answer,
+                    Keywords = r.Keywords,
+                };
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("找不到问答条目", JsonRequestBehavior.AllowGet);
+            }
+        }
 
     }
 }
