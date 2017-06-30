@@ -94,6 +94,8 @@ function Interpret(id, q)
 
 function selectCategory(name, id)
 {
+    if (selectedCategoryId == id)
+        return;
     selectedCategoryId = id;
     $('#current-category').html("当前问题分类: " + name);
     displayResponse("您已选择问题分类：" + name);
@@ -117,6 +119,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-var answerTemplate = '<div class="chat-answer"><span class="answer-name">智能客服 ##TIME##</span><div class="answer-content">##CONTENT##</div></div>';
-var questionTemplate = '<div class="chat-question"><span class="question-name">我 ##TIME##</span><div class="question-content">##CONTENT##</div></div>';
+//var answerTemplate = '<div class="chat-answer"><span class="answer-name">智能客服 ##TIME##</span><div class="answer-content">##CONTENT##</div></div>';
+var answerTemplate = '<div class="chat-answer"><div class="answer-name">智库</div><div class="answer-content-after"></div><div class="answer-content">##CONTENT##</div></div>';
+var questionTemplate = '<div class="chat-question"><span class="question-name">我</span><div class="question-content-after"></div><div class="question-content">##CONTENT##</div></div>';
 var clearTemplate = '<div class="clear" style="height:10px;"></div>';
