@@ -36,7 +36,7 @@
                     
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#TabCategory" data-toggle="tab">问答分类</a></li>
-                        <li><a href="#tab2" data-toggle="tab">热点问题</a></li>
+                        <li><a href="#TabHotTopic" data-toggle="tab">热点问题</a></li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="TabCategory">
@@ -55,9 +55,21 @@
                                 <hr style="border-top: 1px solid #ddd;"/>
                             }
                         </div>
-                        <div class="tab-pane" id="tab2">
-                            <p>热点问题</p>
-                            <p>热点问题</p>
+                        <div class="tab-pane" id="TabHotTopic">
+                            @foreach (var category in Model)
+                            {
+                                <a href="javascript:showHotTopic('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
+                                if (category.SubCategories != null)
+                                {
+                                    <ul>
+                                        @foreach (var sc in category.SubCategories)
+                                        {
+                                            <li><a href="javascript:showHotTopic('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                        }
+                                    </ul>
+                                }
+                                <hr style="border-top: 1px solid #ddd;" />
+                            }
                         </div>
                     </div>
                 </div>

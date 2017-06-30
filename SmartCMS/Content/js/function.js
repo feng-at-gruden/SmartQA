@@ -49,6 +49,24 @@ function getHotTopic(id, name) {
     });
 }
 
+function getHotTopic2(id, name) {
+    $.getJSON("/Home/GetCategoryHotTopic?id=" + id, function (result) {
+        var html;
+        if (result.length > 0) {
+            html = name + "常见问题: <ol class='result'>";
+            $.each(result, function (i, field) {
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' target='_blank'>" + field.Question + "</a></li>";
+            });
+            html += "</ol>";
+        }
+        else {
+            html = name + "暂无收录问答。";
+        }
+        html += "<br /><a href='javascript:hotTopicBack();'>返回</a>"
+        $("#TabHotTopic").html(html);
+    });
+}
+
 function Search(keyword)
 {
     $.getJSON("/Home/Search?id=" + selectedCategoryId + "&keyword=" + keyword, function (result) {
@@ -101,6 +119,26 @@ function selectCategory(name, id)
     displayResponse("您已选择问题分类：" + name);
     //Display category hot topic
     getHotTopic(id, name);
+}
+
+//TODO
+var hotTopicCategpriesHtml = "";
+function showHotTopic(name, id)
+{
+    if (selectedCategoryId != id)
+        displayResponse("您已选择问题分类：" + name);
+
+    hotTopicCategpriesHtml = $('#TabHotTopic').html();
+    selectedCategoryId = id;
+    $('#current-category').html("当前问题分类: " + name);
+    
+    //Display category hot topic
+    getHotTopic2(id, name);
+}
+
+function hotTopicBack()
+{
+    $('#TabHotTopic').html(hotTopicCategpriesHtml);
 }
 
 Date.prototype.Format = function (fmt) { //author: meizz 

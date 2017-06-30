@@ -969,11 +969,13 @@ ul.dropdown-menu
     font-weight: bold;
 }
 
-#TabCategory h5{
+#TabCategory h5,
+#TabHotTopic h5{
     font-weight:bold;
     color:#666;   
 }
-#TabCategory a{
+#TabCategory a,
+#TabHotTopic a{
     padding: 0px;
     color: #009EA1;
     text-decoration:none;    
