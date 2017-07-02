@@ -41,7 +41,7 @@ function getHotTopic(id, name) {
         if (result.length > 0) {
             var html = name + "常见问题: <ol class='result'>";
             $.each(result, function (i, field) {
-                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' target='_blank'>" + field.Question + "</a></li>";
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")'>" + field.Question + "</a></li>";
             });
             html += "</ol>";
             displayResponse(html);
@@ -49,13 +49,14 @@ function getHotTopic(id, name) {
     });
 }
 
+//热点问题
 function getHotTopic2(id, name) {
-    $.getJSON("/Home/GetCategoryHotTopic?id=" + id, function (result) {
+    $.getJSON("/Home/GetCategoryHotTopic?id=" + id + "&max=20", function (result) {
         var html;
         if (result.length > 0) {
             html = name + "常见问题: <ol class='result'>";
             $.each(result, function (i, field) {
-                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' target='_blank'>" + field.Question + "</a></li>";
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' >" + field.Question + "</a></li>";
             });
             html += "</ol>";
         }
@@ -69,7 +70,7 @@ function getHotTopic2(id, name) {
 
 function Search(keyword)
 {
-    $.getJSON("/Home/Search?id=" + selectedCategoryId + "&keyword=" + keyword, function (result) {
+    $.getJSON("/Home/Search?id=" + selectedCategoryId + "&question=" + keyword, function (result) {
         if (result.length > 0) {
             var html = name + "系统中有以下答案匹配您的问题: <ol class='result'>";
             $.each(result, function (i, field) {
@@ -78,6 +79,7 @@ function Search(keyword)
             html += "</ol> <p style='margin-top:10px;'>不知道有没有帮到你呢？O(∩_∩)O</p>";
             displayResponse(html);
         } else {
+            //Save questions not entered in db;            
             displayResponse("这个问题还没有被录入系统，我不知道要怎么回答你哦 (=@__@=) ");
         }
     });
@@ -121,7 +123,6 @@ function selectCategory(name, id)
     getHotTopic(id, name);
 }
 
-//TODO
 var hotTopicCategpriesHtml = "";
 function showHotTopic(name, id)
 {

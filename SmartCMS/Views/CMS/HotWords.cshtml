@@ -1,0 +1,32 @@
+﻿@model IEnumerable<String>
+
+@{
+    ViewBag.Title = "热词一览";
+}
+
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title  </h1>
+            </hgroup>
+        </div>
+    </section>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Hot Words
+    </div>
+    <div class="panel-body">
+        <hr />
+        @foreach (String keyword in Model)
+        {
+            <a href="~/CMS/Search/@keyword" class="category-item btn btn-default"><b>@keyword</b></a>
+        }
+    </div>
+    <!-- /.panel-body -->
+    <div class="panel-footer">
+        &nbsp;
+    </div>
+</div>

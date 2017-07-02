@@ -16,7 +16,12 @@
         <AssociationConnector Association="SmartCMSModel.FK__Categorie__Creat__2B3F6F97" />
         <AssociationConnector Association="SmartCMSModel.FK__Log__UserId__173876EA" />
         <AssociationConnector Association="SmartCMSModel.FK__Users__RoleId__182C9B23" />
-      </Diagram>
+        <EntityTypeShape EntityType="SmartCMSModel.HotWord" Width="1.5" PointX="5.25" PointY="1" />
+        <AssociationConnector Association="SmartCMSModel.FK__HotWords__Create__239E4DCF" />
+        <EntityTypeShape EntityType="SmartCMSModel.PendingQuestion" Width="1.5" PointX="1.5" PointY="8.5" />
+        <AssociationConnector Association="SmartCMSModel.FK__UnknownQu__Creat__29572725" />
+        <AssociationConnector Association="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

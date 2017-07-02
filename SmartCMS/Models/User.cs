@@ -19,6 +19,8 @@ namespace SmartCMS.Models
             this.Articles = new HashSet<Article>();
             this.Categories = new HashSet<Category>();
             this.Logs = new HashSet<Log>();
+            this.HotWords = new HashSet<HotWord>();
+            this.PendingQuestions = new HashSet<PendingQuestion>();
         }
     
         public int Id { get; set; }
@@ -35,5 +37,7 @@ namespace SmartCMS.Models
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
         public virtual UserRole UserRoles { get; set; }
+        public virtual ICollection<HotWord> HotWords { get; set; }
+        public virtual ICollection<PendingQuestion> PendingQuestions { get; set; }
     }
 }

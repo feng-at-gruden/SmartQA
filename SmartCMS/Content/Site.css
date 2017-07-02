@@ -993,6 +993,7 @@ ul.dropdown-menu
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
     float: left;
     margin-top: 0px;
+    max-width: 520px;
 }
 .answer-content-after {
     content: "";
@@ -1028,6 +1029,7 @@ ul.dropdown-menu
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.15);
     margin-top:1px;
+    max-width: 520px;
 }
 .question-name{
     text-align: center;

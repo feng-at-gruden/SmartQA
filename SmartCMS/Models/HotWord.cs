@@ -12,16 +12,14 @@ namespace SmartCMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserRole
+    public partial class HotWord
     {
-        public UserRole()
-        {
-            this.Users = new HashSet<User>();
-        }
-    
         public int Id { get; set; }
-        public string Role { get; set; }
+        public string KeyWord { get; set; }
+        public Nullable<int> Hits { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
     
-        public virtual ICollection<User> Users { get; set; }
+        public virtual User Users { get; set; }
     }
 }

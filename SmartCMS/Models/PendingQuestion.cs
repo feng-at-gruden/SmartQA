@@ -12,16 +12,16 @@ namespace SmartCMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class UserRole
+    public partial class PendingQuestion
     {
-        public UserRole()
-        {
-            this.Users = new HashSet<User>();
-        }
-    
         public int Id { get; set; }
-        public string Role { get; set; }
+        public string Question { get; set; }
+        public int Hits { get; set; }
+        public System.DateTime LastAskedAt { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<int> CategoryId { get; set; }
     
-        public virtual ICollection<User> Users { get; set; }
+        public virtual User Users { get; set; }
+        public virtual Category Categories { get; set; }
     }
 }

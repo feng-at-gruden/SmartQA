@@ -53,8 +53,9 @@ namespace SmartCMS.Controllers
 
 
         [HttpGet]
-        public JsonResult GetCategoryHotTopic(int? id)
+        public JsonResult GetCategoryHotTopic(int? id, int? max)
         {
+            int k = max.HasValue ? max.Value : 10;
             var model = (from r in db.Articles
                         where r.Category == id
                         orderby r.Hits descending                        
@@ -62,16 +63,16 @@ namespace SmartCMS.Controllers
                         {
                             Id = r.Id,
                             Question = r.Question,
-                        }).Take(10);
+                        }).Take(k);
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult Search(int? id, string keyword)
-        {
+        public JsonResult Search(int? id, string question)
+        {            
             var model = (from r in db.Articles
-                         where r.Keywords.Contains(keyword)
+                         where r.Keywords.Contains(question)
                          orderby r.Hits descending
                          select new ArticleViewModel
                          {
@@ -82,7 +83,7 @@ namespace SmartCMS.Controllers
             if(model.Count()<10)
             {
                 var m2 = (from r in db.Articles
-                          where r.Question.Contains(keyword)
+                          where r.Question.Contains(question)
                           orderby r.Hits descending
                           select new ArticleViewModel
                           {
@@ -96,6 +97,35 @@ namespace SmartCMS.Controllers
 
             if (id > 0)
                 model = model.Where(m => m.CategoryId == id);
+            if(model.Count()<=0)
+            {
+                //record not entered questions
+                question = question.Trim();
+                if (!String.IsNullOrWhiteSpace(question))
+                {
+                    int t = db.PendingQuestions.Count(m => m.Question == question);
+                    if (t <= 0)
+                    {
+                        int cid =id.HasValue && id.Value>0 ? id.Value: Constants.Other_Category_Id;
+                        db.PendingQuestions.Add(new PendingQuestion
+                        {
+                            Question = question,
+                            LastAskedAt = DateTime.Now,
+                            Hits = 1,
+                            CreatedBy = CurrentUser.Id,
+                            CategoryId = cid,
+                        });
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        var un = db.PendingQuestions.SingleOrDefault(m => m.Question == question);
+                        un.Hits++;
+                        un.LastAskedAt = DateTime.Now;
+                        db.SaveChanges();
+                    }
+                }
+            }
             return Json(model.Take(10), JsonRequestBehavior.AllowGet);
         }
 

@@ -37,6 +37,8 @@ namespace SmartCMS.Models
     {
         public int Id { get; set; }
         public int CategoryId { get; set; }
+        public String CategoryName { get; set; }
+        public int PendingId { get; set; }
 
         [Required(ErrorMessage = "请输入问题")]
         [Display(Name = "问题")]

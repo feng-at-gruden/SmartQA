@@ -186,13 +186,19 @@ namespace SmartCMS.Controllers
             return RedirectToAction("Categories");
         }
 
-        public ActionResult AddArticle(int id)
+        public ActionResult AddArticle(int id, int? uid)
         {
             var model = new ArticleViewModel
             {
                 CategoryId = id,
             };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
+            if(uid.HasValue)
+            {
+                var k = db.PendingQuestions.SingleOrDefault(m => m.Id == uid);
+                model.Question = k.Question;
+                model.PendingId = uid.Value;
+            }
             return View(model);
         }
 
@@ -220,6 +226,32 @@ namespace SmartCMS.Controllers
                         CreatedBy = CurrentUser.Id,
                         Category = model.CategoryId,
                     });
+                    //If it's pending Question remove it
+                    if(model.PendingId >0 )
+                    {
+                        var p = db.PendingQuestions.SingleOrDefault(m => m.Id == model.PendingId);
+                        if(p!=null)
+                            db.PendingQuestions.Remove(p);
+                    }
+                    //Check and add hot words.
+                    var keys = model.Keywords.Trim().Split(new char[1]{' '});
+                    foreach(var k  in keys)
+                    {
+                        if(!String.IsNullOrWhiteSpace(k))
+                        {
+                            int t = db.HotWords.Count(m => m.KeyWord == k);
+                            if(t<=0)
+                            {
+                                db.HotWords.Add(new HotWord
+                                {
+                                    KeyWord = k,
+                                    CreatedAt = DateTime.Now,
+                                    Hits = 0,
+                                    CreatedBy = CurrentUser.Id,
+                                });
+                            }
+                        }
+                    }
                     db.SaveChanges();
                     ViewBag.SuccessMessage = "问答添加成功！";
                     Log("添加问答");
@@ -242,13 +274,15 @@ namespace SmartCMS.Controllers
                 db.Articles.Remove(u);
                 db.SaveChanges();
                 Log("删除问答");
-                ViewBag.SuccessMessage = "删除问答成功！";                
+                ViewBag.SuccessMessage = "删除问答成功！";
+                return RedirectToAction("Category", new { id = pid });
             }
             else
             {
                 ModelState.AddModelError("", "找不到指定问答");
+                return RedirectToAction("Categories");
             }
-            return RedirectToAction("Category", new { id = pid });
+            
         }
 
         public ActionResult EditArticle(int id)
@@ -282,6 +316,26 @@ namespace SmartCMS.Controllers
                 db.SaveChanges();
                 ViewBag.SuccessMessage = "问答修改成功！";
                 Log("修改问答");
+                //Check and add hot words.
+                var keys = model.Keywords.Trim().Split(new char[1] { ' ' });
+                foreach (var k in keys)
+                {
+                    if (!String.IsNullOrWhiteSpace(k))
+                    {
+                        int t = db.HotWords.Count(m => m.KeyWord == k);
+                        if (t <= 0)
+                        {
+                            db.HotWords.Add(new HotWord
+                            {
+                                KeyWord = k,
+                                CreatedAt = DateTime.Now,
+                                Hits = 0,
+                                CreatedBy = CurrentUser.Id,
+                            });
+                        }
+                    }
+                    db.SaveChanges();
+                }
             }
             var newModel = from row in db.Articles
                            where row.Id == id
@@ -298,6 +352,69 @@ namespace SmartCMS.Controllers
                            };
             return View(newModel.SingleOrDefault());
         }
+
+
+        public ActionResult HotWords()
+        {
+            var model = db.HotWords.Select(m => m.KeyWord);
+            return View(model);
+        }
+
+        public ActionResult Search(string id)
+        {
+            var model = (from r in db.Articles
+                         where r.Keywords.Contains(id)
+                         orderby r.Hits descending
+                         select new ArticleViewModel
+                         {
+                             Id = r.Id,
+                             Question = r.Question,
+                             CategoryId = r.Category.Value,
+                             CategoryName = r.Categories.Name,
+                             Hits = r.Hits.Value,
+                             CreatedAt = r.CreatedAt,
+                             CreatedBy = r.Users.RealName,
+                             Keywords = r.Keywords,
+                         });
+            return View(model);
+        }
+
+        public ActionResult PendingQuestions()
+        {
+            var model = from row in db.PendingQuestions
+                        orderby row.Hits descending
+                        select new ArticleViewModel
+                        {
+                            Id = row.Id,
+                            Question = row.Question,
+                            CategoryId = row.CategoryId.Value,
+                            CategoryName = row.Categories.Name,
+                            Hits = row.Hits,
+                            CreatedAt = row.LastAskedAt,                            
+                        };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePendingQuestion(int id)
+        {
+            int pid = 0;
+            var u = db.PendingQuestions.SingleOrDefault(m => m.Id == id);
+            if (u != null)
+            {
+                db.PendingQuestions.Remove(u);
+                db.SaveChanges();
+                Log("删除未答条目");
+                ViewBag.SuccessMessage = "条目删除成功！";
+            }
+            else
+            {
+                ModelState.AddModelError("", "找不到指定条目");
+            }
+            return RedirectToAction("PendingQuestions");
+        }
+
 
     }
 }

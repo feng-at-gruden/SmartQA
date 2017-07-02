@@ -31,5 +31,7 @@ namespace SmartCMS.Models
         public DbSet<Log> Logs { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<HotWord> HotWords { get; set; }
+        public DbSet<PendingQuestion> PendingQuestions { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="SmartCMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SmartCMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Articles">
           <Key>
             <PropertyRef Name="Id" />
@@ -39,6 +39,16 @@
           <Property Name="Key" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Value" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
+        <EntityType Name="HotWords">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KeyWord" Type="varchar" MaxLength="255" />
+          <Property Name="Hits" Type="int" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Logs">
           <Key>
             <PropertyRef Name="Id" />
@@ -49,6 +59,17 @@
           <Property Name="UserId" Type="int" />
           <Property Name="IP" Type="varchar" MaxLength="50" />
           <Property Name="Client" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="PendingQuestions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Hits" Type="int" Nullable="false" />
+          <Property Name="LastAskedAt" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CategoryId" Type="int" />
         </EntityType>
         <EntityType Name="UserRoles">
           <Key>
@@ -71,7 +92,7 @@
           <Property Name="Locked" Type="bit" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" />
         </EntityType>
-        <Association Name="FK__Articles__Catego__276EDEB3">
+        <Association Name="FK__Articles__Catego__1CF15040">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
           <End Role="Articles" Type="Self.Articles" Multiplicity="*" />
           <ReferentialConstraint>
@@ -83,7 +104,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Articles__Create__286302EC">
+        <Association Name="FK__Articles__Create__1DE57479">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Articles" Type="Self.Articles" Multiplicity="*" />
           <ReferentialConstraint>
@@ -95,7 +116,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Categorie__Creat__2B3F6F97">
+        <Association Name="FK__Categorie__Creat__1ED998B2">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Categories" Type="Self.Categories" Multiplicity="*" />
           <ReferentialConstraint>
@@ -107,7 +128,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Log__UserId__173876EA">
+        <Association Name="FK__HotWords__Create__239E4DCF">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="HotWords" Type="Self.HotWords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HotWords">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Logs__UserId__1FCDBCEB">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Logs" Type="Self.Logs" Multiplicity="*" />
           <ReferentialConstraint>
@@ -119,7 +152,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Users__RoleId__182C9B23">
+        <Association Name="FK__PendingQu__Categ__2B3F6F97">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="PendingQuestions" Type="Self.PendingQuestions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendingQuestions">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UnknownQu__Creat__29572725">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="PendingQuestions" Type="Self.PendingQuestions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendingQuestions">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__RoleId__20C1E124">
           <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
@@ -135,26 +192,40 @@
           <EntitySet Name="Articles" EntityType="Self.Articles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Configurations" EntityType="Self.Configurations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HotWords" EntityType="Self.HotWords" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PendingQuestions" EntityType="Self.PendingQuestions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Articles__Catego__276EDEB3" Association="Self.FK__Articles__Catego__276EDEB3">
+          <AssociationSet Name="FK__Articles__Catego__1CF15040" Association="Self.FK__Articles__Catego__1CF15040">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Articles" EntitySet="Articles" />
           </AssociationSet>
-          <AssociationSet Name="FK__Articles__Create__286302EC" Association="Self.FK__Articles__Create__286302EC">
+          <AssociationSet Name="FK__Articles__Create__1DE57479" Association="Self.FK__Articles__Create__1DE57479">
             <End Role="Users" EntitySet="Users" />
             <End Role="Articles" EntitySet="Articles" />
           </AssociationSet>
-          <AssociationSet Name="FK__Categorie__Creat__2B3F6F97" Association="Self.FK__Categorie__Creat__2B3F6F97">
+          <AssociationSet Name="FK__Categorie__Creat__1ED998B2" Association="Self.FK__Categorie__Creat__1ED998B2">
             <End Role="Users" EntitySet="Users" />
             <End Role="Categories" EntitySet="Categories" />
           </AssociationSet>
-          <AssociationSet Name="FK__Log__UserId__173876EA" Association="Self.FK__Log__UserId__173876EA">
+          <AssociationSet Name="FK__HotWords__Create__239E4DCF" Association="Self.FK__HotWords__Create__239E4DCF">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="HotWords" EntitySet="HotWords" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Logs__UserId__1FCDBCEB" Association="Self.FK__Logs__UserId__1FCDBCEB">
             <End Role="Users" EntitySet="Users" />
             <End Role="Logs" EntitySet="Logs" />
           </AssociationSet>
-          <AssociationSet Name="FK__Users__RoleId__182C9B23" Association="Self.FK__Users__RoleId__182C9B23">
+          <AssociationSet Name="FK__PendingQu__Categ__2B3F6F97" Association="Self.FK__PendingQu__Categ__2B3F6F97">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="PendingQuestions" EntitySet="PendingQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UnknownQu__Creat__29572725" Association="Self.FK__UnknownQu__Creat__29572725">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PendingQuestions" EntitySet="PendingQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__RoleId__20C1E124" Association="Self.FK__Users__RoleId__20C1E124">
             <End Role="UserRoles" EntitySet="UserRoles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
@@ -190,7 +261,21 @@
             <End Role="UserRoles" EntitySet="UserRoles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="HotWords" EntityType="SmartCMSModel.HotWord" />
+          <AssociationSet Name="FK__HotWords__Create__239E4DCF" Association="SmartCMSModel.FK__HotWords__Create__239E4DCF">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HotWords" EntitySet="HotWords" />
+          </AssociationSet>
+          <EntitySet Name="PendingQuestions" EntityType="SmartCMSModel.PendingQuestion" />
+          <AssociationSet Name="FK__UnknownQu__Creat__29572725" Association="SmartCMSModel.FK__UnknownQu__Creat__29572725">
+            <End Role="User" EntitySet="Users" />
+            <End Role="PendingQuestions" EntitySet="PendingQuestions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PendingQu__Categ__2B3F6F97" Association="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="PendingQuestion" EntitySet="PendingQuestions" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Article">
           <Key>
             <PropertyRef Name="Id" />
@@ -219,6 +304,7 @@
           <Property Name="CreatedBy" Type="Int32" />
           <NavigationProperty Name="Articles" Relationship="SmartCMSModel.FK__Articles__Catego__276EDEB3" FromRole="Categories" ToRole="Articles" />
           <NavigationProperty Name="Users" Relationship="SmartCMSModel.FK__Categorie__Creat__2B3F6F97" FromRole="Categories" ToRole="Users" />
+          <NavigationProperty Name="PendingQuestions" Relationship="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" FromRole="Category" ToRole="PendingQuestion" />
         </EntityType>
         <EntityType Name="Configuration">
           <Key>
@@ -266,6 +352,8 @@
           <NavigationProperty Name="Categories" Relationship="SmartCMSModel.FK__Categorie__Creat__2B3F6F97" FromRole="Users" ToRole="Categories" />
           <NavigationProperty Name="Logs" Relationship="SmartCMSModel.FK__Log__UserId__173876EA" FromRole="Users" ToRole="Logs" />
           <NavigationProperty Name="UserRoles" Relationship="SmartCMSModel.FK__Users__RoleId__182C9B23" FromRole="Users" ToRole="UserRoles" />
+          <NavigationProperty Name="HotWords" Relationship="SmartCMSModel.FK__HotWords__Create__239E4DCF" FromRole="User" ToRole="HotWords" />
+          <NavigationProperty Name="PendingQuestions" Relationship="SmartCMSModel.FK__UnknownQu__Creat__29572725" FromRole="User" ToRole="PendingQuestions" />
         </EntityType>
         <Association Name="FK__Articles__Catego__276EDEB3">
           <End Type="SmartCMSModel.Category" Role="Categories" Multiplicity="0..1" />
@@ -324,6 +412,66 @@
             </Principal>
             <Dependent Role="Users">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HotWord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KeyWord" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Hits" Type="Int32" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="SmartCMSModel.FK__HotWords__Create__239E4DCF" FromRole="HotWords" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__HotWords__Create__239E4DCF">
+          <End Type="SmartCMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SmartCMSModel.HotWord" Role="HotWords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HotWords">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PendingQuestion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Question" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Hits" Type="Int32" Nullable="false" />
+          <Property Name="LastAskedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="SmartCMSModel.FK__UnknownQu__Creat__29572725" FromRole="PendingQuestions" ToRole="User" />
+          <NavigationProperty Name="Categories" Relationship="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" FromRole="PendingQuestion" ToRole="Category" />
+        </EntityType>
+        <Association Name="FK__UnknownQu__Creat__29572725">
+          <End Type="SmartCMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SmartCMSModel.PendingQuestion" Role="PendingQuestions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendingQuestions">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PendingQu__Categ__2B3F6F97">
+          <End Type="SmartCMSModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="SmartCMSModel.PendingQuestion" Role="PendingQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PendingQuestion">
+              <PropertyRef Name="CategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -401,6 +549,29 @@
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HotWords">
+            <EntityTypeMapping TypeName="SmartCMSModel.HotWord">
+              <MappingFragment StoreEntitySet="HotWords">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="Hits" ColumnName="Hits" />
+                <ScalarProperty Name="KeyWord" ColumnName="KeyWord" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PendingQuestions">
+            <EntityTypeMapping TypeName="SmartCMSModel.PendingQuestion">
+              <MappingFragment StoreEntitySet="PendingQuestions">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LastAskedAt" ColumnName="LastAskedAt" />
+                <ScalarProperty Name="Hits" ColumnName="Hits" />
+                <ScalarProperty Name="Question" ColumnName="Question" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

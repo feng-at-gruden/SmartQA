@@ -17,6 +17,7 @@ namespace SmartCMS.Models
         public Category()
         {
             this.Articles = new HashSet<Article>();
+            this.PendingQuestions = new HashSet<PendingQuestion>();
         }
     
         public int Id { get; set; }
@@ -29,5 +30,6 @@ namespace SmartCMS.Models
     
         public virtual ICollection<Article> Articles { get; set; }
         public virtual User Users { get; set; }
+        public virtual ICollection<PendingQuestion> PendingQuestions { get; set; }
     }
 }

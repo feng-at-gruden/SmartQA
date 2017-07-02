@@ -46,7 +46,7 @@
         }
         @foreach(SmartCMS.Models.CategoryViewModel category in Model.SubCategories)
         {            
-            <a href="~/CMS/Category?id=@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
+            <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
         }
         <hr />
         
@@ -69,7 +69,7 @@
                     @foreach (SmartCMS.Models.ArticleViewModel item in Model.Articles)
                     {
                         <tr class="odd">
-                            <td style="text-align: left;"><a href="~/CMS/Article/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
+                            <td style="text-align: left;"><a href="~/CMS/EditArticle/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CreatedBy)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
