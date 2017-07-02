@@ -399,7 +399,6 @@ namespace SmartCMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletePendingQuestion(int id)
         {
-            int pid = 0;
             var u = db.PendingQuestions.SingleOrDefault(m => m.Id == id);
             if (u != null)
             {
