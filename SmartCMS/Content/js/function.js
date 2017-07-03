@@ -76,12 +76,27 @@ function Search(keyword)
             $.each(result, function (i, field) {
                 html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' target='_blank'>" + field.Question + "</a></li>";
             });
-            html += "</ol> <p style='margin-top:10px;'>不知道有没有帮到你呢？O(∩_∩)O</p>";
+            html += "</ol> <p style='margin-top:10px;'>不知道有没有帮到你呢？<a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved(" + selectedCategoryId + ", \"" + keyword + "\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
         } else {
             //Save questions not entered in db;            
-            displayResponse("这个问题还没有被录入系统，我不知道要怎么回答你哦 (=@__@=) ");
+            displayResponse("好尴尬，这个问题我还不知道要怎么样回答你哦 >_<||| &nbsp;&nbsp;&nbsp;&nbsp;点击<a href='javascript:Unresolved(" + selectedCategoryId + ",\"" + keyword + "\");'><b>这里</b></a>把待解决的问题收录到知识库吧。");
         }
+    });
+}
+
+function Resolved()
+{
+    displayResponse("能够帮助到您，我真的好开心! O(∩_∩)O  &nbsp;&nbsp;&nbsp;&nbsp;如果您还有其他问题请继续提问。");
+}
+
+function Unresolved(id, q)
+{
+    $.getJSON("/Home/Submit/" + id + "?question=" + q, function (result) {
+        if (result) {
+            var html = "问题已收录入知识库，谢谢您的支持，我会继续努力的！ (@^_^@)"
+            displayResponse(html);
+        } 
     });
 }
 
@@ -89,10 +104,10 @@ function ViewAnswer(id) {
     $.getJSON("/Home/View/" + id, function (result) {
         if (result) {
             var html = result.Answer.replace(/\r/g, "<br>");
-            html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ (@^_^@)</p>";
+            html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> (@^_^@)</p>";
             displayResponse(html);
         } else {
-            displayResponse("这个问题的答案找不到呢 (=@__@=) ");
+            displayResponse("找不到这个问题的答案呢 (=@__@=) ");
         }
     });
 }

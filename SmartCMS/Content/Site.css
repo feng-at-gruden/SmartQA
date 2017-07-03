@@ -837,12 +837,12 @@ ul.dropdown-menu
 
 .chat-right{
     height: 481px;
-    width: 278px;
+    width: 350px;
     float: right;
     background-color:#eee;
 }
 .chat-left{
-    width: 999px;
+    width: 928px;
     background-color: #eee;
     float: left;
 }
@@ -955,7 +955,7 @@ ul.dropdown-menu
     padding: 0 10px;
     margin-top: 2px;
     z-index: 999;
-    width: 888px;
+    width: 840px;
 }
 #sendBtn
 {
