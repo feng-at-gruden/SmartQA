@@ -160,6 +160,7 @@ namespace SmartCMS.Controllers
         [HttpPost]
         public JsonResult Hints(int id, string q)
         {
+            q = q.Trim();
             var model = (from r in db.Articles
                          where r.Question.Contains(q)
                          orderby r.Hits descending
