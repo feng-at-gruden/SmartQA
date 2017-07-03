@@ -101,6 +101,7 @@ namespace SmartCMS.Controllers
             return Json(model.Take(10), JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         public JsonResult Submit(int? id, string question)
         {
             //record not entered questions
@@ -154,6 +155,25 @@ namespace SmartCMS.Controllers
             {
                 return Json("找不到问答条目", JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpPost]
+        public JsonResult Hints(int id, string q)
+        {
+            var model = (from r in db.Articles
+                         where r.Question.Contains(q)
+                         orderby r.Hits descending
+                         select new ArticleViewModel
+                         {
+                             Id = r.Id,
+                             Question = r.Question,
+                             CategoryId = r.Category.Value
+                         });
+            
+            if (id > 0)
+                model = model.Where(m => m.CategoryId == id);
+
+            return Json(model.Take(15));
         }
 
     }

@@ -87,14 +87,9 @@
 
 @Scripts.Render("~/Content/js/function.js") 
 <script>
-    var selectedCategoryId = 0;
     $(document).ready(function () {
         displayResponse("你好，<br/>欢迎使用" + "@SmartCMS.Models.Constants.APP_NAME" + "@SmartCMS.Models.Constants.APP_VERSION" + " (*^__^*)");
     });
-    $('#myQuestion').keydown(function(e){
-        if (e.keyCode == 13) {
-            ask();
-        }
-    });
+    
 </script>
 

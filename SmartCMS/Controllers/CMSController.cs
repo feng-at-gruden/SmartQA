@@ -16,7 +16,7 @@ namespace SmartCMS.Controllers
         {
             var model = from row in db.Categories
                         where row.ParentCategory == 0
-                        orderby row.Name
+                        orderby row.Id
                         select new CategoryViewModel
                         {
                             Id = row.Id,

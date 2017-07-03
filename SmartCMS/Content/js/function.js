@@ -104,7 +104,7 @@ function ViewAnswer(id) {
     $.getJSON("/Home/View/" + id, function (result) {
         if (result) {
             var html = result.Answer.replace(/\r/g, "<br>");
-            html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> (@^_^@)</p>";
+            html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
         } else {
             displayResponse("找不到这个问题的答案呢 (=@__@=) ");
@@ -133,9 +133,38 @@ function selectCategory(name, id)
         return;
     selectedCategoryId = id;
     $('#current-category').html("当前问题分类: " + name);
-    displayResponse("您已选择问题分类：" + name);
-    //Display category hot topic
-    getHotTopic(id, name);
+    resetAutoComplete();
+
+    if (id > 0) {
+        displayResponse("您已选择问题分类：" + name);
+        //Display category hot topic
+        getHotTopic(id, name);
+    }
+}
+
+function resetAutoComplete()
+{
+    //Update autocomplete
+    $('#myQuestion').autocomplete("option", "source",
+        function (request, response) {
+            $.ajax({
+                url: "/Home/Hints/" + selectedCategoryId,
+                type: "post",
+                dataType: "json",
+                data: { q: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Question,
+                            value: item.Question,
+                            Id: item.Id,
+                            CategoryId: item.CategoryId
+
+                        }
+                    }));
+                } //end  success
+            }); //end ajax
+        });
 }
 
 var hotTopicCategpriesHtml = "";
@@ -146,6 +175,7 @@ function showHotTopic(name, id)
 
     hotTopicCategpriesHtml = $('#TabHotTopic').html();
     selectedCategoryId = id;
+    resetAutoComplete();
     $('#current-category').html("当前问题分类: " + name);
     
     //Display category hot topic
@@ -177,3 +207,30 @@ Date.prototype.Format = function (fmt) { //author: meizz
 var answerTemplate = '<div class="chat-answer"><div class="answer-name">智库</div><div class="answer-content-after"></div><div class="answer-content">##CONTENT##</div></div>';
 var questionTemplate = '<div class="chat-question"><span class="question-name">我</span><div class="question-content-after"></div><div class="question-content">##CONTENT##</div></div>';
 var clearTemplate = '<div class="clear" style="height:10px;"></div>';
+
+var selectedCategoryId;
+
+$(document).ready(function () {
+
+    $('#myQuestion').autocomplete({
+        messages: {
+            noResults: '',
+            results: function () { }
+        },
+        minLength: 1,
+        appendTo: "#chat-input-container",
+        position: { my: "left bottom", at: "left top", collision: "none" },
+        select: function (event, ui) {
+            Interpret(ui.item.Id, ui.item.label);            
+            return false;
+        },         
+    });
+
+    $('#myQuestion').keydown(function (e) {
+        if (e.keyCode == 13) {
+            ask();
+        }
+    });
+
+    selectCategory("全部分类", 0);
+});
