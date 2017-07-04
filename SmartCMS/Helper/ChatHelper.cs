@@ -42,15 +42,24 @@ namespace SmartCMS.Helper
 
         private static void InitChatData()
         {
+            _mChatData = new Hashtable();
+
+            //Greetings
             string[] greetingQ = new string[] { "你好", "Hi", "Hello", "how are you", "hey", "good"};
             string[] greetingA = new string[] { "你好， 我是智库机器人。", "Hello", "Hi", "你好", "How are you?"};
-
-            _mChatData = new Hashtable();
-            foreach(string k in greetingQ)
+            foreach (string k in greetingQ)
             {
                 _mChatData.Add(k.ToLower(), greetingA);
             }
-            
+
+            //Emotions
+            string[] emotionQ = new string[] { "hehe", "呵呵", "哈", "哈哈", "哈哈哈", "吼吼", "哦", "噢", "噢噢", "ok" };
+            string[] emotionA = new string[] { "哈哈，你想说什么", "认识你很高兴", "呵呵", "噢，是吗？", "你说什么？", "(^_^)", "└(^o^)┘", "噢", "⊙﹏⊙‖∣", "Good！" };
+            foreach (string k in emotionQ)
+            {
+                _mChatData.Add(k.ToLower(), emotionA);
+            }
+
         }
 
     }
