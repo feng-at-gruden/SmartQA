@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using SmartCMS.Filters;
 using SmartCMS.Models;
+using SmartCMS.Helper;
 
 namespace SmartCMS.Controllers
 {
@@ -175,6 +176,13 @@ namespace SmartCMS.Controllers
                 model = model.Where(m => m.CategoryId == id);
 
             return Json(model.Take(15));
+        }
+
+        [HttpGet]
+        public JsonResult Chat(string q)
+        {
+            var k = ChatHelper.GetAnswer(q);
+            return Json(k, JsonRequestBehavior.AllowGet);
         }
 
     }

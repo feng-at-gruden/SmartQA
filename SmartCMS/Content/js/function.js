@@ -28,7 +28,9 @@ function displayResponse(answer)
 }
 
 function getCategories(id) {
+    loading(true);
     $.getJSON("/Home/GetCategories?id=" + id, function (result) {
+        loading(false);
         $("#TabCategory").html("");
         $.each(result, function (i, field) {
             $("#TabCategory").append("<a href='javascript:getCategories(" + field.Id + ")'>" + field.Name + "</a>");
@@ -37,7 +39,9 @@ function getCategories(id) {
 }
 
 function getHotTopic(id, name) {
-    $.getJSON("/Home/GetCategoryHotTopic?id=" + id, function (result) {        
+    loading(true);
+    $.getJSON("/Home/GetCategoryHotTopic?id=" + id, function (result) {
+        loading(false);
         if (result.length > 0) {
             var html = name + "常见问题: <ol class='result'>";
             $.each(result, function (i, field) {
@@ -51,7 +55,9 @@ function getHotTopic(id, name) {
 
 //热点问题
 function getHotTopic2(id, name) {
+    loading(true);
     $.getJSON("/Home/GetCategoryHotTopic?id=" + id + "&max=20", function (result) {
+        loading(false);
         var html;
         if (result.length > 0) {
             html = name + "常见问题: <ol class='result'>";
@@ -70,7 +76,9 @@ function getHotTopic2(id, name) {
 
 function Search(keyword)
 {
+    loading(true);
     $.getJSON("/Home/Search?id=" + selectedCategoryId + "&question=" + keyword, function (result) {
+        loading(false);
         if (result.length > 0) {
             var html = name + "系统中有以下答案匹配您的问题: <ol class='result'>";
             $.each(result, function (i, field) {
@@ -79,20 +87,44 @@ function Search(keyword)
             html += "</ol> <p style='margin-top:10px;'>不知道有没有帮到你呢？<a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved(" + selectedCategoryId + ", \"" + keyword + "\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
         } else {
-            //Save questions not entered in db;            
-            displayResponse("好尴尬，这个问题我还不知道要怎么样回答你哦 >_<||| &nbsp;&nbsp;&nbsp;&nbsp;点击<a href='javascript:Unresolved(" + selectedCategoryId + ",\"" + keyword + "\");'><b>这里</b></a>把待解决的问题收录到知识库吧。");
+            //Call chat robot
+            loading(false);
+            $.getJSON("/Home/Chat?q=" + keyword, function (result) {
+                loading(false);
+                if (result) {
+                    var html = result;
+                    displayResponse(html);
+                } else {
+                    displayResponse("好尴尬，这个问题我还不知道要怎么样回答你哦 >_<||| &nbsp;&nbsp;&nbsp;&nbsp;点击<a href='javascript:Unresolved(" + selectedCategoryId + ",\"" + keyword + "\");'><b>这里</b></a>把待解决的问题收录到知识库吧。");
+                }
+            });
+            //displayResponse("好尴尬，这个问题我还不知道要怎么样回答你哦 >_<||| &nbsp;&nbsp;&nbsp;&nbsp;点击<a href='javascript:Unresolved(" + selectedCategoryId + ",\"" + keyword + "\");'><b>这里</b></a>把待解决的问题收录到知识库吧。");
         }
     });
+}
+
+function loading(show)
+{
+    if (show) {
+        $('#chat-content-container').removeClass('loaded');
+        $('#chat-content-container').addClass('loading');
+    } else {
+        $('#chat-content-container').removeClass('loading');
+        $('#chat-content-container').addClass('loaded');
+    }
 }
 
 function Resolved()
 {
     displayResponse("能够帮助到您，我真的好开心! O(∩_∩)O  &nbsp;&nbsp;&nbsp;&nbsp;如果您还有其他问题请继续提问。");
+    selectCategory("全部分类", 0);
 }
 
 function Unresolved(id, q)
 {
+    loading(true);
     $.getJSON("/Home/Submit/" + id + "?question=" + q, function (result) {
+        loading(false);
         if (result) {
             var html = "问题已收录入知识库，谢谢您的支持，我会继续努力的！ (@^_^@)"
             displayResponse(html);
@@ -101,7 +133,9 @@ function Unresolved(id, q)
 }
 
 function ViewAnswer(id) {
+    loading(true);
     $.getJSON("/Home/View/" + id, function (result) {
+        loading(false);
         if (result) {
             var html = result.Answer.replace(/\r/g, "<br>");
             html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
@@ -147,12 +181,14 @@ function resetAutoComplete()
     //Update autocomplete
     $('#myQuestion').autocomplete("option", "source",
         function (request, response) {
+            loading(true);
             $.ajax({
                 url: "/Home/Hints/" + selectedCategoryId,
                 type: "post",
                 dataType: "json",
                 data: { q: request.term },
                 success: function (data) {
+                    loading(false);
                     response($.map(data, function (item) {
                         return {
                             label: item.Question,

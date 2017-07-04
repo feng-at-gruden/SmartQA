@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Configuration;
+using System.Collections;
 
 namespace SmartCMS.Models
 {
@@ -12,7 +14,7 @@ namespace SmartCMS.Models
         public const string APP_NAME = "海信智库客服问答系统";
         public const string APP_VERSION = "v1.0";
 
-        public const int Other_Category_Id = 21;      //其他问题 分类ID;
+        public static int Other_Category_Id { get { return int.Parse(ConfigurationManager.AppSettings["PendingQuestionsCategoryID"]); } }
 
         public class Roles
         {
@@ -30,6 +32,7 @@ namespace SmartCMS.Models
             public const string CON_KEY_SMTP_PASSWORD = "_smtpFromPassword";
             public const string CON_KEY_SMTP_NEED_AUTH = "_smtpAuth";
         }
+
 
     }
 

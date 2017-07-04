@@ -138,6 +138,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\ChatHelper.cs" />
     <Compile Include="Helper\NetworkHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Article.cs">
@@ -1039,6 +1040,8 @@
     <Content Include="Content\images\ava_5.png" />
     <Content Include="Content\images\ava_6.png" />
     <Content Include="Content\images\ava_7.png" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\loading_dots.gif" />
     <Content Include="Content\images\shutterstock_18917800.jpg" />
     <Content Include="Content\images\veryGood1.png" />
     <Content Include="Content\images\veryGood2.png" />
