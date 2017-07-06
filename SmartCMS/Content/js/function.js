@@ -195,7 +195,6 @@ function resetAutoComplete()
                             value: item.Question,
                             Id: item.Id,
                             CategoryId: item.CategoryId
-
                         }
                     }));
                 } //end  success
@@ -238,6 +237,33 @@ Date.prototype.Format = function (fmt) { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+function addFavorite() {
+    var url = window.location;
+    var title = document.title;
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf("360se") > -1) {
+        alert("由于360浏览器功能限制，请按 Ctrl+D 手动收藏！");
+    }
+    else if (ua.indexOf("msie 8") > -1) {
+        window.external.AddToFavoritesBar(url, title); //IE8
+    }
+    else if (document.all) {
+        try {
+            window.external.addFavorite(url, title);
+        } catch (e) {
+            alert('您的浏览器不支持,请按 Ctrl+D 手动收藏!');
+        }
+    }
+    else if (window.sidebar) {
+        window.sidebar.addPanel(title, url, "");
+    }
+    else {
+        alert('您的浏览器不支持,请按 Ctrl+D 手动收藏!');
+    }
+}
+
+
 
 //var answerTemplate = '<div class="chat-answer"><span class="answer-name">智能客服 ##TIME##</span><div class="answer-content">##CONTENT##</div></div>';
 var answerTemplate = '<div class="chat-answer"><div class="answer-name">智库</div><div class="answer-content-after"></div><div class="answer-content">##CONTENT##</div></div>';

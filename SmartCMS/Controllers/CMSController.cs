@@ -11,6 +11,11 @@ namespace SmartCMS.Controllers
     [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR)]
     public class CMSController : BaseController
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         
         public ActionResult Categories()
         {
