@@ -27,9 +27,43 @@ namespace SmartCMS.Controllers
                             Id = row.Id,
                             ParentId = row.ParentCategory,
                             Name = row.Name,
-                            Comment = row.Comment,                            
-                        };            
-            return View(model);
+                            Comment = row.Comment,
+                        };
+
+            List<CategoryViewModel> result = new List<CategoryViewModel>();
+            for (int i = 0; i < model.Count(); i++)
+            {
+                CategoryViewModel s = model.ToArray()[i];
+                s.SubCategories = setSubCategoires(s);
+                result.Add(s);
+            }
+
+            return View(result);
+        }
+
+        private IEnumerable<CategoryViewModel> setSubCategoires(CategoryViewModel c)
+        {
+            var subCategories = from row in db.Categories
+                        where row.ParentCategory == c.Id
+                        orderby row.Id
+                        select new CategoryViewModel
+                        {
+                            Id = row.Id,
+                            ParentId = row.ParentCategory,
+                            Name = row.Name,
+                            Comment = row.Comment,
+                        };
+
+            
+            if (subCategories!=null)
+            {
+                for (int i = 0; i < subCategories.Count(); i++)
+                {
+                    CategoryViewModel s = subCategories.ToArray()[i];
+                    s.SubCategories = setSubCategoires(s);
+                }
+            }
+            return subCategories;
         }
 
         public ActionResult Category(int id)
