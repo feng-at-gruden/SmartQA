@@ -4,15 +4,12 @@
     ViewBag.Title = "热词一览";
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("知识管理", "Categories", "CMS") </li>
+        <li><a href="#">@ViewBag.Title</a></li>
+    </ul>
+</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">

@@ -5,21 +5,18 @@
     var me = (SmartCMS.Models.SmartCMSPrincipal)User;
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("智库", "Index", "Home") </li>
+        <li><a href="#">@ViewBag.Title</a></li>
+    </ul>
+</div>
 
 
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        MY ACCOUNT         <div style="float:right">你当前使用以下帐号登录: <text>@User.Identity.Name<small>(@me.RoleName)</small></text></div>
+        My Account         <div style="float:right">当前登录帐号: <text><small> @User.Identity.Name (@me.RoleName) </small></text></div>
     </div>
     <div class="panel-body">
 

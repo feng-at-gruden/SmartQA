@@ -46,7 +46,8 @@ namespace SmartCMS.Controllers
                 HttpContext.User = new SmartCMSPrincipal(u.UserRoles.Role.ToString(), u.RealName, HttpContext.User.Identity);
 
                 u.LastLoginTime = DateTime.Now;
-                //Log("登录系统", u);                
+                db.SaveChanges();
+                //Log("登录系统", u);
                 return RedirectToLocal(returnUrl);
             }
 

@@ -5,16 +5,6 @@
 }
 
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                
-            </hgroup>
-        </div>
-    </section>
-}
-
 <div class="panel panel-default">
     <div class="panel-heading">
         @ViewBag.Title
@@ -30,7 +20,7 @@
         {
             @Html.AntiForgeryToken()
 
-            <div style="width:400px; margin:auto; text-align:center;">
+            <div style="width:400px; margin:50px auto; text-align:center;">
                 <div class="form-group">
                     <div class='input-group date'>
                         <input type='text' class="form-control" name="UserName" placeholder="用户名" />
@@ -47,6 +37,7 @@
                         </span>
                     </div>
                 </div>
+                <br/>
                 <button type="submit" class="btn btn-success">登 录</button>
             </div>
         }

@@ -1,21 +1,27 @@
 ﻿@model SmartCMS.Models.ArticleViewModel
 @{
-    ViewBag.Title = "添加问答 - " + ViewBag.Category;    
+    ViewBag.Title = "添加知识词条";
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("知识管理", "Categories", "CMS") </li>
+        @if (ViewBag.Breadcrumbs != null)
+        {
+            foreach (string k in ViewBag.Breadcrumbs)
+            {
+                string[] v = k.Split('#');
+                <li><a href="/CMS/Category/@v[0]">@v[1]</a></li>
+            }
+        }
+        <li><a href="#">@ViewBag.Title</a></li>
+    </ul>
+</div>
+
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        ADD NEW QUESTION
+        New Knowledge Item
     </div>
     <div class="panel-body">
 
@@ -42,7 +48,7 @@
             <div style="width:698px; margin:auto; text-align:center;">
                 <div class="form-group">
                     <div class='input-group date'>
-                        @Html.TextBoxFor(m => m.Question, new { @class = "form-control", value = Model.Question, placeholder = "问题", maxlength = 50, length = 25 })
+                        @Html.TextBoxFor(m => m.Question, new { @class = "form-control", value = Model.Question, placeholder = "词条名称或问题描述", maxlength = 50, length = 25 })
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-text-width"></span>
                         </span>
@@ -51,7 +57,7 @@
 
                 <div class="form-group">
                     <div class=''>
-                        @Html.TextAreaFor(m => m.Answer, new { id = "myEditor", style="width:698px;height:320px;padding-left:10px;", value = Model.Answer, placeholder = "回答内容", maxlength = 1000 })                        
+                        @Html.TextAreaFor(m => m.Answer, new { id = "myEditor", style="width:698px;height:320px;padding-left:10px;", value = Model.Answer, placeholder = "词条或问题解答", maxlength = 1000 })                        
                     </div>
                 </div>
                 <div class="form-group">

@@ -4,19 +4,17 @@
     ViewBag.Title = "系统日志";
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("智库管理", "Index", "CMS") </li>
+        <li><a href="#">@ViewBag.Title</a></li>        
+    </ul>
+</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        SYSTEM LOG
+        System Log
     </div>
     <div class="panel-body">
         <div class="dataTable_wrapper">

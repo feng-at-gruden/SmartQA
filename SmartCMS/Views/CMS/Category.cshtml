@@ -20,7 +20,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        Categories & Articles
+        Categories & Knowledge
     </div>
     <div class="panel-body">
         <div class="cms-tool-bar">
@@ -34,7 +34,7 @@
             }            
             <a href="~/CMS/EditCategory/@Model.Id" class="btn btn-success">编辑本分类</a>
             <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子分类</a>
-            <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加问答</a>
+            <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加知识条目</a>
         </div>
 
         @using (Html.BeginForm("DeleteCategory", "CMS", FormMethod.Post, new { id = "deleteForm_" + Model.Id, style = "display:none;" }))
@@ -42,19 +42,24 @@
             @Html.AntiForgeryToken()
             <input type="hidden" name="id" value="@Model.Id" />
         }
-        
+                
         @if(Model.SubCategories.Count()>0)
-        {
-            <hr />
-            <p class="sub-category" style="font-weight:bold;">子类别:</p>
-        }
-        @foreach(SmartCMS.Models.CategoryViewModel category in Model.SubCategories)
         {            
-            <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>            
+            <div class="panel panel-default" style="width:750px;">
+                <div class="panel-heading">
+                    @Model.Name 子类别
+                </div>
+                <div class="panel-body">
+                    @foreach (SmartCMS.Models.CategoryViewModel category in Model.SubCategories)
+                    {
+                        <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>
+                    }                    
+                </div>
+            </div>
         }
-        <hr />
         
-
+        
+        <hr style="clear:both; margin:10px 0px 10px 0px;"/>
         <div class="dataTable_wrapper">
             <div style="text-align: right; float: right; margin: 10px 10px 0 0;">
                 <span> </span>

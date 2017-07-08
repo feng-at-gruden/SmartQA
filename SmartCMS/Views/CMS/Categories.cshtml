@@ -1,18 +1,16 @@
 ﻿@model IEnumerable<SmartCMS.Models.CategoryViewModel>
 
 @{
-    ViewBag.Title = "问答分类";
+    ViewBag.Title = "知识分类";
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("智库管理", "Index", "CMS") </li>
+        <li><a href="#">@ViewBag.Title</a></li>
+    </ul>
+</div>
+
 
 <div class="panel panel-default">
     <div class="panel-heading">

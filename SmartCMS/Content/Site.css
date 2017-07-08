@@ -770,8 +770,10 @@ tr.pager td {
 
 .panel-heading{
     color: #555;
-    font-family: initial;
+    font-family: Arial;
     font-weight:bold;
+    font-size:13px;
+    font-style: italic;
 }
 
 
@@ -933,11 +935,28 @@ ul.dropdown-menu
 
 .cms-tool-bar{
     text-align:right;
+    width: 485px;
+    float: right;
+    margin-bottom: 15px;
 }
+
+.btn-default,
+.btn-danger,
 .btn-primary,
 .btn-warning,
 .btn-success{
     color: white !important;
+    margin: 0px 7px;
+    min-width: 80px;
+}
+
+.btn-default{
+    color: #333 !important;
+}
+
+.btn-success{
+    background-color: #009EA1 !important;
+    border-color: #097f82  !important;
 }
 
 .copyrights-footer{
@@ -1112,8 +1131,8 @@ ul.dropdown-menu
 #breadcrumbs{
     position: absolute;
     top: 167px;
-    width: 100%;
-    left: 0px;
+    width: 640px;
+    left: 3px;
 }
 
 #breadcrumbs ul
@@ -1197,4 +1216,18 @@ ul.dropdown-menu
 #breadcrumbs ul li a:hover:before{
     border-top-color: #999;
     border-bottom-color: #999;
+}
+
+.dataTable_wrapper table th{
+    font-size:14px;
+    font-weight:bold;
+    background:#bbb !important;
+    text-align:center;
+}
+.dataTable_wrapper table td {
+    font-size:13px;
+}
+
+.category-item{
+    margin: 10px 10px 10px 10px !important;
 }
