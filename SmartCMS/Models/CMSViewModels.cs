@@ -25,6 +25,9 @@ namespace SmartCMS.Models
         [Display(Name = "子类别")]
         public IEnumerable<CategoryViewModel> SubCategories { get; set; }
 
+        [Display(Name = "同级类别")]
+        public IEnumerable<CategoryViewModel> SameLevelCategories { get; set; }
+
         public IEnumerable<ArticleViewModel> Articles { get; set; }
 
         public String CreatedBy { get; set; }

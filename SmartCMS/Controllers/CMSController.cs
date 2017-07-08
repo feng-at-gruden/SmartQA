@@ -69,7 +69,28 @@ namespace SmartCMS.Controllers
                                  CreatedAt = a.CreatedAt,
                                  CreatedBy = a.Users.RealName
                              };
+
+            //Breadcrumbs
+            var c = db.Categories.SingleOrDefault(m=>m.Id == model.Id);
+            var breadcrumbs = new List<string>();
+            breadcrumbs = addParentLinks(breadcrumbs, c);
+            breadcrumbs.Add(model.Id + "#" + model.Name);
+            ViewBag.Breadcrumbs = breadcrumbs.ToArray();
             return View(model);
+        }
+
+        private List<string> addParentLinks(List<string> links, Category category)
+        {
+            if(category.ParentCategory == 0)
+                return links;
+
+            var pc = db.Categories.SingleOrDefault(m=>m.Id==category.ParentCategory);
+            if(pc != null)
+            {
+                links.Add(pc.Id + "#" + pc.Name);
+                links = addParentLinks(links, pc);
+            }            
+            return links;
         }
 
         public ActionResult AddCategory(int? id)

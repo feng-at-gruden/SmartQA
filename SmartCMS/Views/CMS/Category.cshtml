@@ -4,15 +4,19 @@
     ViewBag.Title = Model.Name;
 }
 
-@section featured {
-    <section class="featured">
-        <div class="content-wrapper">
-            <hgroup class="title">
-                <h1>@ViewBag.Title  </h1>
-            </hgroup>
-        </div>
-    </section>
-}
+<div id="breadcrumbs">
+    <ul>
+        <li>@Html.ActionLink("知识管理", "Categories", "CMS") </li>
+        @if (ViewBag.Breadcrumbs != null)
+        {
+            foreach (string k in ViewBag.Breadcrumbs)
+            {
+                string[] v = k.Split('#');
+                <li><a href="/CMS/Category/@v[0]">@v[1]</a></li>
+            }
+        }
+    </ul>
+</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">

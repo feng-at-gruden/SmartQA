@@ -108,15 +108,16 @@ h5 a:link, h5 a:visited, h5 a:active {
     border-top: 1px solid #ddd;
 }
 
-    .main-content {
-        background: url("../Images/accent.png") no-repeat;
-        padding-left: 0px;
-        padding-top: 30px;
-    }
+.main-content {
+    background: url("../Images/accent.png") no-repeat;
+    padding-left: 0px;
+    padding-top: 30px;
+    margin-top: 48px;
+}
 
-    .featured + .main-content {
-        background: url("../Images/heroAccent.png") 20px 0 no-repeat;
-    }
+.featured + .main-content {
+    background: url("../Images/heroAccent.png") 20px 0 no-repeat;
+}
 
 header .content-wrapper {
     padding-top: 20px; 
@@ -769,7 +770,8 @@ tr.pager td {
 
 .panel-heading{
     color: #555;
-    font-family: fantasy;
+    font-family: initial;
+    font-weight:bold;
 }
 
 
@@ -1105,4 +1107,94 @@ ul.dropdown-menu
     background-color:#009EA1;
     color:#fff;
 
+}
+
+#breadcrumbs{
+    position: absolute;
+    top: 167px;
+    width: 100%;
+    left: 0px;
+}
+
+#breadcrumbs ul
+{
+    list-style: none;
+}
+
+#breadcrumbs ul li a
+{
+    float: left;
+    margin-right: 25px;
+    display: inline-block;
+    position: relative;    
+    padding: 5px 10px 5px 15px;
+    text-align: center;
+    background-color: #ddd;
+    color: #777;
+    text-decoration: none; 
+    font-size: 14px;
+}
+#breadcrumbs ul li a:after
+{
+    content: "";
+    border-left: 15px solid #ddd;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    position: absolute;
+    right: -15px;
+    top: 0;
+}
+#breadcrumbs ul li a:before
+ {
+    content: "";
+    border-top: 15px solid #ddd;
+    border-bottom: 15px solid #ddd; 
+    border-left: 15px solid transparent;
+    position: absolute;
+    top: 0;
+    left: -15px;
+}
+
+#breadcrumbs ul li:first-child a{
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+#breadcrumbs ul li:first-child a:before{
+    display: none;
+}
+
+#breadcrumbs ul li:last-child a{
+    /*
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    */
+    background-color:#eee;    
+}
+
+#breadcrumbs ul li:last-child a:after{
+    /*display: none;*/
+    border-left: 15px solid #eee;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+}
+
+#breadcrumbs ul li:last-child a:before
+{
+    border-top: 15px solid #eee;
+    border-bottom: 15px solid #eee; 
+    border-left: 15px solid transparent;
+}
+ #breadcrumbs ul li a:hover{
+    background-color:#999;
+    color:#fff;
+}
+
+#breadcrumbs ul li a:hover:after{
+    border-left-color: #999;
+}
+
+#breadcrumbs ul li a:hover:before{
+    border-top-color: #999;
+    border-bottom-color: #999;
 }
