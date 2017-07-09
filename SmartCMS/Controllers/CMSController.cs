@@ -41,31 +41,6 @@ namespace SmartCMS.Controllers
             return View(result);
         }
 
-        private IEnumerable<CategoryViewModel> setSubCategoires(CategoryViewModel c)
-        {
-            var subCategories = from row in db.Categories
-                        where row.ParentCategory == c.Id
-                        orderby row.Id
-                        select new CategoryViewModel
-                        {
-                            Id = row.Id,
-                            ParentId = row.ParentCategory,
-                            Name = row.Name,
-                            Comment = row.Comment,
-                        };
-
-            
-            if (subCategories!=null)
-            {
-                for (int i = 0; i < subCategories.Count(); i++)
-                {
-                    CategoryViewModel s = subCategories.ToArray()[i];
-                    s.SubCategories = setSubCategoires(s);
-                }
-            }
-            return subCategories;
-        }
-
         public ActionResult Category(int id)
         {
             var categories = from row in db.Categories
@@ -403,8 +378,23 @@ namespace SmartCMS.Controllers
 
         public ActionResult HotWords()
         {
-            var model = db.HotWords.Select(m => m.KeyWord);
+            var model = from row in db.HotWords
+                        select new KeywordViewModel
+                        {
+                            Keyword = row.KeyWord,
+                            Count = db.Articles.Count(m=>m.Keywords.Contains(row.KeyWord))
+                        };
             return View(model);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteHotWord(string id)
+        {
+            var r = db.HotWords.SingleOrDefault(m => id.Equals(m.KeyWord));
+            db.HotWords.Remove(r);
+            db.SaveChanges();
+            return RedirectToAction("HotWords");
         }
 
         public ActionResult Search(string id)
@@ -426,9 +416,36 @@ namespace SmartCMS.Controllers
             return View(model);
         }
 
-        public ActionResult PendingQuestions()
+
+        public ActionResult QuestionCategories()
+        {
+            var model = from row in db.Categories
+                        where row.ParentCategory == 0
+                        orderby row.Id
+                        select new CategoryViewModel
+                        {
+                            Id = row.Id,
+                            ParentId = row.ParentCategory,
+                            Name = row.Name,
+                            Comment = row.Comment,
+                            Count = db.PendingQuestions.Count(m=>m.CategoryId == row.Id),
+                        };
+
+            List<CategoryViewModel> result = new List<CategoryViewModel>();
+            for (int i = 0; i < model.Count(); i++)
+            {
+                CategoryViewModel s = model.ToArray()[i];
+                s.SubCategories = setSubCategoires(s);
+                result.Add(s);
+            }
+
+            return View(result);
+        }
+
+        public ActionResult PendingQuestions(int? id)
         {
             var model = from row in db.PendingQuestions
+                        where row.CategoryId == id.Value
                         orderby row.Hits descending
                         select new ArticleViewModel
                         {
@@ -490,6 +507,32 @@ namespace SmartCMS.Controllers
             return links;
         }
 
+        private IEnumerable<CategoryViewModel> setSubCategoires(CategoryViewModel c)
+        {
+            var subCategories = from row in db.Categories
+                                where row.ParentCategory == c.Id
+                                orderby row.Id
+                                select new CategoryViewModel
+                                {
+                                    Id = row.Id,
+                                    ParentId = row.ParentCategory,
+                                    Name = row.Name,
+                                    Comment = row.Comment,
+                                    Count = db.PendingQuestions.Count(m => m.CategoryId == row.Id),
+                                };
+
+            List<CategoryViewModel> r = new List<CategoryViewModel>();
+            if (subCategories != null)
+            {                
+                foreach(var s in subCategories)
+                {                    
+                    s.SubCategories = setSubCategoires(s);
+                    r.Add(s);
+                }                
+            }
+            return r;
+        }
+        
 
     }
 }

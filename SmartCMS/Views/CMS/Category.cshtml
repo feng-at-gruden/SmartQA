@@ -33,8 +33,8 @@
                 <a href="javascript:uid=@Model.Id; $('#deleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
             }            
             <a href="~/CMS/EditCategory/@Model.Id" class="btn btn-success">编辑本分类</a>
-            <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子分类</a>
-            <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加知识条目</a>
+            <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子类别</a>
+            <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加知识词条</a>
         </div>
 
         @using (Html.BeginForm("DeleteCategory", "CMS", FormMethod.Post, new { id = "deleteForm_" + Model.Id, style = "display:none;" }))
@@ -45,14 +45,13 @@
                 
         @if(Model.SubCategories.Count()>0)
         {            
-            <div class="panel panel-default" style="width:750px;">
-                <div class="panel-heading">
-                    @Model.Name 子类别
-                </div>
+            <div class="panel panel-default" style="max-width:735px;">
+                <div class="panel-heading category-name">
+                    <a href="~/CMS/Category/@Model.Id">@Model.Name</a> 子类别</div>
                 <div class="panel-body">
                     @foreach (SmartCMS.Models.CategoryViewModel category in Model.SubCategories)
                     {
-                        <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default"><b>@category.Name</b></a>
+                        <a href="~/CMS/Category/@category.Id" class="category-item btn btn-default">@category.Name</a>
                     }                    
                 </div>
             </div>
@@ -67,11 +66,12 @@
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
-                        <th>问题</th>
-                        <th>编辑</th>
-                        <th style="text-align: center;">添加时间</th>
-                        <th style="text-align: center;">热度</th>
-                        <th style="text-align: center;">操作</th>
+                        <th style="text-align: left;">知识词条&问题</th>
+                        <th style="text-align: left;">关键词</th>
+                        <th style="text-align: left;">录入人</th>
+                        <th>录入时间</th>
+                        <th>热度</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,6 +79,7 @@
                     {
                         <tr class="odd">
                             <td style="text-align: left;"><a href="~/CMS/EditArticle/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
+                            <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Keywords)</td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CreatedBy)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
@@ -115,7 +116,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">删除分类</h4>
             </div>
-            <div class="modal-body">确定要删除该分类吗？</div>
+            <div class="modal-body">确定要删除本类别吗？</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-danger" onclick="$('#deleteForm_' + uid).submit();">确认</button>
@@ -132,7 +133,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">删除分类</h4>
             </div>
-            <div class="modal-body">该类别不为空，不能删除。请先清空文章及子类别？</div>
+            <div class="modal-body">本类别不为空，不能删除。请先清空文章及子类别？</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
             </div>
@@ -146,12 +147,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">删除问答</h4>
+                <h4 class="modal-title" id="myModalLabel">删除知识词条</h4>
             </div>
-            <div class="modal-body">确定要删除该问答吗？</div>
+            <div class="modal-body">确定要删除该知识词条吗？</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" onclick="$('#deleteArticleForm_' + uid).submit();">确认</button>
+                <button type="button" class="btn btn-danger" onclick="$('#deleteArticleForm_' + uid).submit();">确认</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

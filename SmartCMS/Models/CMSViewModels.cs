@@ -33,6 +33,8 @@ namespace SmartCMS.Models
         public String CreatedBy { get; set; }
 
         public DateTime? CreatedAt { get; set; }
+
+        public int Count { get; set; }
     }
 
 
@@ -64,7 +66,11 @@ namespace SmartCMS.Models
     }
 
 
-
+    public class KeywordViewModel
+    {
+        public String Keyword { get; set; }
+        public int Count { get; set; }        
+    }
 
 
 }

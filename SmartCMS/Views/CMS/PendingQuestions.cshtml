@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<SmartCMS.Models.ArticleViewModel>
 
 @{
-    ViewBag.Title = "待回答问题";
+    ViewBag.Title = "待解答问题";
 }
 
 
 <div id="breadcrumbs">
     <ul>
-        <li>@Html.ActionLink("智库管理", "Index", "CMS") </li>
+        <li>@Html.ActionLink("问题管理", "QuestionCategories", "CMS") </li>
         <li><a href="#">@ViewBag.Title</a></li>
     </ul>
 </div>
@@ -26,18 +26,18 @@
             <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                 <thead>
                     <tr>
-                        <th>问题</th>
-                        <th>分类</th>
-                        <th style="text-align: center;">最近提问时间</th>
-                        <th style="text-align: center;">提问次数</th>
-                        <th style="text-align: center;">操作</th>
+                        <th style="text-align: left;">问题</th>
+                        <th style="text-align: left;">分类</th>
+                        <th>最近提问时间</th>
+                        <th>提问次数</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (SmartCMS.Models.ArticleViewModel item in Model)
                     {
                         <tr class="odd">
-                            <td style="text-align: left;"><a href="~/CMS/Article/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
+                            <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Question)</td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CategoryName)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>

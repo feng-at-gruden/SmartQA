@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<SmartCMS.Models.CategoryViewModel>
 
 @{
-    ViewBag.Title = "知识分类";
+    ViewBag.Title = "待解答问题";
 }
 
 <div id="breadcrumbs">
     <ul>
-        <li>@Html.ActionLink("智库管理", "Index", "CMS") </li>
+        <li>@Html.ActionLink("问题管理", "QuestionCategories", "CMS") </li>
         <li><a href="#">@ViewBag.Title</a></li>
     </ul>
 </div>
@@ -17,25 +17,7 @@
         Categories
     </div>
     <div class="panel-body">
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger">
-                @Html.ValidationSummary()
-            </div>
-        }
-
-        @if (ViewBag.SuccessMessage != null)
-        {
-            <div class="alert alert-success">
-                @ViewBag.SuccessMessage
-            </div>
-        }
-
-        <div class="cms-tool-bar">
-            <a href="~/CMS/AddCategory" class="btn btn-success">添加分类</a>            
-        </div>
-        <hr style="width:100%;"/>
+        
         @foreach(SmartCMS.Models.CategoryViewModel category in Model)
         {
             @DisplayCategory(category);           
@@ -51,14 +33,15 @@
 @helper DisplayCategory(SmartCMS.Models.CategoryViewModel category)
 {
     var className = category.ParentId == 0 ? "category" : "sub-category";
+    var count = category.Count > 0? new HtmlString("<span class=\"badge\">" + category.Count + "</span>") : null;
     <ul class="@className">
         @if(category.ParentId==0)
         {
-            <li><a href="~/CMS/Category/@category.Id" class="category-item-root"><b>@category.Name</b></a></li>
+            <li><a href="~/CMS/PendingQuestions/@category.Id" class="category-item-root"><b>@category.Name</b></a>@count</li>
         }
         else
         {
-            <li><a href="~/CMS/Category/@category.Id" class="category-item">@category.Name</a></li>
+            <li><a href="~/CMS/PendingQuestions/@category.Id" class="category-item">@category.Name</a>@count</li>
         }
         
         @if (category.SubCategories != null)

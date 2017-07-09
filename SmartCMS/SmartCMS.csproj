@@ -1040,6 +1040,8 @@
     <Content Include="Content\images\ava_5.png" />
     <Content Include="Content\images\ava_6.png" />
     <Content Include="Content\images\ava_7.png" />
+    <Content Include="Content\images\del-s.png" />
+    <Content Include="Content\images\del.png" />
     <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\loading_dots.gif" />
     <Content Include="Content\images\logo.png" />
@@ -1262,6 +1264,7 @@
     <Content Include="Views\CMS\Search.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\CMS\Index.cshtml" />
+    <Content Include="Views\CMS\QuestionCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

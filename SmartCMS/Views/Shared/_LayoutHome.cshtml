@@ -62,7 +62,7 @@
                     <div style="float:right;">                    
                     @if (User.IsInRole(Constants.Roles.ROLE_ADMIN) || User.IsInRole(Constants.Roles.ROLE_EDITOR))
                     {
-                        @Html.ActionLink("智库管理", "PendingQuestions", "CMS", null, new { target = "_blank" })
+                        @Html.ActionLink("智库管理", "QuestionCategories", "CMS", null, new { target = "_blank" })
                     }
                         <a href="javascript:addFavorite();">收藏本站</a>
                         @Html.ActionLink("退出","LogOff","Account")

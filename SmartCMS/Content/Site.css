@@ -806,13 +806,13 @@ tr.pager td {
 
 ul.dropdown-menu 
 {
-    border: solid 2px #009EA1;
+    border: solid 2px #bbb;
     padding: 0px 0;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover
 {
-    border: solid 2px #009EA1;
-    background-color: #009EA1 !important;
+    border: solid 2px #bbb;
+    background-color: #bbb !important;
     color:white !important;
     border-bottom:none;
 }
@@ -1104,7 +1104,7 @@ ul.dropdown-menu
     max-width:840px;
     margin-top:-9px;
     padding:10px 5px;
-    height: 200px;
+    max-height: 200px;
     overflow: auto;
 }
 .ui-autocomplete li{
@@ -1221,13 +1221,55 @@ ul.dropdown-menu
 .dataTable_wrapper table th{
     font-size:14px;
     font-weight:bold;
-    background:#bbb !important;
+    background:#e6e6e6 !important;
     text-align:center;
 }
 .dataTable_wrapper table td {
     font-size:13px;
 }
 
-.category-item{
+.panel-body .category-item{
     margin: 10px 10px 10px 10px !important;
+}
+
+.category-name{
+    font-family:微软雅黑;
+    font-style:normal;
+    background:#e6e6e6 !important;    
+}
+
+.panel-body .btn-default{
+    background:#ddd;
+}
+
+.category{
+    margin: 20px 0px 20px 100px;
+    font-size: 15px;
+}
+
+.delete-hot-word:hover,
+.hot-word:hover +a{
+    visibility:visible !important;    
+}
+
+.delete-hot-word{
+    background:url("./Images/del-s.png") top right no-repeat !important;
+    width:16px;
+    height:16px;
+    display: inline-block;
+    position: relative;
+    top: -12px;    
+    right: 22px;
+    visibility:hidden;
+}
+.hot-word-count{
+    position: relative;
+    left: -45px;
+    display: inline-block;
+    top: 15px;
+    background-color: #009ea1  !important;
+}
+.hot-word-container{
+    display:inline-block;
+    margin-right: -40px;
 }

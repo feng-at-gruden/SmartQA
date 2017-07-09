@@ -57,8 +57,11 @@ namespace SmartCMS.Controllers
         public JsonResult GetCategoryHotTopic(int? id, int? max)
         {
             int k = max.HasValue ? max.Value : 10;
+            
+            var ids = getSubCategoryIds(id.Value);
+            ids.Add(id.Value);            
             var model = (from r in db.Articles
-                        where r.Category == id
+                        where ids.Contains(r.Category.Value)
                         orderby r.Hits descending                        
                         select new ArticleViewModel
                         {
@@ -97,9 +100,40 @@ namespace SmartCMS.Controllers
             model = model.Distinct();
 
             if (id > 0)
-                model = model.Where(m => m.CategoryId == id);
-            
+            {
+                var ids = getSubCategoryIds(id.Value);
+                ids.Add(id.Value);
+                model = from k in model  
+                              where ids.Contains(k.CategoryId)
+                              select new ArticleViewModel
+                              {
+                                  Id = k.Id,
+                                  Question = k.Question,
+                                  CategoryId = k.CategoryId
+                              }; 
+            }
             return Json(model.Take(10), JsonRequestBehavior.AllowGet);
+        }
+
+        private List<int> getSubCategoryIds(int id)
+        {
+            List<int> result = new List<int>();
+            var c = db.Categories.SingleOrDefault(m => m.Id == id);
+            if(c !=null)
+            {
+                var sc = db.Categories.Where(m => m.ParentCategory == id);
+                if(sc !=null )
+                {
+                    foreach(var k in sc)
+                    {
+                        result.Add(k.Id);
+                        var ssc = getSubCategoryIds(k.Id);
+                        if (ssc.Count() > 0)
+                            result.AddRange(ssc);
+                    }
+                }
+            }
+            return result;
         }
 
         [HttpGet]
@@ -171,11 +205,21 @@ namespace SmartCMS.Controllers
                              Question = r.Question,
                              CategoryId = r.Category.Value
                          });
-            
-            if (id > 0)
-                model = model.Where(m => m.CategoryId == id);
 
-            return Json(model.Take(15));
+            if (id > 0)
+            {
+                var ids = getSubCategoryIds(id);
+                ids.Add(id);
+                model = from k in model
+                        where ids.Contains(k.CategoryId)
+                        select new ArticleViewModel
+                        {
+                            Id = k.Id,
+                            Question = k.Question,
+                            CategoryId = k.CategoryId
+                        };
+            }
+            return Json(model.Take(15), JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
