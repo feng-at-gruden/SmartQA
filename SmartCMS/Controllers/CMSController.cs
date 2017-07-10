@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 using SmartCMS.Filters;
 using SmartCMS.Models;
 
@@ -11,6 +12,8 @@ namespace SmartCMS.Controllers
     [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR)]
     public class CMSController : BaseController
     {
+        private const String UploadFolder = "Upload/Attachment/";
+
 
         public ActionResult Index()
         {
@@ -236,6 +239,22 @@ namespace SmartCMS.Controllers
                 }
                 else
                 {
+                    var attachmentPath = "";
+                    //upload file
+                    HttpRequestBase request = this.Request;
+                    if (request.Files.Count == 1 && !string.IsNullOrWhiteSpace(request.Files[0].FileName))
+                    {
+                        var fileName = (new FileInfo(request.Files[0].FileName)).Name;
+                        //string fileSavedName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + fileName.Substring(fileName.LastIndexOf("."));
+                        string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + UploadFolder + DateTime.Now.ToString("yyyyMM"));
+                        if (!Directory.Exists(dir))
+                        {
+                            Directory.CreateDirectory(dir);
+                        }
+                        attachmentPath = Path.Combine(dir, fileName);
+                        request.Files[0].SaveAs(attachmentPath);
+                    }
+
                     db.Articles.Add(new Article
                     {
                         Question = model.Question,
@@ -245,6 +264,7 @@ namespace SmartCMS.Controllers
                         CreatedAt = DateTime.Now,
                         CreatedBy = CurrentUser.Id,
                         Category = model.CategoryId,
+                        Attachment = attachmentPath
                     });
                     //If it's pending Question remove it
                     if(model.PendingId >0 )

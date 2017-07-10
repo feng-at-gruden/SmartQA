@@ -11,10 +11,10 @@
             foreach (string k in ViewBag.Breadcrumbs)
             {
                 string[] v = k.Split('#');
-                <li><a href="/CMS/Category/@v[0]">@v[1]</a></li>
+                <li><a href="~/CMS/Category/@v[0]">@v[1]</a></li>
             }
         }
-        <li><a href="#">@ViewBag.Title</a></li>
+        <li><a href="~/CMS/AddArticle/@Model.CategoryId">@ViewBag.Title</a></li>
     </ul>
 </div>
 
@@ -40,7 +40,7 @@
         }
 
 
-        @using (Html.BeginForm("AddArticle", "CMS", FormMethod.Post))
+        @using (Html.BeginForm("AddArticle", "CMS", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.CategoryId)
@@ -69,6 +69,15 @@
                     </div>
                     <div class="keyword-tips">多个关键字以空格隔开</div>
                 </div>
+
+                <div class="form-group" style="height:40px;">
+                    <a href="javascript:;" class="file">
+                        选择附件文件
+                        <input type="file" name="file" />
+                    </a><span id="selectedFile"></span>
+                </div>
+                
+
                 <a href="~/CMS/Category/@Model.CategoryId" class="btn btn-success" style="color:white;">返 回</a>
                 
                 <button type="submit" class="btn btn-success">保 存</button>
@@ -86,3 +95,19 @@
     });
 </script>
 ------>
+
+<script>
+
+    $(".file").on("change", "input[type='file']", function () {
+        var filePath = $(this).val();
+        if (filePath.length>0) {
+            var arr = filePath.split('\\');
+            var fileName = arr[arr.length - 1];
+            $("#selectedFile").html(fileName);
+        } else {
+            $("#selectedFile").html("");
+            return false;
+        }
+    })
+
+</script>

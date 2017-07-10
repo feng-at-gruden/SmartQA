@@ -183,6 +183,7 @@ namespace SmartCMS.Controllers
                     Answer = r.Answer,
                     Keywords = r.Keywords,
                     CategoryId = r.Category.Value,
+                    Attachment = r.Attachment,
                 };
                 return Json(model, JsonRequestBehavior.AllowGet);
             }

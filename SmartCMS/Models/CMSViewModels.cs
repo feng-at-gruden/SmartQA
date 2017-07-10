@@ -60,6 +60,9 @@ namespace SmartCMS.Models
         [Display(Name = "热度")]
         public int Hits { get; set; }
 
+        [Display(Name = "附件")]
+        public string Attachment { get; set; }
+
         public String CreatedBy { get; set; }
 
         public DateTime? CreatedAt { get; set; }

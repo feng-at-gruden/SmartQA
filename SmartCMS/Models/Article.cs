@@ -22,6 +22,7 @@ namespace SmartCMS.Models
         public Nullable<int> Hits { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<int> CreatedBy { get; set; }
+        public string Attachment { get; set; }
     
         public virtual Category Categories { get; set; }
         public virtual User Users { get; set; }
