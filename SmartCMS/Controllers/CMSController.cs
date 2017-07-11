@@ -23,12 +23,12 @@ namespace SmartCMS.Controllers
         public ActionResult Categories()
         {
             var model = from row in db.Categories
-                        where row.ParentCategory == 0
+                        where row.ParentCategoryId == 0
                         orderby row.Id
                         select new CategoryViewModel
                         {
                             Id = row.Id,
-                            ParentId = row.ParentCategory,
+                            ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,
                         };
@@ -51,35 +51,35 @@ namespace SmartCMS.Controllers
                         select new CategoryViewModel
                         {
                             Id = row.Id,
-                            ParentId = row.ParentCategory,
+                            ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,                            
                         };
 
             var model = categories.SingleOrDefault();
             model.SubCategories = from sr in db.Categories
-                                    where sr.ParentCategory == model.Id
+                                    where sr.ParentCategoryId == model.Id
                                     orderby sr.Name
                                     select new CategoryViewModel
                                     {
                                         Id = sr.Id,
-                                        ParentId = sr.ParentCategory,
+                                        ParentId = sr.ParentCategoryId,
                                         Name = sr.Name,
                                         Comment = sr.Comment,
                                     };
-            model.Articles = from a in db.Articles
-                             where a.Category == model.Id
-                             orderby a.Question
-                             select new ArticleViewModel
+            model.Articles = from a in db.Knowledges
+                             where a.CategoryId == model.Id
+                             orderby a.Topic
+                             select new KnowledgeViewModel
                              {
                                  Id = a.Id,
-                                 CategoryId = a.Category.Value,
-                                 Question = a.Question,
-                                 Answer = a.Answer,
+                                 CategoryId = a.CategoryId.Value,
+                                 Question = a.Topic,
+                                 Answer = a.Content,
                                  Hits = a.Hits.Value,
                                  Keywords = a.Keywords,
                                  CreatedAt = a.CreatedAt,
-                                 CreatedBy = a.Users.RealName,
+                                 CreatedBy = a.User.RealName,
                                  Attachment = a.Attachment,
                              };
             ViewBag.Breadcrumbs = setBreadcrumbs(model.Id);
@@ -107,7 +107,7 @@ namespace SmartCMS.Controllers
             if (ModelState.IsValid)
             {
                 model.Name = model.Name.Trim();
-                var i = db.Categories.Count(m => m.Name.Equals(model.Name, StringComparison.OrdinalIgnoreCase) && m.ParentCategory == model.ParentId);
+                var i = db.Categories.Count(m => m.Name.Equals(model.Name, StringComparison.OrdinalIgnoreCase) && m.ParentCategoryId == model.ParentId);
                 if (i > 0)
                 {
                     ModelState.AddModelError("", "分类已经存在，请勿重复添加!");
@@ -120,7 +120,7 @@ namespace SmartCMS.Controllers
                         Comment = model.Comment,
                         CreatedAt = DateTime.Now,
                         CreatedBy = CurrentUser.Id,
-                        ParentCategory = model.ParentId,
+                        ParentCategoryId = model.ParentId,
                     });
                     db.SaveChanges();
                     ViewBag.SuccessMessage = "问题分类添加成功！";
@@ -142,9 +142,9 @@ namespace SmartCMS.Controllers
                             Id = row.Id,
                             Name = row.Name,
                             Comment = row.Comment,
-                            ParentId = row.ParentCategory,
+                            ParentId = row.ParentCategoryId,
                             CreatedAt = row.CreatedAt,
-                            CreatedBy = row.Users.RealName,
+                            CreatedBy = row.User.RealName,
                         };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
@@ -173,9 +173,9 @@ namespace SmartCMS.Controllers
                             Id = row.Id,
                             Name = row.Name,
                             Comment = row.Comment,
-                            ParentId = row.ParentCategory,
+                            ParentId = row.ParentCategoryId,
                             CreatedAt = row.CreatedAt,
-                            CreatedBy = row.Users.RealName,
+                            CreatedBy = row.User.RealName,
                         };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
@@ -189,8 +189,8 @@ namespace SmartCMS.Controllers
             var u = db.Categories.SingleOrDefault(m => m.Id == id);
             if (u != null)
             {
-                var c = db.Categories.Where(m => m.ParentCategory == id);
-                if (c.Count() > 0 || u.Articles.Count() > 0)
+                var c = db.Categories.Where(m => m.ParentCategoryId == id);
+                if (c.Count() > 0 || u.Knowledges.Count() > 0)
                 {
                     ModelState.AddModelError("", "问题分类不为空，无法删除！");
                 }
@@ -211,15 +211,15 @@ namespace SmartCMS.Controllers
 
         public ActionResult AddArticle(int id, int? uid)
         {
-            var model = new ArticleViewModel
+            var model = new KnowledgeViewModel
             {
                 CategoryId = id,
             };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             if(uid.HasValue)
             {
-                var k = db.PendingQuestions.SingleOrDefault(m => m.Id == uid);
-                model.Question = k.Question;
+                var k = db.Questions.SingleOrDefault(m => m.Id == uid);
+                model.Question = k.Content;
                 model.PendingId = uid.Value;
             }
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
@@ -228,12 +228,12 @@ namespace SmartCMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddArticle(ArticleViewModel model)
+        public ActionResult AddArticle(KnowledgeViewModel model)
         {
             if (ModelState.IsValid)
             {
                 model.Question = model.Question.Trim();
-                var i = db.Articles.Count(m => m.Question.Equals(model.Question, StringComparison.OrdinalIgnoreCase) && m.Category == model.CategoryId);
+                var i = db.Knowledges.Count(m => m.Topic.Equals(model.Question, StringComparison.OrdinalIgnoreCase) && m.CategoryId == model.CategoryId);
                 if (i > 0)
                 {
                     ModelState.AddModelError("", "同类别下相同问答已经存在，请勿重复添加!");
@@ -257,23 +257,24 @@ namespace SmartCMS.Controllers
                         attachmentPath = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
                     }
 
-                    db.Articles.Add(new Article
+                    db.Knowledges.Add(new Knowledge
                     {
-                        Question = model.Question,
-                        Answer = model.Answer,
+                        Topic = model.Question,
+                        Content = model.Answer,
                         Keywords = model.Keywords,
                         Hits = 0,
                         CreatedAt = DateTime.Now,
                         CreatedBy = CurrentUser.Id,
-                        Category = model.CategoryId,
+                        CategoryId = model.CategoryId,
                         Attachment = attachmentPath
                     });
+                    //TODO, not remove
                     //If it's pending Question remove it
                     if(model.PendingId >0 )
                     {
-                        var p = db.PendingQuestions.SingleOrDefault(m => m.Id == model.PendingId);
+                        var p = db.Questions.SingleOrDefault(m => m.Id == model.PendingId);
                         if(p!=null)
-                            db.PendingQuestions.Remove(p);
+                            db.Questions.Remove(p);
                     }
                     //Check and add hot words.
                     var keys = model.Keywords.Trim().Split(new char[1]{' '});
@@ -310,10 +311,10 @@ namespace SmartCMS.Controllers
         public ActionResult DeleteArticle(int id)
         {
             int pid = 0;
-            var u = db.Articles.SingleOrDefault(m => m.Id == id);           
+            var u = db.Knowledges.SingleOrDefault(m => m.Id == id);           
             if (u != null)
             {
-                pid = u.Category.Value;
+                pid = u.CategoryId.Value;
                 if(u.Attachment !="" && u.Attachment !=null)
                 {
                     try
@@ -325,7 +326,7 @@ namespace SmartCMS.Controllers
                     }
                     catch (Exception) { }
                 }
-                db.Articles.Remove(u);
+                db.Knowledges.Remove(u);
                 db.SaveChanges();
                 Log("删除问答");
                 ViewBag.SuccessMessage = "删除问答成功！";
@@ -341,18 +342,18 @@ namespace SmartCMS.Controllers
 
         public ActionResult EditArticle(int id)
         {
-            var model = from row in db.Articles
+            var model = from row in db.Knowledges
                         where row.Id == id
-                        select new ArticleViewModel
+                        select new KnowledgeViewModel
                         {
                             Id = row.Id,
-                            Question = row.Question,
-                            Answer = row.Answer,
-                            CategoryId = row.Category.Value,
+                            Question = row.Topic,
+                            Answer = row.Content,
+                            CategoryId = row.CategoryId.Value,
                             Keywords = row.Keywords,
                             Hits = row.Hits.Value,
                             CreatedAt = row.CreatedAt,
-                            CreatedBy = row.Users.RealName,
+                            CreatedBy = row.User.RealName,
                             Attachment = row.Attachment,
                         };
             ViewBag.Breadcrumbs = setBreadcrumbs(model.SingleOrDefault().CategoryId);
@@ -361,11 +362,11 @@ namespace SmartCMS.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditArticle(int id, ArticleViewModel model)
+        public ActionResult EditArticle(int id, KnowledgeViewModel model)
         {            
             if (ModelState.IsValid)
             {
-                var c = db.Articles.SingleOrDefault(m => m.Id == model.Id);
+                var c = db.Knowledges.SingleOrDefault(m => m.Id == model.Id);
 
                 //Check and save attachment,
                 HttpRequestBase request = this.Request;
@@ -394,8 +395,8 @@ namespace SmartCMS.Controllers
                     request.Files[0].SaveAs(Path.Combine(dir, fileName));
                     c.Attachment = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
                 }
-                c.Question = model.Question.Trim();
-                c.Answer = model.Answer.Trim();
+                c.Topic = model.Question.Trim();
+                c.Content = model.Answer.Trim();
                 c.Keywords = model.Keywords.Trim();
                 db.SaveChanges();
 
@@ -422,18 +423,18 @@ namespace SmartCMS.Controllers
                     db.SaveChanges();
                 }
             }
-            var newModel = from row in db.Articles
+            var newModel = from row in db.Knowledges
                            where row.Id == id
-                           select new ArticleViewModel
+                           select new KnowledgeViewModel
                            {
                                Id = row.Id,
-                               Question = row.Question,
-                               Answer = row.Answer,
-                               CategoryId = row.Category.Value,
+                               Question = row.Topic,
+                               Answer = row.Content,
+                               CategoryId = row.CategoryId.Value,
                                Keywords = row.Keywords,
                                Hits = row.Hits.Value,
                                CreatedAt = row.CreatedAt,
-                               CreatedBy = row.Users.RealName,
+                               CreatedBy = row.User.RealName,
                                Attachment = row.Attachment,
                            };
             ViewBag.Breadcrumbs = setBreadcrumbs(newModel.SingleOrDefault().CategoryId);
@@ -446,7 +447,7 @@ namespace SmartCMS.Controllers
                         select new KeywordViewModel
                         {
                             Keyword = row.KeyWord,
-                            Count = db.Articles.Count(m=>m.Keywords.Contains(row.KeyWord))
+                            Count = db.Knowledges.Count(m=>m.Keywords.Contains(row.KeyWord))
                         };
             return View(model);
         }
@@ -463,18 +464,18 @@ namespace SmartCMS.Controllers
 
         public ActionResult Search(string id)
         {
-            var model = (from r in db.Articles
+            var model = (from r in db.Knowledges
                          where r.Keywords.Contains(id)
                          orderby r.Hits descending
-                         select new ArticleViewModel
+                         select new KnowledgeViewModel
                          {
                              Id = r.Id,
-                             Question = r.Question,
-                             CategoryId = r.Category.Value,
-                             CategoryName = r.Categories.Name,
+                             Question = r.Topic,
+                             CategoryId = r.CategoryId.Value,
+                             CategoryName = r.Category.Name,
                              Hits = r.Hits.Value,
                              CreatedAt = r.CreatedAt,
-                             CreatedBy = r.Users.RealName,
+                             CreatedBy = r.User.RealName,
                              Keywords = r.Keywords,
                              Attachment = r.Attachment,
                          });
@@ -485,15 +486,15 @@ namespace SmartCMS.Controllers
         public ActionResult QuestionCategories()
         {
             var model = from row in db.Categories
-                        where row.ParentCategory == 0
+                        where row.ParentCategoryId == 0
                         orderby row.Id
                         select new CategoryViewModel
                         {
                             Id = row.Id,
-                            ParentId = row.ParentCategory,
+                            ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,
-                            Count = db.PendingQuestions.Count(m=>m.CategoryId == row.Id),
+                            Count = db.Questions.Count(m=>m.CategoryId == row.Id),
                         };
 
             List<CategoryViewModel> result = new List<CategoryViewModel>();
@@ -507,17 +508,17 @@ namespace SmartCMS.Controllers
             return View(result);
         }
 
-        public ActionResult PendingQuestions(int? id)
+        public ActionResult Questions(int? id)
         {
-            var model = from row in db.PendingQuestions
+            var model = from row in db.Questions
                         where row.CategoryId == id.Value
                         orderby row.Hits descending
-                        select new ArticleViewModel
+                        select new KnowledgeViewModel
                         {
                             Id = row.Id,
-                            Question = row.Question,
+                            Question = row.Content,
                             CategoryId = row.CategoryId.Value,
-                            CategoryName = row.Categories.Name,
+                            CategoryName = row.Category.Name,
                             Hits = row.Hits,
                             CreatedAt = row.LastAskedAt,                            
                         };
@@ -528,10 +529,10 @@ namespace SmartCMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeletePendingQuestion(int id)
         {
-            var u = db.PendingQuestions.SingleOrDefault(m => m.Id == id);
+            var u = db.Questions.SingleOrDefault(m => m.Id == id);
             if (u != null)
             {
-                db.PendingQuestions.Remove(u);
+                db.Questions.Remove(u);
                 db.SaveChanges();
                 Log("删除未答条目");
                 ViewBag.SuccessMessage = "条目删除成功！";
@@ -560,10 +561,10 @@ namespace SmartCMS.Controllers
 
         private List<string> addParentLinks(List<string> links, Category category)
         {
-            if (category.ParentCategory == 0)
+            if (category.ParentCategoryId == 0)
                 return links;
 
-            var pc = db.Categories.SingleOrDefault(m => m.Id == category.ParentCategory);
+            var pc = db.Categories.SingleOrDefault(m => m.Id == category.ParentCategoryId);
             if (pc != null)
             {
                 links.Add(pc.Id + "#" + pc.Name);
@@ -575,15 +576,15 @@ namespace SmartCMS.Controllers
         private IEnumerable<CategoryViewModel> setSubCategoires(CategoryViewModel c)
         {
             var subCategories = from row in db.Categories
-                                where row.ParentCategory == c.Id
+                                where row.ParentCategoryId == c.Id
                                 orderby row.Id
                                 select new CategoryViewModel
                                 {
                                     Id = row.Id,
-                                    ParentId = row.ParentCategory,
+                                    ParentId = row.ParentCategoryId,
                                     Name = row.Name,
                                     Comment = row.Comment,
-                                    Count = db.PendingQuestions.Count(m => m.CategoryId == row.Id),
+                                    Count = db.Questions.Count(m => m.CategoryId == row.Id),
                                 };
 
             List<CategoryViewModel> r = new List<CategoryViewModel>();

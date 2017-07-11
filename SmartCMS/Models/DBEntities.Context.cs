@@ -25,13 +25,14 @@ namespace SmartCMS.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Article> Articles { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Configuration> Configurations { get; set; }
-        public DbSet<Log> Logs { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<HotWord> HotWords { get; set; }
-        public DbSet<PendingQuestion> PendingQuestions { get; set; }
+        public DbSet<Knowledge> Knowledges { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
     }
 }

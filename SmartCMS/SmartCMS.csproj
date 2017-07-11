@@ -141,7 +141,7 @@
     <Compile Include="Helper\ChatHelper.cs" />
     <Compile Include="Helper\NetworkHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Article.cs">
+    <Compile Include="Models\Answer.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Category.cs">
@@ -170,10 +170,13 @@
     <Compile Include="Models\HotWord.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Knowledge.cs">
+      <DependentUpon>DBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Log.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PendingQuestion.cs">
+    <Compile Include="Models\Question.cs">
       <DependentUpon>DBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SmartCMSPrincipal.cs" />
@@ -1260,7 +1263,7 @@
     <Content Include="Views\CMS\EditCategory.cshtml" />
     <Content Include="Views\CMS\AddArticle.cshtml" />
     <Content Include="Views\CMS\EditArticle.cshtml" />
-    <Content Include="Views\CMS\PendingQuestions.cshtml" />
+    <Content Include="Views\CMS\Questions.cshtml" />
     <Content Include="Views\CMS\HotWords.cshtml" />
     <Content Include="Views\CMS\Search.cshtml" />
     <Content Include="Views\Shared\_LayoutHome.cshtml" />

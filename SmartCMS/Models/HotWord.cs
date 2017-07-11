@@ -20,6 +20,6 @@ namespace SmartCMS.Models
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<int> CreatedBy { get; set; }
     
-        public virtual User Users { get; set; }
+        public virtual User User { get; set; }
     }
 }

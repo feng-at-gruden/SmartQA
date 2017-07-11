@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SmartCMS.Models.ArticleViewModel>
+﻿@model IEnumerable<SmartCMS.Models.KnowledgeViewModel>
 
 @{
     ViewBag.Title = "待解答问题";
@@ -34,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (SmartCMS.Models.ArticleViewModel item in Model)
+                    @foreach (SmartCMS.Models.KnowledgeViewModel item in Model)
                     {
                         <tr class="odd">
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Question)</td>

@@ -37,11 +37,11 @@
     <ul class="@className">
         @if(category.ParentId==0)
         {
-            <li><a href="~/CMS/PendingQuestions/@category.Id" class="category-item-root"><b>@category.Name</b></a>@count</li>
+            <li><a href="~/CMS/Questions/@category.Id" class="category-item-root"><b>@category.Name</b></a>@count</li>
         }
         else
         {
-            <li><a href="~/CMS/PendingQuestions/@category.Id" class="category-item">@category.Name</a>@count</li>
+            <li><a href="~/CMS/Questions/@category.Id" class="category-item">@category.Name</a>@count</li>
         }
         
         @if (category.SubCategories != null)

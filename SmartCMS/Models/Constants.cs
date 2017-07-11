@@ -19,6 +19,7 @@ namespace SmartCMS.Models
         public class Roles
         {
             public const string ROLE_ADMIN = "管理员";
+            public const string ROLE_CHIEF_EDITOR = "主编";
             public const string ROLE_EDITOR = "编辑";
             public const string ROLE_SERVICE = "客服";
         }

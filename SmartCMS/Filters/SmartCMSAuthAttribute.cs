@@ -44,7 +44,7 @@ namespace SmartCMS.Filters
             {
                 var u = db.Users.FirstOrDefault(m => m.UserName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
                 if (u != null)
-                    return u.UserRoles.Role;
+                    return u.UserRole.Role;
                 else
                     return null;
             }

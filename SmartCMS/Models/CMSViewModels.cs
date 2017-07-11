@@ -28,7 +28,7 @@ namespace SmartCMS.Models
         [Display(Name = "同级类别")]
         public IEnumerable<CategoryViewModel> SameLevelCategories { get; set; }
 
-        public IEnumerable<ArticleViewModel> Articles { get; set; }
+        public IEnumerable<KnowledgeViewModel> Articles { get; set; }
 
         public String CreatedBy { get; set; }
 
@@ -38,7 +38,7 @@ namespace SmartCMS.Models
     }
 
 
-    public class ArticleViewModel
+    public class KnowledgeViewModel
     {
         public int Id { get; set; }
         public int CategoryId { get; set; }

@@ -24,7 +24,7 @@ namespace SmartCMS.Controllers
                             ActionTime = row.ActionTime,
                             IP = row.IP,
                             UserClient = row.Client,
-                            User = row.Users != null ? row.Users.UserName + "/" + row.Users.RealName + "" : "已删除帐户"
+                            User = row.User != null ? row.User.UserName + "/" + row.User.RealName + "" : "已删除帐户"
                         };
             return View(model);
         }

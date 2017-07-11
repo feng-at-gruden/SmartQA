@@ -12,24 +12,19 @@ namespace SmartCMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Category
+    public partial class Knowledge
     {
-        public Category()
-        {
-            this.Knowledges = new HashSet<Knowledge>();
-            this.Questions = new HashSet<Question>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Comment { get; set; }
-        public string Icon { get; set; }
-        public int ParentCategoryId { get; set; }
+        public string Topic { get; set; }
+        public string Content { get; set; }
+        public string Keywords { get; set; }
+        public Nullable<int> CategoryId { get; set; }
+        public Nullable<int> Hits { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
         public Nullable<int> CreatedBy { get; set; }
+        public string Attachment { get; set; }
     
-        public virtual ICollection<Knowledge> Knowledges { get; set; }
+        public virtual Category Category { get; set; }
         public virtual User User { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
     }
 }

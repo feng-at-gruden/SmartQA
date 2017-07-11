@@ -5,23 +5,26 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="79ada709901049b0b9e5ea477c756c19" Name="Diagram1">
-        <EntityTypeShape EntityType="SmartCMSModel.Article" Width="1.5" PointX="7.75" PointY="8.25" />
-        <EntityTypeShape EntityType="SmartCMSModel.Category" Width="1.5" PointX="5.25" PointY="8.25" />
-        <EntityTypeShape EntityType="SmartCMSModel.Configuration" Width="1.5" PointX="0.5" PointY="2" />
-        <EntityTypeShape EntityType="SmartCMSModel.Log" Width="1.5" PointX="5.5" PointY="4.25" />
-        <EntityTypeShape EntityType="SmartCMSModel.UserRole" Width="1.5" PointX="0.5" PointY="4.25" />
-        <EntityTypeShape EntityType="SmartCMSModel.User" Width="1.5" PointX="3" PointY="4.25" />
-        <AssociationConnector Association="SmartCMSModel.FK__Articles__Catego__276EDEB3" />
-        <AssociationConnector Association="SmartCMSModel.FK__Articles__Create__286302EC" />
-        <AssociationConnector Association="SmartCMSModel.FK__Categorie__Creat__2B3F6F97" />
-        <AssociationConnector Association="SmartCMSModel.FK__Log__UserId__173876EA" />
-        <AssociationConnector Association="SmartCMSModel.FK__Users__RoleId__182C9B23" />
-        <EntityTypeShape EntityType="SmartCMSModel.HotWord" Width="1.5" PointX="5.25" PointY="1" />
-        <AssociationConnector Association="SmartCMSModel.FK__HotWords__Create__239E4DCF" />
-        <EntityTypeShape EntityType="SmartCMSModel.PendingQuestion" Width="1.5" PointX="1.5" PointY="8.5" />
-        <AssociationConnector Association="SmartCMSModel.FK__UnknownQu__Creat__29572725" />
+        <EntityTypeShape EntityType="SmartCMSModel.Answer" Width="1.5" PointX="5.25" PointY="8.125" />
+        <EntityTypeShape EntityType="SmartCMSModel.Category" Width="1.5" PointX="5.25" PointY="11.625" />
+        <EntityTypeShape EntityType="SmartCMSModel.Configuration" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SmartCMSModel.HotWord" Width="1.5" PointX="5.25" PointY="15.125" />
+        <EntityTypeShape EntityType="SmartCMSModel.Knowledge" Width="1.5" PointX="7.5" PointY="9.375" />
+        <EntityTypeShape EntityType="SmartCMSModel.Log" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="SmartCMSModel.Question" Width="1.5" PointX="10.5" PointY="9.625" />
+        <EntityTypeShape EntityType="SmartCMSModel.User" Width="1.5" PointX="3" PointY="7.375" />
+        <EntityTypeShape EntityType="SmartCMSModel.UserRole" Width="1.5" PointX="0.75" PointY="8.75" />
+        <AssociationConnector Association="SmartCMSModel.FK__Answers__AnswerB__30F848ED" />
+        <AssociationConnector Association="SmartCMSModel.FK__Answers__Questio__300424B4" />
+        <AssociationConnector Association="SmartCMSModel.FK__Articles__Catego__1CF15040" />
+        <AssociationConnector Association="SmartCMSModel.FK__Categorie__Creat__1ED998B2" />
         <AssociationConnector Association="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" />
-        </Diagram>
+        <AssociationConnector Association="SmartCMSModel.FK__HotWords__Create__239E4DCF" />
+        <AssociationConnector Association="SmartCMSModel.FK__Articles__Create__1DE57479" />
+        <AssociationConnector Association="SmartCMSModel.FK__Logs__UserId__1FCDBCEB" />
+        <AssociationConnector Association="SmartCMSModel.FK__UnknownQu__Creat__29572725" />
+        <AssociationConnector Association="SmartCMSModel.FK__Users__RoleId__20C1E124" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

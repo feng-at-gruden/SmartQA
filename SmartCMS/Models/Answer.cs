@@ -12,15 +12,17 @@ namespace SmartCMS.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Log
+    public partial class Answer
     {
         public int Id { get; set; }
-        public string Action { get; set; }
-        public System.DateTime ActionTime { get; set; }
-        public Nullable<int> UserId { get; set; }
-        public string IP { get; set; }
-        public string Client { get; set; }
+        public Nullable<int> QuestionId { get; set; }
+        public string Content { get; set; }
+        public Nullable<int> AnswerBy { get; set; }
+        public Nullable<System.DateTime> AnswerAt { get; set; }
+        public int Hits { get; set; }
+        public bool Accepted { get; set; }
     
         public virtual User User { get; set; }
+        public virtual Question Question { get; set; }
     }
 }

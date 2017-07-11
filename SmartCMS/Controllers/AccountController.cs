@@ -39,11 +39,11 @@ namespace SmartCMS.Controllers
                 FormsAuthentication.SetAuthCookie(model.UserName, false);
                 FormsAuthentication.RedirectFromLoginPage(u.UserName, false);
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, u.UserName, DateTime.Now,
-                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}", u.UserRoles.Role.ToString(), u.RealName));
+                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}", u.UserRole.Role.ToString(), u.RealName));
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 Response.Cookies.Add(cookie);
-                HttpContext.User = new SmartCMSPrincipal(u.UserRoles.Role.ToString(), u.RealName, HttpContext.User.Identity);
+                HttpContext.User = new SmartCMSPrincipal(u.UserRole.Role.ToString(), u.RealName, HttpContext.User.Identity);
 
                 u.LastLoginTime = DateTime.Now;
                 db.SaveChanges();
@@ -128,7 +128,7 @@ namespace SmartCMS.Controllers
                             UserName = row.UserName,
                             RealName = row.RealName,
                             RoleId = row.RoleId.Value,
-                            RoleName = row.UserRoles.Role,
+                            RoleName = row.UserRole.Role,
                             Password = row.Password,
                             LastLoginTime = row.LastLoginTime,
                             RegisterTime = row.RegisterTime,
@@ -308,7 +308,7 @@ namespace SmartCMS.Controllers
                 UserName = row.UserName,
                 RealName = row.RealName,
                 RoleId = row.RoleId.Value,
-                RoleName = row.UserRoles.Role,
+                RoleName = row.UserRole.Role,
                 Password = row.Password,
                 LastLoginTime = row.LastLoginTime,
                 RegisterTime = row.RegisterTime,

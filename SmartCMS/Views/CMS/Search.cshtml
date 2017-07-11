@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SmartCMS.Models.ArticleViewModel>
+﻿@model IEnumerable<SmartCMS.Models.KnowledgeViewModel>
 
 @{
     ViewBag.Title = "查询结果";
@@ -34,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (SmartCMS.Models.ArticleViewModel item in Model)
+                    @foreach (SmartCMS.Models.KnowledgeViewModel item in Model)
                     {
                         <tr class="odd">
                             <td style="text-align: left;"><a href="~/CMS/EditArticle/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a>@if (!String.IsNullOrEmpty(item.Attachment)){ <a href="@item.Attachment" target="_blank"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span></a>}</td>

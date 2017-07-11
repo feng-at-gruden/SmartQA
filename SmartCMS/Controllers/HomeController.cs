@@ -17,7 +17,7 @@ namespace SmartCMS.Controllers
         public ActionResult Index()
         {
             var rootCategories = from r in db.Categories
-                        where r.ParentCategory == 0
+                        where r.ParentCategoryId == 0
                         select new CategoryViewModel
                         {
                             Id = r.Id,
@@ -27,7 +27,7 @@ namespace SmartCMS.Controllers
             foreach(var m in rootCategories)
             {
                 m.SubCategories = from sr in db.Categories
-                                  where sr.ParentCategory == m.Id
+                                  where sr.ParentCategoryId == m.Id
                                   select new CategoryViewModel
                                   {
                                       Id = sr.Id,
@@ -42,7 +42,7 @@ namespace SmartCMS.Controllers
         public JsonResult GetCategories(int? id)
         {
             var model = from r in db.Categories
-                        where r.ParentCategory == id
+                        where r.ParentCategoryId == id
                         select new CategoryViewModel
                         {
                             Id = r.Id,
@@ -60,13 +60,13 @@ namespace SmartCMS.Controllers
             
             var ids = getSubCategoryIds(id.Value);
             ids.Add(id.Value);            
-            var model = (from r in db.Articles
-                        where ids.Contains(r.Category.Value)
+            var model = (from r in db.Knowledges
+                         where ids.Contains(r.CategoryId.Value)
                         orderby r.Hits descending                        
-                        select new ArticleViewModel
+                        select new KnowledgeViewModel
                         {
                             Id = r.Id,
-                            Question = r.Question,
+                            Question = r.Topic,
                         }).Take(k);
 
             return Json(model, JsonRequestBehavior.AllowGet);
@@ -75,25 +75,25 @@ namespace SmartCMS.Controllers
         [HttpGet]
         public JsonResult Search(int? id, string question)
         {            
-            var model = (from r in db.Articles
+            var model = (from r in db.Knowledges
                          where r.Keywords.Contains(question)
                          orderby r.Hits descending
-                         select new ArticleViewModel
+                         select new KnowledgeViewModel
                          {
                              Id = r.Id,
-                             Question = r.Question,
-                             CategoryId = r.Category.Value
+                             Question = r.Topic,
+                             CategoryId = r.CategoryId.Value
                          });
             if(model.Count()<10)
             {
-                var m2 = (from r in db.Articles
-                          where r.Question.Contains(question)
+                var m2 = (from r in db.Knowledges
+                          where r.Topic.Contains(question)
                           orderby r.Hits descending
-                          select new ArticleViewModel
+                          select new KnowledgeViewModel
                           {
                               Id = r.Id,
-                              Question = r.Question,
-                              CategoryId = r.Category.Value
+                              Question = r.Topic,
+                              CategoryId = r.CategoryId.Value
                           });
                 model = model.Concat(m2);
             }
@@ -105,7 +105,7 @@ namespace SmartCMS.Controllers
                 ids.Add(id.Value);
                 model = from k in model  
                               where ids.Contains(k.CategoryId)
-                              select new ArticleViewModel
+                              select new KnowledgeViewModel
                               {
                                   Id = k.Id,
                                   Question = k.Question,
@@ -121,7 +121,7 @@ namespace SmartCMS.Controllers
             var c = db.Categories.SingleOrDefault(m => m.Id == id);
             if(c !=null)
             {
-                var sc = db.Categories.Where(m => m.ParentCategory == id);
+                var sc = db.Categories.Where(m => m.ParentCategoryId == id);
                 if(sc !=null )
                 {
                     foreach(var k in sc)
@@ -143,13 +143,13 @@ namespace SmartCMS.Controllers
             question = question.Trim();
             if (!String.IsNullOrWhiteSpace(question))
             {
-                int t = db.PendingQuestions.Count(m => m.Question == question);
+                int t = db.Questions.Count(m => m.Content == question);
                 if (t <= 0)
                 {
                     int cid = id.HasValue && id.Value > 0 ? id.Value : Constants.Other_Category_Id;
-                    db.PendingQuestions.Add(new PendingQuestion
+                    db.Questions.Add(new Question
                     {
-                        Question = question,
+                        Content = question,
                         LastAskedAt = DateTime.Now,
                         Hits = 1,
                         CreatedBy = CurrentUser.Id,
@@ -159,7 +159,7 @@ namespace SmartCMS.Controllers
                 }
                 else
                 {
-                    var un = db.PendingQuestions.SingleOrDefault(m => m.Question == question);
+                    var un = db.Questions.SingleOrDefault(m => m.Content == question);
                     un.Hits++;
                     un.LastAskedAt = DateTime.Now;
                     db.SaveChanges();
@@ -171,18 +171,18 @@ namespace SmartCMS.Controllers
         [HttpGet]
         public JsonResult View(int id)
         {
-            var r = db.Articles.SingleOrDefault(m => m.Id == id);
+            var r = db.Knowledges.SingleOrDefault(m => m.Id == id);
             if(r!=null)
             {
                 r.Hits++;
                 db.SaveChanges();
-                var model = new ArticleViewModel
+                var model = new KnowledgeViewModel
                 {
                     Id = r.Id,
-                    Question = r.Question,
-                    Answer = r.Answer,
+                    Question = r.Topic,
+                    Answer = r.Content,
                     Keywords = r.Keywords,
-                    CategoryId = r.Category.Value,
+                    CategoryId = r.CategoryId.Value,
                     Attachment = r.Attachment,
                 };
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -197,14 +197,14 @@ namespace SmartCMS.Controllers
         public JsonResult Hints(int id, string q)
         {
             q = q.Trim();
-            var model = (from r in db.Articles
-                         where r.Question.Contains(q)
+            var model = (from r in db.Knowledges
+                         where r.Topic.Contains(q)
                          orderby r.Hits descending
-                         select new ArticleViewModel
+                         select new KnowledgeViewModel
                          {
                              Id = r.Id,
-                             Question = r.Question,
-                             CategoryId = r.Category.Value
+                             Question = r.Topic,
+                             CategoryId = r.CategoryId.Value
                          });
 
             if (id > 0)
@@ -213,7 +213,7 @@ namespace SmartCMS.Controllers
                 ids.Add(id);
                 model = from k in model
                         where ids.Contains(k.CategoryId)
-                        select new ArticleViewModel
+                        select new KnowledgeViewModel
                         {
                             Id = k.Id,
                             Question = k.Question,
