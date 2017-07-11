@@ -11,7 +11,7 @@ Target Server Type    : SQL Server
 Target Server Version : 110000
 File Encoding         : 65001
 
-Date: 2017-07-02 15:03:23
+Date: 2017-07-11 12:22:50
 */
 
 
@@ -28,12 +28,13 @@ CREATE TABLE [dbo].[Articles] (
 [Category] int NULL ,
 [Hits] int NULL DEFAULT ((0)) ,
 [CreatedAt] datetime NULL ,
-[CreatedBy] int NULL 
+[CreatedBy] int NULL ,
+[Attachment] varchar(255) NULL 
 )
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[Articles]', RESEED, 16)
+DBCC CHECKIDENT(N'[dbo].[Articles]', RESEED, 29)
 GO
 
 -- ----------------------------
@@ -53,7 +54,7 @@ CREATE TABLE [dbo].[Categories] (
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[Categories]', RESEED, 21)
+DBCC CHECKIDENT(N'[dbo].[Categories]', RESEED, 23)
 GO
 
 -- ----------------------------
@@ -88,7 +89,7 @@ CREATE TABLE [dbo].[HotWords] (
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[HotWords]', RESEED, 3)
+DBCC CHECKIDENT(N'[dbo].[HotWords]', RESEED, 20)
 GO
 
 -- ----------------------------
@@ -107,7 +108,7 @@ CREATE TABLE [dbo].[Logs] (
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[Logs]', RESEED, 192)
+DBCC CHECKIDENT(N'[dbo].[Logs]', RESEED, 248)
 GO
 
 -- ----------------------------
@@ -126,7 +127,7 @@ CREATE TABLE [dbo].[PendingQuestions] (
 
 
 GO
-DBCC CHECKIDENT(N'[dbo].[PendingQuestions]', RESEED, 4)
+DBCC CHECKIDENT(N'[dbo].[PendingQuestions]', RESEED, 17)
 GO
 
 -- ----------------------------

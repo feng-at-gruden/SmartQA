@@ -1182,8 +1182,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="DBScript\SmartCMS20170621.sql" />
-    <Content Include="DBScript\SmartCMS20170702.sql" />
+    <Content Include="DBScript\SmartCMS-all-20170711.sql" />
+    <Content Include="DBScript\SmartCMS-data-20170711.sql" />
+    <Content Include="DBScript\SmartCMS-Structure-20170711.sql" />
     <Content Include="Global.asax" />
     <EntityDeploy Include="Models\DBEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
