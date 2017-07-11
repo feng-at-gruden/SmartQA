@@ -1305,9 +1305,11 @@ ul.dropdown-menu
     margin: 9px 10px 5px 6px;
 }
 
+/*
 textarea:-ms-input-placeholder,
 textarea::-moz-placeholder,
 textarea:-moz-placeholder,
 input::-webkit-input-placeholder {
     color: #e80c4d !important; 
 }
+    */

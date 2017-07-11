@@ -138,6 +138,10 @@ function ViewAnswer(id) {
         loading(false);
         if (result) {
             var html = result.Answer.replace(/\r/g, "<br>");
+            if (result.Attachment != "" && result.Attachment != null)
+            {
+                html += "<p style='margin:10px 0 0 0px;'> 点击<a href='" + result.Attachment + "' target='_blank'><b>这里</b></a>查看附件 </p>"
+            }
             html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
         } else {

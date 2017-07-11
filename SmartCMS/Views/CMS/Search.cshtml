@@ -37,7 +37,7 @@
                     @foreach (SmartCMS.Models.ArticleViewModel item in Model)
                     {
                         <tr class="odd">
-                            <td style="text-align: left;"><a href="~/CMS/EditArticle/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
+                            <td style="text-align: left;"><a href="~/CMS/EditArticle/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a>@if (!String.IsNullOrEmpty(item.Attachment)){ <a href="@item.Attachment" target="_blank"><span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span></a>}</td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CategoryName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Keywords)</td>
                             <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>

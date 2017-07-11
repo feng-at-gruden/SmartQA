@@ -12,7 +12,7 @@ namespace SmartCMS.Controllers
     [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR)]
     public class CMSController : BaseController
     {
-        private const String UploadFolder = "Upload/Attachment/";
+        private const String UploadFolder = "/Upload/Attachment/";
 
 
         public ActionResult Index()
@@ -79,7 +79,8 @@ namespace SmartCMS.Controllers
                                  Hits = a.Hits.Value,
                                  Keywords = a.Keywords,
                                  CreatedAt = a.CreatedAt,
-                                 CreatedBy = a.Users.RealName
+                                 CreatedBy = a.Users.RealName,
+                                 Attachment = a.Attachment,
                              };
             ViewBag.Breadcrumbs = setBreadcrumbs(model.Id);
             return View(model);
@@ -244,8 +245,8 @@ namespace SmartCMS.Controllers
                     HttpRequestBase request = this.Request;
                     if (request.Files.Count == 1 && !string.IsNullOrWhiteSpace(request.Files[0].FileName))
                     {
-                        var fileName = (new FileInfo(request.Files[0].FileName)).Name;
-                        //string fileSavedName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + fileName.Substring(fileName.LastIndexOf("."));
+                        string originalName = (new FileInfo(request.Files[0].FileName)).Name;
+                        string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + originalName.Substring(originalName.LastIndexOf("."));
                         string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + UploadFolder + DateTime.Now.ToString("yyyyMM"));
                         if (!Directory.Exists(dir))
                         {
@@ -253,6 +254,7 @@ namespace SmartCMS.Controllers
                         }
                         attachmentPath = Path.Combine(dir, fileName);
                         request.Files[0].SaveAs(attachmentPath);
+                        attachmentPath = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
                     }
 
                     db.Articles.Add(new Article
@@ -312,6 +314,17 @@ namespace SmartCMS.Controllers
             if (u != null)
             {
                 pid = u.Category.Value;
+                if(u.Attachment !="" && u.Attachment !=null)
+                {
+                    try
+                    {
+                        string path = System.Web.HttpContext.Current.Server.MapPath("~" + u.Attachment);
+                        FileInfo f = new FileInfo(path);
+                        if (f.Exists)
+                            f.Delete();
+                    }
+                    catch (Exception) { }
+                }
                 db.Articles.Remove(u);
                 db.SaveChanges();
                 Log("删除问答");
@@ -340,11 +353,12 @@ namespace SmartCMS.Controllers
                             Hits = row.Hits.Value,
                             CreatedAt = row.CreatedAt,
                             CreatedBy = row.Users.RealName,
+                            Attachment = row.Attachment,
                         };
             ViewBag.Breadcrumbs = setBreadcrumbs(model.SingleOrDefault().CategoryId);
             return View(model.SingleOrDefault());
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditArticle(int id, ArticleViewModel model)
@@ -352,10 +366,39 @@ namespace SmartCMS.Controllers
             if (ModelState.IsValid)
             {
                 var c = db.Articles.SingleOrDefault(m => m.Id == model.Id);
+
+                //Check and save attachment,
+                HttpRequestBase request = this.Request;
+                if (request.Files.Count == 1 && !string.IsNullOrWhiteSpace(request.Files[0].FileName))
+                {
+                    //Check and delete old attachment first
+                    if(!string.IsNullOrEmpty(c.Attachment))
+                    {
+                        try
+                        {
+                            string path = System.Web.HttpContext.Current.Server.MapPath("~" + c.Attachment);
+                            FileInfo f = new FileInfo(path);
+                            if (f.Exists)
+                                f.Delete();
+                        }
+                        catch (Exception) { }
+                    }
+                    //Save new attachment
+                    string originalName = (new FileInfo(request.Files[0].FileName)).Name;
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + originalName.Substring(originalName.LastIndexOf("."));
+                    string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + UploadFolder + DateTime.Now.ToString("yyyyMM"));
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                    request.Files[0].SaveAs(Path.Combine(dir, fileName));
+                    c.Attachment = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
+                }
                 c.Question = model.Question.Trim();
                 c.Answer = model.Answer.Trim();
                 c.Keywords = model.Keywords.Trim();
                 db.SaveChanges();
+
                 ViewBag.SuccessMessage = "问答修改成功！";
                 Log("修改问答");
                 //Check and add hot words.
@@ -391,6 +434,7 @@ namespace SmartCMS.Controllers
                                Hits = row.Hits.Value,
                                CreatedAt = row.CreatedAt,
                                CreatedBy = row.Users.RealName,
+                               Attachment = row.Attachment,
                            };
             ViewBag.Breadcrumbs = setBreadcrumbs(newModel.SingleOrDefault().CategoryId);
             return View(newModel.SingleOrDefault());
@@ -432,6 +476,7 @@ namespace SmartCMS.Controllers
                              CreatedAt = r.CreatedAt,
                              CreatedBy = r.Users.RealName,
                              Keywords = r.Keywords,
+                             Attachment = r.Attachment,
                          });
             return View(model);
         }
