@@ -43,6 +43,7 @@ namespace SmartCMS.Models
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public String CategoryName { get; set; }
+
         public int PendingId { get; set; }
 
         [Required(ErrorMessage = "请输入问题")]
@@ -68,6 +69,30 @@ namespace SmartCMS.Models
         public DateTime? CreatedAt { get; set; }
     }
 
+    public class QuestionViewModel : KnowledgeViewModel
+    {
+        [Display(Name = "回答数")]
+        public int AnswerCount { get; set; }
+
+        public IEnumerable<AnswerViewModel> Answers { get; set; }
+    }
+
+    public class AnswerViewModel
+    {
+        public int Id { get; set; }
+
+        public int QuestionId { get; set; }
+
+        public String AnswerBy { get; set; }
+
+        public int AnswerById { get; set; }
+
+        public DateTime? AnswerAt { get; set; }
+
+        public int Hits { get; set; }
+
+        public bool Adopted { get; set; }
+    }
 
     public class KeywordViewModel
     {

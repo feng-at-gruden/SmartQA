@@ -51,7 +51,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left" style="margin-bottom:5px;">
-                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
+                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;margin-right:10px; vertical-align: bottom;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
             </div>
             <div class="float-right" style="margin: 20px 15px 0 0;">
                 <section id="login">
@@ -60,7 +60,7 @@
 
                 
                     <div style="float:right;">                    
-                    @if (User.IsInRole(Constants.Roles.ROLE_ADMIN) || User.IsInRole(Constants.Roles.ROLE_EDITOR))
+                    @if (User.IsInRole(Constants.Roles.ROLE_ADMIN) || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR) || User.IsInRole(Constants.Roles.ROLE_EDITOR))
                     {
                         @Html.ActionLink("智库管理", "QuestionCategories", "CMS", null, new { target = "_blank" })
                     }

@@ -9,17 +9,18 @@ using SmartCMS.Models;
 
 namespace SmartCMS.Controllers
 {
-    [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_EDITOR)]
+    [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR + "," + Constants.Roles.ROLE_EDITOR)]
     public class CMSController : BaseController
     {
-        private const String UploadFolder = "/Upload/Attachment/";
-
 
         public ActionResult Index()
         {
             return RedirectToAction("Categories");
         }
-        
+
+
+        #region 分类管理
+
         public ActionResult Categories()
         {
             var model = from row in db.Categories
@@ -47,26 +48,26 @@ namespace SmartCMS.Controllers
         public ActionResult Category(int id)
         {
             var categories = from row in db.Categories
-                        where row.Id == id                        
-                        select new CategoryViewModel
-                        {
-                            Id = row.Id,
-                            ParentId = row.ParentCategoryId,
-                            Name = row.Name,
-                            Comment = row.Comment,                            
-                        };
+                             where row.Id == id
+                             select new CategoryViewModel
+                             {
+                                 Id = row.Id,
+                                 ParentId = row.ParentCategoryId,
+                                 Name = row.Name,
+                                 Comment = row.Comment,
+                             };
 
             var model = categories.SingleOrDefault();
             model.SubCategories = from sr in db.Categories
-                                    where sr.ParentCategoryId == model.Id
-                                    orderby sr.Name
-                                    select new CategoryViewModel
-                                    {
-                                        Id = sr.Id,
-                                        ParentId = sr.ParentCategoryId,
-                                        Name = sr.Name,
-                                        Comment = sr.Comment,
-                                    };
+                                  where sr.ParentCategoryId == model.Id
+                                  orderby sr.Name
+                                  select new CategoryViewModel
+                                  {
+                                      Id = sr.Id,
+                                      ParentId = sr.ParentCategoryId,
+                                      Name = sr.Name,
+                                      Comment = sr.Comment,
+                                  };
             model.Articles = from a in db.Knowledges
                              where a.CategoryId == model.Id
                              orderby a.Topic
@@ -85,21 +86,23 @@ namespace SmartCMS.Controllers
             ViewBag.Breadcrumbs = setBreadcrumbs(model.Id);
             return View(model);
         }
-        
+
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult AddCategory(int? id)
         {
             var model = new CategoryViewModel
             {
-                ParentId = id.HasValue? id.Value : 0,
+                ParentId = id.HasValue ? id.Value : 0,
             };
             if (id > 0)
-                ViewBag.Category = db.Categories.SingleOrDefault(m=>m.Id == id).Name;
-            ViewBag.Breadcrumbs = setBreadcrumbs(id.HasValue?id.Value:0);
+                ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
+            ViewBag.Breadcrumbs = setBreadcrumbs(id.HasValue ? id.Value : 0);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult AddCategory(CategoryViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Name))
@@ -133,6 +136,7 @@ namespace SmartCMS.Controllers
             return View(model);
         }
 
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult EditCategory(int id)
         {
             var model = from row in db.Categories
@@ -153,6 +157,7 @@ namespace SmartCMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult EditCategory(int id, CategoryViewModel model)
         {
             if (string.IsNullOrWhiteSpace(model.Name))
@@ -164,26 +169,27 @@ namespace SmartCMS.Controllers
                 c.Comment = model.Comment;
                 db.SaveChanges();
                 ViewBag.SuccessMessage = "分类修改成功！";
-                Log("修改分类:" + model.Name);                
+                Log("修改分类:" + model.Name);
             }
             var newModel = from row in db.Categories
-                        where row.Id == id
-                        select new CategoryViewModel
-                        {
-                            Id = row.Id,
-                            Name = row.Name,
-                            Comment = row.Comment,
-                            ParentId = row.ParentCategoryId,
-                            CreatedAt = row.CreatedAt,
-                            CreatedBy = row.User.RealName,
-                        };
+                           where row.Id == id
+                           select new CategoryViewModel
+                           {
+                               Id = row.Id,
+                               Name = row.Name,
+                               Comment = row.Comment,
+                               ParentId = row.ParentCategoryId,
+                               CreatedAt = row.CreatedAt,
+                               CreatedBy = row.User.RealName,
+                           };
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
-            return View(newModel.SingleOrDefault());            
+            return View(newModel.SingleOrDefault());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult DeleteCategory(int id)
         {
             var u = db.Categories.SingleOrDefault(m => m.Id == id);
@@ -200,7 +206,7 @@ namespace SmartCMS.Controllers
                     db.SaveChanges();
                     Log("删除分类:" + u.Name);
                     ViewBag.SuccessMessage = "删除分类成功！";
-                }                
+                }
             }
             else
             {
@@ -209,19 +215,26 @@ namespace SmartCMS.Controllers
             return RedirectToAction("Categories");
         }
 
+        #endregion
+
+
+
+        #region 知识管理
+
         public ActionResult AddArticle(int id, int? uid)
         {
             var model = new KnowledgeViewModel
             {
                 CategoryId = id,
             };
-            ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
-            if(uid.HasValue)
+            //TODO, Comment out
+            if (uid.HasValue)
             {
                 var k = db.Questions.SingleOrDefault(m => m.Id == uid);
                 model.Question = k.Content;
                 model.PendingId = uid.Value;
             }
+            ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
             return View(model);
         }
@@ -247,14 +260,14 @@ namespace SmartCMS.Controllers
                     {
                         string originalName = (new FileInfo(request.Files[0].FileName)).Name;
                         string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + originalName.Substring(originalName.LastIndexOf("."));
-                        string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + UploadFolder + DateTime.Now.ToString("yyyyMM"));
+                        string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + Constants.UploadFolder + DateTime.Now.ToString("yyyyMM"));
                         if (!Directory.Exists(dir))
                         {
                             Directory.CreateDirectory(dir);
                         }
                         attachmentPath = Path.Combine(dir, fileName);
                         request.Files[0].SaveAs(attachmentPath);
-                        attachmentPath = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
+                        attachmentPath = Constants.UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
                     }
 
                     db.Knowledges.Add(new Knowledge
@@ -268,22 +281,25 @@ namespace SmartCMS.Controllers
                         CategoryId = model.CategoryId,
                         Attachment = attachmentPath
                     });
-                    //TODO, not remove
+
                     //If it's pending Question remove it
-                    if(model.PendingId >0 )
+                    //TODO
+                    if (model.PendingId > 0)
                     {
                         var p = db.Questions.SingleOrDefault(m => m.Id == model.PendingId);
-                        if(p!=null)
+                        if (p != null)
                             db.Questions.Remove(p);
                     }
+                    
+
                     //Check and add hot words.
-                    var keys = model.Keywords.Trim().Split(new char[1]{' '});
-                    foreach(var k  in keys)
+                    var keys = model.Keywords.Trim().Split(new char[1] { ' ' });
+                    foreach (var k in keys)
                     {
-                        if(!String.IsNullOrWhiteSpace(k))
+                        if (!String.IsNullOrWhiteSpace(k))
                         {
                             int t = db.HotWords.Count(m => m.KeyWord == k);
-                            if(t<=0)
+                            if (t <= 0)
                             {
                                 db.HotWords.Add(new HotWord
                                 {
@@ -300,10 +316,10 @@ namespace SmartCMS.Controllers
                     Log("添加问答");
                 }
             }
-            
+
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == model.CategoryId).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(model.CategoryId);
-            return View(model);            
+            return View(model);
         }
 
         [HttpPost]
@@ -311,11 +327,11 @@ namespace SmartCMS.Controllers
         public ActionResult DeleteArticle(int id)
         {
             int pid = 0;
-            var u = db.Knowledges.SingleOrDefault(m => m.Id == id);           
+            var u = db.Knowledges.SingleOrDefault(m => m.Id == id);
             if (u != null)
             {
                 pid = u.CategoryId.Value;
-                if(u.Attachment !="" && u.Attachment !=null)
+                if (u.Attachment != "" && u.Attachment != null)
                 {
                     try
                     {
@@ -337,7 +353,7 @@ namespace SmartCMS.Controllers
                 ModelState.AddModelError("", "找不到指定问答");
                 return RedirectToAction("Categories");
             }
-            
+
         }
 
         public ActionResult EditArticle(int id)
@@ -359,11 +375,11 @@ namespace SmartCMS.Controllers
             ViewBag.Breadcrumbs = setBreadcrumbs(model.SingleOrDefault().CategoryId);
             return View(model.SingleOrDefault());
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditArticle(int id, KnowledgeViewModel model)
-        {            
+        {
             if (ModelState.IsValid)
             {
                 var c = db.Knowledges.SingleOrDefault(m => m.Id == model.Id);
@@ -373,7 +389,7 @@ namespace SmartCMS.Controllers
                 if (request.Files.Count == 1 && !string.IsNullOrWhiteSpace(request.Files[0].FileName))
                 {
                     //Check and delete old attachment first
-                    if(!string.IsNullOrEmpty(c.Attachment))
+                    if (!string.IsNullOrEmpty(c.Attachment))
                     {
                         try
                         {
@@ -387,13 +403,13 @@ namespace SmartCMS.Controllers
                     //Save new attachment
                     string originalName = (new FileInfo(request.Files[0].FileName)).Name;
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "" + originalName.Substring(originalName.LastIndexOf("."));
-                    string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + UploadFolder + DateTime.Now.ToString("yyyyMM"));
+                    string dir = System.Web.HttpContext.Current.Server.MapPath("~/" + Constants.UploadFolder + DateTime.Now.ToString("yyyyMM"));
                     if (!Directory.Exists(dir))
                     {
                         Directory.CreateDirectory(dir);
                     }
                     request.Files[0].SaveAs(Path.Combine(dir, fileName));
-                    c.Attachment = UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
+                    c.Attachment = Constants.UploadFolder + DateTime.Now.ToString("yyyyMM") + "/" + fileName;
                 }
                 c.Topic = model.Question.Trim();
                 c.Content = model.Answer.Trim();
@@ -447,13 +463,14 @@ namespace SmartCMS.Controllers
                         select new KeywordViewModel
                         {
                             Keyword = row.KeyWord,
-                            Count = db.Knowledges.Count(m=>m.Keywords.Contains(row.KeyWord))
+                            Count = db.Knowledges.Count(m => m.Keywords.Contains(row.KeyWord))
                         };
             return View(model);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
         public ActionResult DeleteHotWord(string id)
         {
             var r = db.HotWords.SingleOrDefault(m => id.Equals(m.KeyWord));
@@ -482,6 +499,11 @@ namespace SmartCMS.Controllers
             return View(model);
         }
 
+        #endregion
+
+
+
+        #region 问题管理
 
         public ActionResult QuestionCategories()
         {
@@ -494,7 +516,7 @@ namespace SmartCMS.Controllers
                             ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,
-                            Count = db.Questions.Count(m=>m.CategoryId == row.Id),
+                            Count = db.Questions.Count(m => m.CategoryId == row.Id),
                         };
 
             List<CategoryViewModel> result = new List<CategoryViewModel>();
@@ -513,38 +535,65 @@ namespace SmartCMS.Controllers
             var model = from row in db.Questions
                         where row.CategoryId == id.Value
                         orderby row.Hits descending
-                        select new KnowledgeViewModel
+                        select new QuestionViewModel
                         {
                             Id = row.Id,
                             Question = row.Content,
                             CategoryId = row.CategoryId.Value,
                             CategoryName = row.Category.Name,
                             Hits = row.Hits,
-                            CreatedAt = row.LastAskedAt,                            
+                            AnswerCount = row.Answers.Count(),
+                            CreatedAt = row.LastAskedAt,
                         };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeletePendingQuestion(int id)
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
+        public ActionResult DeleteQuestion(int id)
         {
             var u = db.Questions.SingleOrDefault(m => m.Id == id);
+            int cid = Constants.Other_Category_Id;
             if (u != null)
             {
+                cid = u.CategoryId.Value;
                 db.Questions.Remove(u);
                 db.SaveChanges();
-                Log("删除未答条目");
-                ViewBag.SuccessMessage = "条目删除成功！";
+                Log("删除问题条目");
+                ViewBag.SuccessMessage = "问题删除成功！";
             }
             else
             {
-                ModelState.AddModelError("", "找不到指定条目");
+                ModelState.AddModelError("", "找不到指定问题条目");
             }
-            return RedirectToAction("PendingQuestions");
+            return RedirectToAction("Questions", new { id = cid});
+        }
+
+        //TODO
+        public ActionResult Question(int id)
+        {
+            return View();
+        }
+
+        public ActionResult Answer(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Answer(int id, object model)
+        {
+            return View();
         }
 
 
+        #endregion
+
+
+
+        #region 私有函数
 
         //Private Functions
         private List<string> setBreadcrumbs(int id)
@@ -598,7 +647,11 @@ namespace SmartCMS.Controllers
             }
             return r;
         }
-        
+
+
+
+        #endregion
+
 
     }
 }

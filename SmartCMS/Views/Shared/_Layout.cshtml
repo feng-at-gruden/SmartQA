@@ -51,7 +51,7 @@
     <header>
         <div class="content-wrapper">
             <div class="float-left" style="margin-bottom:5px;">
-                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
+                <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;margin:0 10px 0 0px; vertical-align: bottom;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
             </div>
             <div class="float-right" style="margin: 20px 15px 0 0;">
                 <section id="login" class="cms">
@@ -82,7 +82,8 @@
                         <div>
                             <ul class="nav navbar-nav navbar-left">
                                 @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
-                                        || User.IsInRole(Constants.Roles.ROLE_EDITOR))
+                                    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR)
+                                    || User.IsInRole(Constants.Roles.ROLE_EDITOR))
                                 {
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -97,8 +98,9 @@
                                 }
                                 
                                 @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
-                                        || User.IsInRole(Constants.Roles.ROLE_EDITOR))
-                                {                                    
+                                    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR)
+                                    || User.IsInRole(Constants.Roles.ROLE_EDITOR))
+                                {
                                     <li class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                             问答管理 <b class="caret"></b>

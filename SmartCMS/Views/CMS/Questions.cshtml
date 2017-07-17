@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SmartCMS.Models.KnowledgeViewModel>
+﻿@using SmartCMS.Models
+@model IEnumerable<SmartCMS.Models.QuestionViewModel>
 
 @{
     ViewBag.Title = "待解答问题";
@@ -30,25 +31,31 @@
                         <th style="text-align: left;">分类</th>
                         <th>最近提问时间</th>
                         <th>提问次数</th>
+                        <th>回答次数</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (SmartCMS.Models.KnowledgeViewModel item in Model)
+                    @foreach (SmartCMS.Models.QuestionViewModel item in Model)
                     {
                         <tr class="odd">
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Question)</td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CategoryName)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
+                            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.AnswerCount)</td>
                             <td style="text-align: center;">
                                 <a href="~/CMS/AddArticle/@item.CategoryId?uid=@item.Id" title="回答" style="padding:5px;"><span class="glyphicon glyphicon-edit">回答</span></a>
-                                @using (Html.BeginForm("DeletePendingQuestion", "CMS", FormMethod.Post, new { id = "deleteArticleForm_" + item.Id, style = "display:none;" }))
+@if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+{
+                                using (Html.BeginForm("DeleteQuestion", "CMS", FormMethod.Post, new { id = "deleteArticleForm_" + item.Id, style = "display:none;" }))
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" value="@item.Id" />
                                 }
                                 <a href="javascript:uid=@item.Id; $('#deleteArticleModal').modal('show');  " title="删除" style="padding:5px;"><span class="glyphicon glyphicon-remove">删除</span></a>
+}
                             </td>
                         </tr>
                     }

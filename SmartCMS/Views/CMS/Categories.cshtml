@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SmartCMS.Models.CategoryViewModel>
+﻿@using SmartCMS.Models
+@model IEnumerable<SmartCMS.Models.CategoryViewModel>
 
 @{
     ViewBag.Title = "知识分类";
@@ -31,10 +32,13 @@
                 @ViewBag.SuccessMessage
             </div>
         }
-
-        <div class="cms-tool-bar">
-            <a href="~/CMS/AddCategory" class="btn btn-success">添加分类</a>            
-        </div>
+        @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+            || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+        {
+            <div class="cms-tool-bar">
+                <a href="~/CMS/AddCategory" class="btn btn-success">添加分类</a>            
+            </div>
+        }
         <hr style="width:100%;"/>
         @foreach(SmartCMS.Models.CategoryViewModel category in Model)
         {

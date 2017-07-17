@@ -1,4 +1,5 @@
-﻿@model IEnumerable<SmartCMS.Models.KeywordViewModel>
+﻿@using SmartCMS.Models
+@model IEnumerable<SmartCMS.Models.KeywordViewModel>
 
 @{
     ViewBag.Title = "热词一览";
@@ -21,7 +22,11 @@
         {
             <div class="hot-word-container">
                 <a href="~/CMS/Search/@item.Keyword" class="category-item btn btn-default hot-word"><b>@item.Keyword</b></a>
+@if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+{
                 <a href="javascript:DeleteKeyWord('@item.Keyword');" class="delete-hot-word" title="删除"></a>
+}
                 <span class="badge badge-trp hot-word-count">@item.Count</span>
             </div>
         }

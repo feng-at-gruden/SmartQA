@@ -1,4 +1,5 @@
-﻿@model SmartCMS.Models.CategoryViewModel
+﻿@using SmartCMS.Models
+@model SmartCMS.Models.CategoryViewModel
 
 @{
     ViewBag.Title = Model.Name;
@@ -24,25 +25,32 @@
     </div>
     <div class="panel-body">
         <div class="cms-tool-bar">
-            @if(Model.Articles.Count()>0 || Model.SubCategories.Count()>0)
+            @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+                || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
             {
-                <a href="javascript:uid=@Model.Id; $('#cantDeleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
+                if (Model.Articles.Count() > 0 || Model.SubCategories.Count() > 0)
+                {
+                    <a href="javascript:uid=@Model.Id; $('#cantDeleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
+                }
+                else
+                {
+                    <a href="javascript:uid=@Model.Id; $('#deleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
+                }            
+                <a href="~/CMS/EditCategory/@Model.Id" class="btn btn-success">编辑本分类</a>
+                <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子类别</a>
             }
-            else
-            {
-                <a href="javascript:uid=@Model.Id; $('#deleteModal').modal('show'); " class="btn btn-warning">删除本分类</a>
-            }            
-            <a href="~/CMS/EditCategory/@Model.Id" class="btn btn-success">编辑本分类</a>
-            <a href="~/CMS/AddCategory/@Model.Id" class="btn btn-success">添加子类别</a>
             <a href="~/CMS/AddArticle/@Model.Id" class="btn btn-success" >添加知识词条</a>
         </div>
-
-        @using (Html.BeginForm("DeleteCategory", "CMS", FormMethod.Post, new { id = "deleteForm_" + Model.Id, style = "display:none;" }))
+        @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+            || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
         {
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@Model.Id" />
+            using (Html.BeginForm("DeleteCategory", "CMS", FormMethod.Post, new { id = "deleteForm_" + Model.Id, style = "display:none;" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+            }
         }
-                
+
         @if(Model.SubCategories.Count()>0)
         {            
             <div class="panel panel-default" style="max-width:735px;">

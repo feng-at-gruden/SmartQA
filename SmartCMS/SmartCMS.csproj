@@ -1048,6 +1048,7 @@
     <Content Include="Content\images\loading.gif" />
     <Content Include="Content\images\loading_dots.gif" />
     <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo1.png" />
     <Content Include="Content\images\shutterstock_18917800.jpg" />
     <Content Include="Content\images\veryGood1.png" />
     <Content Include="Content\images\veryGood2.png" />

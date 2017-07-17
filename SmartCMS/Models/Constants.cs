@@ -11,10 +11,13 @@ namespace SmartCMS.Models
     public class Constants 
     {
 
-        public const string APP_NAME = "海信智库客服问答系统";
+        public const string APP_NAME = "漳州交警支队智库问答系统";
         public const string APP_VERSION = "v1.0";
 
         public static int Other_Category_Id { get { return int.Parse(ConfigurationManager.AppSettings["PendingQuestionsCategoryID"]); } }
+
+
+        public const String UploadFolder = "/Upload/Attachment/";
 
         public class Roles
         {
