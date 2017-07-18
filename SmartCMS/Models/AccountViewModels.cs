@@ -63,6 +63,10 @@ namespace SmartCMS.Models
         public Boolean Locked { get; set; }
 
         public IEnumerable<UserRoleViweModel> Roles { get; set; }
+
+        public int Score { get; set; }
+
+        public String Level { get { return Constants.GetUserLevel(Score); } }
     }
 
     public class UserRoleViweModel

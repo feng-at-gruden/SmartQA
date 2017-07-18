@@ -543,7 +543,7 @@ namespace SmartCMS.Controllers
                             CategoryName = row.Category.Name,
                             Hits = row.Hits,
                             AnswerCount = row.Answers.Count(),
-                            CreatedAt = row.LastAskedAt,
+                            LastAskedAt = row.LastAskedAt,
                         };
             return View(model);
         }
@@ -573,19 +573,41 @@ namespace SmartCMS.Controllers
         //TODO
         public ActionResult Question(int id)
         {
-            return View();
-        }
+            var q = db.Questions.SingleOrDefault(m => m.Id == id);
+            var model = new QuestionViewModel
+            {
+                Id = q.Id,
+                CategoryId = q.CategoryId.Value,
+                LastAskedAt = q.LastAskedAt,
+                Hits = q.Hits,
+                AnswerCount = q.Answers.Count(),
+                CreatedBy = q.User.RealName,
+                Question = q.Content,
+                CategoryName = q.Category.Name,
+                Answers = from a in db.Answers
+                          where a.QuestionId == id
+                          select new AnswerViewModel
+                          {
+                              Id = a.Id,
+                              Adopted = a.Accepted,
+                              AnswerAt = a.AnswerAt,
+                              AnswerBy = a.User.RealName,
+                              AnswerById = a.AnswerBy.Value,
+                              QuestionId = id,
+                              Hits = a.Hits,
+                              Content = a.Content,
+                          },
 
-        public ActionResult Answer(int id)
-        {
-            return View();
+            };
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Answer(int id, object model)
+        public ActionResult Answer(int id, AnswerViewModel model)
         {
-            return View();
+            TempData["SuccessMessage"] = "感谢您的回答。";
+            return RedirectToAction("Question", new { id = id });
         }
 
 

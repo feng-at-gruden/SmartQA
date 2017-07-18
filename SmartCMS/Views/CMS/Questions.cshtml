@@ -2,7 +2,7 @@
 @model IEnumerable<SmartCMS.Models.QuestionViewModel>
 
 @{
-    ViewBag.Title = "待解答问题";
+    ViewBag.Title = "问题解答";
 }
 
 
@@ -39,9 +39,9 @@
                     @foreach (SmartCMS.Models.QuestionViewModel item in Model)
                     {
                         <tr class="odd">
-                            <td style="text-align: left;">@Html.DisplayFor(modelItem => item.Question)</td>
+                            <td style="text-align: left;"><a href="~/CMS/Question/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
                             <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CategoryName)</td>
-                            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                            <td style="text-align: center;">@Html.DisplayFor(modelItem => item.LastAskedAt)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
                             <td style="text-align: center;">@Html.DisplayFor(modelItem => item.AnswerCount)</td>
                             <td style="text-align: center;">

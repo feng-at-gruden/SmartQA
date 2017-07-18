@@ -74,6 +74,8 @@ namespace SmartCMS.Models
         [Display(Name = "回答数")]
         public int AnswerCount { get; set; }
 
+        public DateTime? LastAskedAt { get; set; }
+
         public IEnumerable<AnswerViewModel> Answers { get; set; }
     }
 
@@ -92,6 +94,8 @@ namespace SmartCMS.Models
         public int Hits { get; set; }
 
         public bool Adopted { get; set; }
+
+        public string Content { get; set; }
     }
 
     public class KeywordViewModel
