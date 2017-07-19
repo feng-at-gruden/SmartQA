@@ -5,7 +5,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="79ada709901049b0b9e5ea477c756c19" Name="Diagram1">
-        <EntityTypeShape EntityType="SmartCMSModel.Answer" Width="1.5" PointX="5.25" PointY="8.125" />
         <EntityTypeShape EntityType="SmartCMSModel.Category" Width="1.5" PointX="5.25" PointY="11.625" />
         <EntityTypeShape EntityType="SmartCMSModel.Configuration" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="SmartCMSModel.HotWord" Width="1.5" PointX="5.25" PointY="15.125" />
@@ -14,8 +13,6 @@
         <EntityTypeShape EntityType="SmartCMSModel.Question" Width="1.5" PointX="10.5" PointY="9.625" />
         <EntityTypeShape EntityType="SmartCMSModel.User" Width="1.5" PointX="3" PointY="7.375" />
         <EntityTypeShape EntityType="SmartCMSModel.UserRole" Width="1.5" PointX="0.75" PointY="8.75" />
-        <AssociationConnector Association="SmartCMSModel.FK__Answers__AnswerB__30F848ED" />
-        <AssociationConnector Association="SmartCMSModel.FK__Answers__Questio__300424B4" />
         <AssociationConnector Association="SmartCMSModel.FK__Articles__Catego__1CF15040" />
         <AssociationConnector Association="SmartCMSModel.FK__Categorie__Creat__1ED998B2" />
         <AssociationConnector Association="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" />
@@ -24,6 +21,9 @@
         <AssociationConnector Association="SmartCMSModel.FK__Logs__UserId__1FCDBCEB" />
         <AssociationConnector Association="SmartCMSModel.FK__UnknownQu__Creat__29572725" />
         <AssociationConnector Association="SmartCMSModel.FK__Users__RoleId__20C1E124" />
+        <EntityTypeShape EntityType="SmartCMSModel.Answer" Width="1.5" PointX="5.625" PointY="8.25" />
+        <AssociationConnector Association="SmartCMSModel.FK__Answers__AnswerB__30F848ED" />
+        <AssociationConnector Association="SmartCMSModel.FK__Answers__Questio__300424B4" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

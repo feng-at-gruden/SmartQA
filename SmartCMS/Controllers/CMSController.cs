@@ -570,7 +570,6 @@ namespace SmartCMS.Controllers
             return RedirectToAction("Questions", new { id = cid});
         }
 
-        //TODO
         public ActionResult Question(int id)
         {
             var q = db.Questions.SingleOrDefault(m => m.Id == id);
@@ -581,9 +580,16 @@ namespace SmartCMS.Controllers
                 LastAskedAt = q.LastAskedAt,
                 Hits = q.Hits,
                 AnswerCount = q.Answers.Count(),
-                CreatedBy = q.User.RealName,
                 Question = q.Content,
                 CategoryName = q.Category.Name,
+                AskedBy = (from u in db.Users
+                                      where u.Id == q.CreatedBy
+                                      select new UserViewModel
+                                      {
+                                          ID = u.Id,
+                                          Score = u.Score,
+                                          RealName = u.RealName,
+                                      }).FirstOrDefault(),
                 Answers = from a in db.Answers
                           where a.QuestionId == id
                           select new AnswerViewModel
@@ -591,22 +597,46 @@ namespace SmartCMS.Controllers
                               Id = a.Id,
                               Adopted = a.Accepted,
                               AnswerAt = a.AnswerAt,
-                              AnswerBy = a.User.RealName,
-                              AnswerById = a.AnswerBy.Value,
+                              AnswerBy = (from u in db.Users where u.Id == a.AnswerBy
+                                          select new UserViewModel
+                                          {
+                                              ID = u.Id,
+                                              Score = u.Score,
+                                              RealName = u.RealName,
+                                          }).FirstOrDefault(),
                               QuestionId = id,
-                              Hits = a.Hits,
+                              Likes = a.Likes,
+                              Unlikes = a.Unlikes,
                               Content = a.Content,
                           },
 
             };
+            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Answer(int id, AnswerViewModel model)
+        public ActionResult Answer(int id, QuestionViewModel model)
         {
-            TempData["SuccessMessage"] = "感谢您的回答。";
+            if(!string.IsNullOrWhiteSpace(model.Answer))
+            {
+                db.Answers.Add(new Answer
+                {
+                    QuestionId = id,
+                    Content = model.Answer.Trim(),
+                    Accepted = false,
+                    AnswerAt = DateTime.Now,
+                    AnswerBy = CurrentUser.Id,  
+                });
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "感谢您的回答。";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "感谢您的回答。";
+            }
+            
             return RedirectToAction("Question", new { id = id });
         }
 

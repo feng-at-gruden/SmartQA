@@ -8,92 +8,97 @@
     ViewBag.Title = "智能客服";
 }
 
+<div class="content-wrapper">
+    <div class="main-content">
 
-<div class="panel panel-default chat-panel" style="border-color: #efeeef; border-bottom: 1px solid #d6d6d6; box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding-top: 10px; background: #efeeef; ">
-    
-    <div class="panel-body-null">
-        
-        <div id="chat-container">
+        <div class="panel panel-default chat-panel" style="border-color: #efeeef; border-bottom: 1px solid #d6d6d6; box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding-top: 10px; background: #efeeef; ">
 
-            <div class="chat-left">
+            <div class="panel-body-null">
 
-                <div class="panel-heading" style="padding: 5px 15px 16px 15px; border-bottom: 1px solid #ddd;">
-                    @ViewBag.Title
-                </div>
+                <div id="chat-container">
 
-                <div id="chat-content-container">
+                    <div class="chat-left">
 
-                </div>
+                        <div class="panel-heading" style="padding: 5px 15px 18px 15px; border-bottom: 1px solid #ddd;">
+                            @ViewBag.Title
+                        </div>
 
-                <div id="chat-input-container">
-                    <div id="current-category">当前问题分类: 全部分类</div>
-                    <div id="question-input-container">
-                        <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题"/>
-                        <button onclick="ask()" id="sendBtn">提问</button>
+                        <div id="chat-content-container">
+
+                        </div>
+
+                        <div id="chat-input-container">
+                            <div id="current-category">当前问题分类: 全部分类</div>
+                            <div id="question-input-container">
+                                <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题" />
+                                <button onclick="ask()" id="sendBtn">提问</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chat-right">
+                    <div class="chat-right">
 
-                <div class="tabbable">
-                    
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#TabCategory" data-toggle="tab">知识分类</a></li>
-                        <li><a href="#TabHotTopic" data-toggle="tab">热门问答</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="TabCategory">
-                            @foreach( var category in Model)
-                            {
-                                <a href="javascript:selectCategory('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
-                                if (category.SubCategories != null)
-                                {
-                                    <ul>
-                                        @foreach (var sc in category.SubCategories)
+                        <div class="tabbable">
+
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#TabCategory" data-toggle="tab">知识分类</a></li>
+                                <li><a href="#TabHotTopic" data-toggle="tab">热门问答</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="TabCategory">
+                                    @foreach (var category in Model)
+                                    {
+                                        <a href="javascript:selectCategory('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
+                                        if (category.SubCategories != null)
                                         {
-                                            <li><a href="javascript:selectCategory('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                            <ul>
+                                                @foreach (var sc in category.SubCategories)
+                                                {
+                                                    <li><a href="javascript:selectCategory('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                                }
+                                            </ul>
                                         }
-                                    </ul>
-                                }
-                                <hr style="border-top: 1px solid #ddd;"/>
-                            }
-                        </div>
-                        <div class="tab-pane" id="TabHotTopic">
-                            @foreach (var category in Model)
-                            {
-                                <a href="javascript:showHotTopic('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
-                                if (category.SubCategories != null)
-                                {
-                                    <ul>
-                                        @foreach (var sc in category.SubCategories)
+                                        <hr style="border-top: 1px solid #ddd;" />
+                                    }
+                                </div>
+                                <div class="tab-pane" id="TabHotTopic">
+                                    @foreach (var category in Model)
+                                    {
+                                        <a href="javascript:showHotTopic('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
+                                        if (category.SubCategories != null)
                                         {
-                                            <li><a href="javascript:showHotTopic('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                            <ul>
+                                                @foreach (var sc in category.SubCategories)
+                                                {
+                                                    <li><a href="javascript:showHotTopic('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                                }
+                                            </ul>
                                         }
-                                    </ul>
-                                }
-                                <hr style="border-top: 1px solid #ddd;" />
-                            }
+                                        <hr style="border-top: 1px solid #ddd;" />
+                                    }
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="clear"></div>
                     </div>
                 </div>
 
                 <div class="clear"></div>
-            </div>
-    </div>
+                <!-- /.panel-body -->
 
-    <div class="clear" ></div>
-    <!-- /.panel-body -->
-    
+            </div>
+        </div>
+
+
     </div>
 </div>
 
+        @Scripts.Render("~/Content/js/function.js")
+        <script>
+            $(document).ready(function () {
+                displayResponse("你好，<br/>欢迎使用" + "@SmartCMS.Models.Constants.APP_NAME" + "@SmartCMS.Models.Constants.APP_VERSION" + " (*^__^*)");
+            });
 
-@Scripts.Render("~/Content/js/function.js") 
-<script>
-    $(document).ready(function () {
-        displayResponse("你好，<br/>欢迎使用" + "@SmartCMS.Models.Constants.APP_NAME" + "@SmartCMS.Models.Constants.APP_VERSION" + " (*^__^*)");
-    });
-    
-</script>
+        </script>
 

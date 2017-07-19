@@ -1,7 +1,7 @@
 ﻿@model SmartCMS.Models.ChangeUserDetailViewModel
 @{
     ViewBag.Title = "个人帐户管理";
-    
+
     var me = (SmartCMS.Models.SmartCMSPrincipal)User;
 }
 
@@ -13,32 +13,41 @@
 </div>
 
 
+<br />
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        My Account         <div style="float:right">当前登录帐号: <text><small> @User.Identity.Name (@me.RoleName) </small></text></div>
-    </div>
-    <div class="panel-body">
+<div class="content-wrapper">
+    <div class="main-content">
 
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger">
-                @Html.ValidationSummary()
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                My Account         <div style="float:right">当前登录帐号: <text><small> @User.Identity.Name (@me.RoleName) </small></text></div>
             </div>
-        }
-        
-        @if (ViewBag.SuccessMessage != null)
-        {
-            <div class="alert alert-success">
-                @ViewBag.SuccessMessage
-            </div>
-        }
-        
+            <div class="panel-body">
 
-        @Html.Partial("_ChangePasswordPartial")
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary()
+                    </div>
+                }
+
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
+
+
+                @Html.Partial("_ChangePasswordPartial")
+
+            </div>
+        </div>
+
 
     </div>
 </div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }

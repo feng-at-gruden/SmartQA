@@ -12,58 +12,63 @@
     </ul>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Hot Words
+<br />
+
+<div class="content-wrapper">
+    <div class="main-content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Hot Words
+            </div>
+            <div class="panel-body">
+                <hr />
+                @foreach (SmartCMS.Models.KeywordViewModel item in Model)
+                {
+                    <div class="hot-word-container">
+                        <a href="~/CMS/Search/@item.Keyword" class="category-item btn btn-default hot-word"><b>@item.Keyword</b></a>
+                        @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+|| User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+                        {
+                            <a href="javascript:DeleteKeyWord('@item.Keyword');" class="delete-hot-word" title="删除"></a>
+                        }
+                        <span class="badge badge-trp hot-word-count">@item.Count</span>
+                    </div>
+                }
+            </div>
+            <!-- /.panel-body -->
+            <div class="panel-footer">
+                &nbsp;
+            </div>
+        </div>
+
     </div>
-    <div class="panel-body">
-        <hr />
-        @foreach (SmartCMS.Models.KeywordViewModel item in Model)
+</div>
+        @using (Html.BeginForm("DeleteHotWord", "CMS", FormMethod.Post, new { id = "deleteKeywordForm", style = "display:none;" }))
         {
-            <div class="hot-word-container">
-                <a href="~/CMS/Search/@item.Keyword" class="category-item btn btn-default hot-word"><b>@item.Keyword</b></a>
-@if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
-    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
-{
-                <a href="javascript:DeleteKeyWord('@item.Keyword');" class="delete-hot-word" title="删除"></a>
-}
-                <span class="badge badge-trp hot-word-count">@item.Count</span>
-            </div>
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" id="delKey" value="" />
         }
-    </div>
-    <!-- /.panel-body -->
-    <div class="panel-footer">
-        &nbsp;
-    </div>
-</div>
 
-@using (Html.BeginForm("DeleteHotWord", "CMS", FormMethod.Post, new { id = "deleteKeywordForm", style = "display:none;" }))
-{
-    @Html.AntiForgeryToken()
-    <input type="hidden" name="id" id="delKey" value="" />
-}
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="deleteKeywordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">删除热词</h4>
+                    </div>
+                    <div class="modal-body">确定要删除该热词吗？</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-danger" onclick="$('#deleteKeywordForm').submit();">确认</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
 
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="deleteKeywordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">删除热词</h4>
-            </div>
-            <div class="modal-body">确定要删除该热词吗？</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-danger" onclick="$('#deleteKeywordForm').submit();">确认</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
-
-<script>
-    function DeleteKeyWord(s)
-    {
-        $('#delKey').val(s);
-        $('#deleteKeywordModal').modal('show');
-    }
-</script>
+        <script>
+            function DeleteKeyWord(s) {
+                $('#delKey').val(s);
+                $('#deleteKeywordModal').modal('show');
+            }
+        </script>

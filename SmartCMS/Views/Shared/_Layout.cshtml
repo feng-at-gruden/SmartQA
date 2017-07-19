@@ -49,8 +49,8 @@
 }
 <body>
     <header>
-        <div class="content-wrapper">
-            <div class="float-left" style="margin-bottom:5px;">
+        <div class="header-content-wrapper">
+            <div class="float-left" style="margin:5px 0 5px 10px;">
                 <p class="site-title"><a href="~/"><img src="@logoUrl" style="height:70px;margin:0 10px 0 0px; vertical-align: bottom;"></a>@Html.ActionLink(Constants.APP_NAME, "Index", "Home")</p>
             </div>
             <div class="float-right" style="margin: 20px 15px 0 0;">
@@ -120,12 +120,12 @@
     </header>
     <div id="body">
         @RenderSection("featured", required: false)
-        <section class="content-wrapper main-content clear-fix">
+        <section class=" clear-fix">
             @RenderBody()
         </section>
     </div>
     <footer>
-        <div class="content-wrapper">
+        <div class="footer-content-wrapper">
             <div class="center">
                 <br />
                 <p class="copyrights-footer">&copy; @DateTime.Now.Year - @Constants.APP_NAME @Constants.APP_VERSION</p>

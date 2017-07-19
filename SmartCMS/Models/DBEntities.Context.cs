@@ -25,7 +25,6 @@ namespace SmartCMS.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Answer> Answers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Configuration> Configurations { get; set; }
         public DbSet<HotWord> HotWords { get; set; }
@@ -34,5 +33,6 @@ namespace SmartCMS.Models
         public DbSet<Question> Questions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Answer> Answers { get; set; }
     }
 }

@@ -11,24 +11,30 @@
     </ul>
 </div>
 
+<br />
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Categories
-    </div>
-    <div class="panel-body">
+<div class="content-wrapper">
+    <div class="main-content">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Categories
+            </div>
+            <div class="panel-body">
         
-        @foreach(SmartCMS.Models.CategoryViewModel category in Model)
-        {
-            @DisplayCategory(category);           
-        }
-    </div>
-    <!-- /.panel-body -->
-    <div class="panel-footer">
-        &nbsp;
+                @foreach(SmartCMS.Models.CategoryViewModel category in Model)
+                {
+                    @DisplayCategory(category);           
+                }
+            </div>
+            <!-- /.panel-body -->
+            <div class="panel-footer">
+                &nbsp;
+            </div>
+        </div>
+
     </div>
 </div>
-
 
 @helper DisplayCategory(SmartCMS.Models.CategoryViewModel category)
 {

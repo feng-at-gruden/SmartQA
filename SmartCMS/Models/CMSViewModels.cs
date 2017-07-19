@@ -77,6 +77,10 @@ namespace SmartCMS.Models
         public DateTime? LastAskedAt { get; set; }
 
         public IEnumerable<AnswerViewModel> Answers { get; set; }
+
+        public AnswerViewModel BestAnswer { get; set; }
+
+        public UserViewModel AskedBy { get; set; }
     }
 
     public class AnswerViewModel
@@ -85,13 +89,13 @@ namespace SmartCMS.Models
 
         public int QuestionId { get; set; }
 
-        public String AnswerBy { get; set; }
-
-        public int AnswerById { get; set; }
+        public UserViewModel AnswerBy { get; set; }
 
         public DateTime? AnswerAt { get; set; }
 
-        public int Hits { get; set; }
+        public int Likes { get; set; }
+
+        public int Unlikes { get; set; }
 
         public bool Adopted { get; set; }
 

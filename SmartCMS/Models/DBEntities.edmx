@@ -14,8 +14,9 @@
           <Property Name="Content" Type="text" />
           <Property Name="AnswerBy" Type="int" />
           <Property Name="AnswerAt" Type="datetime" />
-          <Property Name="Hits" Type="int" Nullable="false" />
+          <Property Name="Likes" Type="int" Nullable="false" />
           <Property Name="Accepted" Type="bit" Nullable="false" />
+          <Property Name="Unlikes" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -97,7 +98,7 @@
           <Property Name="RealName" Type="varchar" MaxLength="255" />
           <Property Name="Locked" Type="bit" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="255" />
-          <Property Name="Score" Type="int" />
+          <Property Name="Score" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -282,7 +283,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="SmartCMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="SmartCMSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Answers" EntityType="SmartCMSModel.Answer" />
           <EntitySet Name="Categories" EntityType="SmartCMSModel.Category" />
           <EntitySet Name="Configurations" EntityType="SmartCMSModel.Configuration" />
           <EntitySet Name="HotWords" EntityType="SmartCMSModel.HotWord" />
@@ -291,14 +291,6 @@
           <EntitySet Name="Questions" EntityType="SmartCMSModel.Question" />
           <EntitySet Name="Users" EntityType="SmartCMSModel.User" />
           <EntitySet Name="UserRoles" EntityType="SmartCMSModel.UserRole" />
-          <AssociationSet Name="FK__Answers__AnswerB__30F848ED" Association="SmartCMSModel.FK__Answers__AnswerB__30F848ED">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Answer" EntitySet="Answers" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Answers__Questio__300424B4" Association="SmartCMSModel.FK__Answers__Questio__300424B4">
-            <End Role="Question" EntitySet="Questions" />
-            <End Role="Answer" EntitySet="Answers" />
-          </AssociationSet>
           <AssociationSet Name="FK__Articles__Catego__1CF15040" Association="SmartCMSModel.FK__Articles__Catego__1CF15040">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Knowledge" EntitySet="Knowledges" />
@@ -331,21 +323,16 @@
             <End Role="UserRole" EntitySet="UserRoles" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Answers" EntityType="SmartCMSModel.Answer" />
+          <AssociationSet Name="FK__Answers__AnswerB__30F848ED" Association="SmartCMSModel.FK__Answers__AnswerB__30F848ED">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Answers__Questio__300424B4" Association="SmartCMSModel.FK__Answers__Questio__300424B4">
+            <End Role="Question" EntitySet="Questions" />
+            <End Role="Answer" EntitySet="Answers" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Answer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QuestionId" Type="Int32" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="AnswerBy" Type="Int32" />
-          <Property Name="AnswerAt" Type="DateTime" Precision="3" />
-          <Property Name="Hits" Type="Int32" Nullable="false" />
-          <Property Name="Accepted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="SmartCMSModel.FK__Answers__AnswerB__30F848ED" FromRole="Answer" ToRole="User" />
-          <NavigationProperty Name="Question" Relationship="SmartCMSModel.FK__Answers__Questio__300424B4" FromRole="Answer" ToRole="Question" />
-        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="Id" />
@@ -419,9 +406,9 @@
           <Property Name="LastAskedAt" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="CategoryId" Type="Int32" />
-          <NavigationProperty Name="Answers" Relationship="SmartCMSModel.FK__Answers__Questio__300424B4" FromRole="Question" ToRole="Answer" />
           <NavigationProperty Name="Category" Relationship="SmartCMSModel.FK__PendingQu__Categ__2B3F6F97" FromRole="Question" ToRole="Category" />
           <NavigationProperty Name="User" Relationship="SmartCMSModel.FK__UnknownQu__Creat__29572725" FromRole="Question" ToRole="User" />
+          <NavigationProperty Name="Answers" Relationship="SmartCMSModel.FK__Answers__Questio__300424B4" FromRole="Question" ToRole="Answer" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -436,14 +423,14 @@
           <Property Name="RealName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Locked" Type="Boolean" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Score" Type="Int32" />
-          <NavigationProperty Name="Answers" Relationship="SmartCMSModel.FK__Answers__AnswerB__30F848ED" FromRole="User" ToRole="Answer" />
+          <Property Name="Score" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Categories" Relationship="SmartCMSModel.FK__Categorie__Creat__1ED998B2" FromRole="User" ToRole="Category" />
           <NavigationProperty Name="HotWords" Relationship="SmartCMSModel.FK__HotWords__Create__239E4DCF" FromRole="User" ToRole="HotWord" />
           <NavigationProperty Name="Knowledges" Relationship="SmartCMSModel.FK__Articles__Create__1DE57479" FromRole="User" ToRole="Knowledge" />
           <NavigationProperty Name="Logs" Relationship="SmartCMSModel.FK__Logs__UserId__1FCDBCEB" FromRole="User" ToRole="Log" />
           <NavigationProperty Name="Questions" Relationship="SmartCMSModel.FK__UnknownQu__Creat__29572725" FromRole="User" ToRole="Question" />
           <NavigationProperty Name="UserRole" Relationship="SmartCMSModel.FK__Users__RoleId__20C1E124" FromRole="User" ToRole="UserRole" />
+          <NavigationProperty Name="Answers" Relationship="SmartCMSModel.FK__Answers__AnswerB__30F848ED" FromRole="User" ToRole="Answer" />
         </EntityType>
         <EntityType Name="UserRole">
           <Key>
@@ -453,30 +440,6 @@
           <Property Name="Role" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Users" Relationship="SmartCMSModel.FK__Users__RoleId__20C1E124" FromRole="UserRole" ToRole="User" />
         </EntityType>
-        <Association Name="FK__Answers__AnswerB__30F848ED">
-          <End Type="SmartCMSModel.User" Role="User" Multiplicity="0..1" />
-          <End Type="SmartCMSModel.Answer" Role="Answer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Answer">
-              <PropertyRef Name="AnswerBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Answers__Questio__300424B4">
-          <End Type="SmartCMSModel.Question" Role="Question" Multiplicity="0..1" />
-          <End Type="SmartCMSModel.Answer" Role="Answer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Question">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Answer">
-              <PropertyRef Name="QuestionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__Articles__Catego__1CF15040">
           <End Type="SmartCMSModel.Category" Role="Category" Multiplicity="0..1" />
           <End Type="SmartCMSModel.Knowledge" Role="Knowledge" Multiplicity="*" />
@@ -573,25 +536,51 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Answer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionId" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AnswerBy" Type="Int32" />
+          <Property Name="AnswerAt" Type="DateTime" Precision="3" />
+          <Property Name="Likes" Type="Int32" Nullable="false" />
+          <Property Name="Accepted" Type="Boolean" Nullable="false" />
+          <Property Name="Unlikes" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="SmartCMSModel.FK__Answers__AnswerB__30F848ED" FromRole="Answer" ToRole="User" />
+          <NavigationProperty Name="Question" Relationship="SmartCMSModel.FK__Answers__Questio__300424B4" FromRole="Answer" ToRole="Question" />
+        </EntityType>
+        <Association Name="FK__Answers__AnswerB__30F848ED">
+          <End Type="SmartCMSModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SmartCMSModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="AnswerBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Answers__Questio__300424B4">
+          <End Type="SmartCMSModel.Question" Role="Question" Multiplicity="0..1" />
+          <End Type="SmartCMSModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QuestionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SmartCMSModelStoreContainer" CdmEntityContainer="SmartCMSEntities">
-          <EntitySetMapping Name="Answers">
-            <EntityTypeMapping TypeName="SmartCMSModel.Answer">
-              <MappingFragment StoreEntitySet="Answer">
-                <ScalarProperty Name="Accepted" ColumnName="Accepted" />
-                <ScalarProperty Name="Hits" ColumnName="Hits" />
-                <ScalarProperty Name="AnswerAt" ColumnName="AnswerAt" />
-                <ScalarProperty Name="AnswerBy" ColumnName="AnswerBy" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="SmartCMSModel.Category">
               <MappingFragment StoreEntitySet="Category">
@@ -685,6 +674,20 @@
             <EntityTypeMapping TypeName="SmartCMSModel.UserRole">
               <MappingFragment StoreEntitySet="UserRole">
                 <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Answers">
+            <EntityTypeMapping TypeName="SmartCMSModel.Answer">
+              <MappingFragment StoreEntitySet="Answer">
+                <ScalarProperty Name="Unlikes" ColumnName="Unlikes" />
+                <ScalarProperty Name="Accepted" ColumnName="Accepted" />
+                <ScalarProperty Name="Likes" ColumnName="Likes" />
+                <ScalarProperty Name="AnswerAt" ColumnName="AnswerAt" />
+                <ScalarProperty Name="AnswerBy" ColumnName="AnswerBy" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -18,62 +18,68 @@
     </ul>
 </div>
 
+<br/>
+<div class="content-wrapper">
+    <div class="main-content">
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Edit Category
-    </div>
-    <div class="panel-body">
-
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger">
-                @Html.ValidationSummary()
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Edit Category
             </div>
-        }
+            <div class="panel-body">
 
-        @if (ViewBag.SuccessMessage != null)
-        {
-            <div class="alert alert-success">
-                @ViewBag.SuccessMessage
-            </div>
-        }
-
-
-        @using (Html.BeginForm("EditCategory", "CMS", new { id = Model.Id }, FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.ParentId)
-            @Html.HiddenFor(m => m.Id)
-            <div style="width:400px; margin:auto; text-align:center;">
-                <div class="form-group">
-                    <div class='input-group date'>
-                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", value = Model.Name, placeholder = "分类名称", maxlength = 20 })
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-text-width"></span>
-                        </span>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @Html.ValidationSummary()
                     </div>
-                </div>
+                }
 
-                <div class="form-group">
-                    <div class='input-group date'>
-                        @Html.TextAreaFor(m => m.Comment, new { @class = "form-control", value = Model.Comment, placeholder = "分类描述", maxlength = 100 })
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-th-list"></span>
-                        </span>
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success">
+                        @ViewBag.SuccessMessage
                     </div>
-                </div>
+                }
 
-                <div class="form-group category-info">
-                    Created by @Model.CreatedBy at @Html.DisplayFor(m => m.CreatedAt)
-                </div>
 
-                <a href="~/CMS/Category/@Model.Id" class="btn btn-success" style="color:white;">返 回</a>
+                @using (Html.BeginForm("EditCategory", "CMS", new { id = Model.Id }, FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.ParentId)
+                    @Html.HiddenFor(m => m.Id)
+                    <div style="width:400px; margin:auto; text-align:center;">
+                        <div class="form-group">
+                            <div class='input-group date'>
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", value = Model.Name, placeholder = "分类名称", maxlength = 20 })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-text-width"></span>
+                                </span>
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn btn-success">保 存</button>
+                        <div class="form-group">
+                            <div class='input-group date'>
+                                @Html.TextAreaFor(m => m.Comment, new { @class = "form-control", value = Model.Comment, placeholder = "分类描述", maxlength = 100 })
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th-list"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group category-info">
+                            Created by @Model.CreatedBy at @Html.DisplayFor(m => m.CreatedAt)
+                        </div>
+
+                        <a href="~/CMS/Category/@Model.Id" class="btn btn-success" style="color:white;">返 回</a>
+
+                        <button type="submit" class="btn btn-success">保 存</button>
+                    </div>
+
+                }
+
             </div>
-
-        }
+        </div>
 
     </div>
 </div>

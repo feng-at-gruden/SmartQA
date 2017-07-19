@@ -19,8 +19,9 @@ namespace SmartCMS.Models
         public string Content { get; set; }
         public Nullable<int> AnswerBy { get; set; }
         public Nullable<System.DateTime> AnswerAt { get; set; }
-        public int Hits { get; set; }
+        public int Likes { get; set; }
         public bool Accepted { get; set; }
+        public int Unlikes { get; set; }
     
         public virtual User User { get; set; }
         public virtual Question Question { get; set; }

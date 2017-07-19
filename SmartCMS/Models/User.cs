@@ -16,12 +16,12 @@ namespace SmartCMS.Models
     {
         public User()
         {
-            this.Answers = new HashSet<Answer>();
             this.Categories = new HashSet<Category>();
             this.HotWords = new HashSet<HotWord>();
             this.Knowledges = new HashSet<Knowledge>();
             this.Logs = new HashSet<Log>();
             this.Questions = new HashSet<Question>();
+            this.Answers = new HashSet<Answer>();
         }
     
         public int Id { get; set; }
@@ -33,14 +33,14 @@ namespace SmartCMS.Models
         public string RealName { get; set; }
         public bool Locked { get; set; }
         public string Email { get; set; }
-        public Nullable<int> Score { get; set; }
+        public int Score { get; set; }
     
-        public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<HotWord> HotWords { get; set; }
         public virtual ICollection<Knowledge> Knowledges { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual UserRole UserRole { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }

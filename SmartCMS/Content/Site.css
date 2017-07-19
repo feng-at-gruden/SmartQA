@@ -90,29 +90,42 @@ h5 a:link, h5 a:visited, h5 a:active {
     text-decoration: none;
 }
 
+.header-content-wrapper{
+    max-width: 1280px;
+    padding-left: 0px;
+    padding-top: 0px;
+    margin:auto;
+}
 
+.footer-content-wrapper
+{
+    max-width: 1280px;
+    margin:30px 0 0 20px;
+    margin:auto;
+}
 /* main layout
 ----------------------------------------------------------*/
 .content-wrapper {
     margin: 0 auto;
-    max-width: 1280px;
+    background: url(../Images/accent.png) 35px -7px no-repeat;
+    background-color: #efeeef;
+    padding-bottom: 30px;
+    padding-top: 30px;
 }
 
 #body {
-    background-color: #efeeef;
     clear: both;
-    padding-bottom: 20px;    
 }
 
 #body.home{
-    border-top: 1px solid #ddd;
+    border-top: 0px solid #ddd;
 }
 
 .main-content {
-    background: url("../Images/accent.png") 8px -5px no-repeat;
+    max-width: 1280px;
     padding-left: 0px;
-    padding-top: 30px;
-    margin-top: 48px;
+    padding-top: 0px;
+    margin:auto;
 }
 
 .featured + .main-content {
@@ -768,6 +781,10 @@ tr.pager td {
     text-align:center
 }
 
+.panel{
+    margin-bottom:0px !important;
+}
+
 .panel-heading{
     color: #555;
     font-family: Arial;
@@ -847,7 +864,6 @@ ul.dropdown-menu
 }
 
 .chat-right{
-    height: 515px;
     width: 350px;
     float: right;
     background-color:#eee;
@@ -868,7 +884,7 @@ ul.dropdown-menu
 {
     padding: 10px 15px;
     border-left: 1px solid #ddd;
-    height: 473px;
+    height: 495px;
     overflow: auto;
 }
 .nav-tabs>li>a {
@@ -895,14 +911,14 @@ ul.dropdown-menu
 
 #chat-content-container{
     width: 100%;
-    height: 380px;
+    height: 405px;
     overflow-y: auto;
     padding:10px 5px;
     font-size:13px;
     background-color: #fff;
 }
 .loading{
-    background: url(images/loading_dots.gif) no-repeat -20px 327px;
+    background: url(images/loading_dots.gif) no-repeat -20px 350px;
     background-color: #fff;
     background-size: 10%;
 }
@@ -1129,15 +1145,16 @@ ul.dropdown-menu
 }
 
 #breadcrumbs{
-    position: absolute;
-    top: 167px;
-    width: 640px;
-    left: 3px;
+    height: 29px;
+    max-width: 1280px;
+    margin: auto;
 }
 
 #breadcrumbs ul
 {
     list-style: none;
+    position: relative;
+    left: -40px;
 }
 
 #breadcrumbs ul li a
@@ -1328,9 +1345,13 @@ i.glyphicon{
     margin-right:5px;
 }
 
-h3 i.glyphicon
+h3.best-answer i.glyphicon
 {
     color:#97d697;
+}
+h3.other-answer i.glyphicon
+{
+    color:#999;
 }
 
 hr.question{
@@ -1338,4 +1359,38 @@ hr.question{
     background: #d0c8c8;
     height: 1px;
     margin: 20px 0 20px 0;
+}
+
+.question-left{
+    width:960px; 
+    padding:15px; 
+    border-right:1px solid #ddd;
+    float:left;
+}
+.question-right{
+    float:left;
+    padding-left: 10px;
+}
+
+.user-avatar{
+    float: right;
+    display: block;
+    width: 50px;
+    background: url(./images/ava_2.png) no-repeat center top;
+}
+
+.other-answer-container
+{
+    padding-left:5px;
+}
+.user-level{
+    border:1px solid #97d697;
+    color: #97d697;
+    border-radius:10px;
+    font-size:0.8em;
+    padding: 0 2px;
+}
+.btn-group .btn{
+    margin-left: -8px !important;
+    border-radius: 10px;
 }

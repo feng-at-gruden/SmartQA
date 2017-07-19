@@ -26,8 +26,8 @@ namespace SmartCMS.Models
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> CategoryId { get; set; }
     
-        public virtual ICollection<Answer> Answers { get; set; }
         public virtual Category Category { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
     }
 }
