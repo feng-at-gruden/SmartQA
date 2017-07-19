@@ -37,7 +37,11 @@ namespace SmartCMS.Models
             public const string CON_KEY_SMTP_NEED_AUTH = "_smtpAuth";
         }
 
-        
+
+
+        public const int AnswerScore = 2;
+        public const int LikeScore = 2;
+        public const int UnlikeScore = 1;
 
         //TODO
         public static String GetUserLevel(int score)

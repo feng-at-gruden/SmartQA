@@ -39,11 +39,11 @@ namespace SmartCMS.Controllers
                 FormsAuthentication.SetAuthCookie(model.UserName, false);
                 FormsAuthentication.RedirectFromLoginPage(u.UserName, false);
                 FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, u.UserName, DateTime.Now,
-                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}", u.UserRole.Role.ToString(), u.RealName));
+                DateTime.Now.AddMinutes(120), false, string.Format("{0}|{1}|{2}", u.Id, u.UserRole.Role.ToString(), u.RealName));
                 string encryptedTicket = FormsAuthentication.Encrypt(ticket);
                 HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                 Response.Cookies.Add(cookie);
-                HttpContext.User = new SmartCMSPrincipal(u.UserRole.Role.ToString(), u.RealName, HttpContext.User.Identity);
+                HttpContext.User = new SmartCMSPrincipal(u.Id, u.UserRole.Role.ToString(), u.RealName, HttpContext.User.Identity);
 
                 u.LastLoginTime = DateTime.Now;
                 db.SaveChanges();

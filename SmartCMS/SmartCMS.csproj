@@ -134,6 +134,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CMSController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Extensions\MyExtension.cs" />
     <Compile Include="Filters\SmartCMSAuthAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

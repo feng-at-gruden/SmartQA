@@ -48,17 +48,17 @@
                         <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>
                         <td style="text-align: center;">@Html.DisplayFor(modelItem => item.AnswerCount)</td>
                         <td style="text-align: center;">
-                            <a href="~/CMS/AddArticle/@item.CategoryId?uid=@item.Id" title="回答" style="padding:5px;"><span class="glyphicon glyphicon-edit">回答</span></a>
+                            <a href="~/CMS/Question/@item.Id" title="回答" style="padding:5px;"><span class="glyphicon glyphicon-edit">回答</span></a>
                             @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
-    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
-{
+                                || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+                            {
                                 using (Html.BeginForm("DeleteQuestion", "CMS", FormMethod.Post, new { id = "deleteArticleForm_" + item.Id, style = "display:none;" }))
                                 {
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@item.Id" />
                                 }
                                 <a href="javascript:uid=@item.Id; $('#deleteArticleModal').modal('show');  " title="删除" style="padding:5px;"><span class="glyphicon glyphicon-remove">删除</span></a>
-}
+                            }
                         </td>
                     </tr>
                     }
@@ -78,22 +78,22 @@
 
     </div>
 </div>
-        <!-- 模态框（Modal） -->
-        <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">删除条目</4>
-                    </div>
-                    <div class="modal-body">确定要删除该条目？</div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" onclick="$('#deleteArticleForm_' + uid).submit();">确认</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
-        </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">删除条目</h4>
+            </div>
+            <div class="modal-body">确定要删除该条目？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$('#deleteArticleForm_' + uid).submit();">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 
         <script>

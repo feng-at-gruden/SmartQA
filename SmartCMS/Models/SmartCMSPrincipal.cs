@@ -12,11 +12,13 @@ namespace SmartCMS.Models
     {
         public string RoleName { get; set; }
         public string RealName { get; set; }
+        public int Id { get; set; }
 
         private IIdentity _identity;
 
-        public SmartCMSPrincipal(string roleName, string realName, IIdentity identity)
+        public SmartCMSPrincipal(int id, string roleName, string realName, IIdentity identity)
         {
+            Id = id;
             RealName = realName;
             RoleName = roleName;
             _identity = identity;
@@ -41,10 +43,11 @@ namespace SmartCMS.Models
                 if (fi != null)
                 {
                     string[] userData = fi.Ticket.UserData.Split('|');
-                    if (userData.Length == 2)
+                    if (userData.Length == 3)
                     {
-                        SmartCMSPrincipal newPrincipal = new SmartCMSPrincipal(userData[0],
+                        SmartCMSPrincipal newPrincipal = new SmartCMSPrincipal(int.Parse(userData[0]),
                             userData[1],
+                            userData[2],
                             httpContext.User.Identity);
                         return newPrincipal;
                     }

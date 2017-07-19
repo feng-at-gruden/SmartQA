@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 using SmartCMS.Filters;
 using SmartCMS.Models;
 using SmartCMS.Helper;
+using SmartCMS.Extensions;
 
 namespace SmartCMS.Controllers
 {

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.IO;
 using SmartCMS.Filters;
 using SmartCMS.Models;
+using SmartCMS.Extensions;
 
 namespace SmartCMS.Controllers
 {
@@ -620,7 +621,7 @@ namespace SmartCMS.Controllers
         public ActionResult Answer(int id, QuestionViewModel model)
         {
             if(!string.IsNullOrWhiteSpace(model.Answer))
-            {
+            {                
                 db.Answers.Add(new Answer
                 {
                     QuestionId = id,
@@ -629,6 +630,7 @@ namespace SmartCMS.Controllers
                     AnswerAt = DateTime.Now,
                     AnswerBy = CurrentUser.Id,  
                 });
+                CurrentUser.Score += Constants.AnswerScore;
                 db.SaveChanges();
                 TempData["SuccessMessage"] = "感谢您的回答。";
             }
@@ -640,6 +642,61 @@ namespace SmartCMS.Controllers
             return RedirectToAction("Question", new { id = id });
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAnswer(int id)
+        {
+            Answer answer = db.Answers.SingleOrDefault(m => m.Id == id);
+            int qid = answer.QuestionId.Value;
+            if(answer != null)
+            {
+                if(CurrentUser.UserRole.Role==Constants.Roles.ROLE_ADMIN ||
+                    CurrentUser.UserRole.Role==Constants.Roles.ROLE_CHIEF_EDITOR ||
+                    CurrentUser.Id == answer.AnswerBy)
+                {
+                    //TODO
+                    TempData["SuccessMessage"] = "回答删除成功";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "错误，您没有删除该回答的权限";
+                }
+            }
+            return RedirectToAction("Question", new { id = qid});
+        }
+
+
+        [HttpGet]
+        public JsonResult LikeAnswer(int id)
+        {
+            Answer a = db.Answers.SingleOrDefault(m=>m.Id == id);            
+            int k = 0;
+            if(a != null)
+            {
+                a.Likes++;
+                a.User.Score += Constants.LikeScore;
+                db.SaveChanges();
+                k = a.Likes;
+            }
+            return Json(k, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult UnlikeAnswer(int id)
+        {
+            Answer a = db.Answers.SingleOrDefault(m => m.Id == id);
+            int k = 0;
+            if (a != null)
+            {                
+                a.Unlikes++;
+                if(a.User.Score>0)
+                    a.User.Score -= Constants.UnlikeScore;
+                db.SaveChanges();
+                k = a.Unlikes;                
+            }
+            return Json(k, JsonRequestBehavior.AllowGet);
+        }
 
         #endregion
 
