@@ -610,7 +610,24 @@ namespace SmartCMS.Controllers
                               Unlikes = a.Unlikes,
                               Content = a.Content,
                           },
-
+                BestAnswer = (from a in db.Answers where a.QuestionId==id && a.Accepted
+                              select new AnswerViewModel {
+                                  Id = a.Id,
+                                  Adopted = a.Accepted,
+                                  AnswerAt = a.AnswerAt,
+                                  AnswerBy = (from u in db.Users
+                                              where u.Id == a.AnswerBy
+                                              select new UserViewModel
+                                              {
+                                                  ID = u.Id,
+                                                  Score = u.Score,
+                                                  RealName = u.RealName,
+                                              }).FirstOrDefault(),
+                                  QuestionId = id,
+                                  Likes = a.Likes,
+                                  Unlikes = a.Unlikes,
+                                  Content = a.Content,
+                              }).SingleOrDefault(),
             };
             
             return View(model);
@@ -630,7 +647,7 @@ namespace SmartCMS.Controllers
                     AnswerAt = DateTime.Now,
                     AnswerBy = CurrentUser.Id,  
                 });
-                CurrentUser.Score += Constants.AnswerScore;
+                CurrentUser.Score += Constants.UserScore.AnswerScore;
                 db.SaveChanges();
                 TempData["SuccessMessage"] = "感谢您的回答。";
             }
@@ -655,7 +672,8 @@ namespace SmartCMS.Controllers
                     CurrentUser.UserRole.Role==Constants.Roles.ROLE_CHIEF_EDITOR ||
                     CurrentUser.Id == answer.AnswerBy)
                 {
-                    //TODO
+                    db.Answers.Remove(answer);
+                    db.SaveChanges();
                     TempData["SuccessMessage"] = "回答删除成功";
                 }
                 else
@@ -667,6 +685,38 @@ namespace SmartCMS.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
+        public ActionResult AdoptAnswer(int id)
+        {
+            Answer answer = db.Answers.SingleOrDefault(m => m.Id == id);
+            int qid = answer.QuestionId.Value;
+            if (answer != null)
+            {
+                if (CurrentUser.UserRole.Role == Constants.Roles.ROLE_ADMIN ||
+                    CurrentUser.UserRole.Role == Constants.Roles.ROLE_CHIEF_EDITOR )
+                {
+                    var others = db.Answers.Where(m => m.QuestionId == qid && m.Accepted);
+                    foreach(var a in others)
+                    {
+                        a.Accepted = false;
+                    }
+                    answer.Accepted = true;
+                    var u = answer.User;
+                    u.Score += Constants.UserScore.AdoptedScore;
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = "回答采纳成功";
+                    //TODO, 录入知识库
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "错误，您没有采纳该回答的权限";
+                }
+            }
+            return RedirectToAction("Question", new { id = qid });
+        }
+
         [HttpGet]
         public JsonResult LikeAnswer(int id)
         {
@@ -675,7 +725,7 @@ namespace SmartCMS.Controllers
             if(a != null)
             {
                 a.Likes++;
-                a.User.Score += Constants.LikeScore;
+                a.User.Score += Constants.UserScore.LikeScore;
                 db.SaveChanges();
                 k = a.Likes;
             }
@@ -691,7 +741,7 @@ namespace SmartCMS.Controllers
             {                
                 a.Unlikes++;
                 if(a.User.Score>0)
-                    a.User.Score -= Constants.UnlikeScore;
+                    a.User.Score -= Constants.UserScore.UnlikeScore;
                 db.SaveChanges();
                 k = a.Unlikes;                
             }

@@ -979,8 +979,8 @@ ul.dropdown-menu
 }
 
 .copyrights-footer{
-    color:#009EA1;
-    font-weight:bold;
+    color:#101010;
+    font-family: 微软雅黑;
 }
 .dataTables_length{
     font-size:12px;
@@ -1373,15 +1373,18 @@ hr.question{
     float:left;
 }
 .question-right{
-    float:left;
+    float: left;
     padding-left: 10px;
+    width: 300px;
+    margin: auto;
 }
 
 .user-avatar{
-    float: right;
     display: block;
-    width: 50px;
+    width: 60px;
+    height: 60px;
     background: url(./images/ava_2.png) no-repeat center top;
+    margin: auto;
 }
 
 .other-answer-container

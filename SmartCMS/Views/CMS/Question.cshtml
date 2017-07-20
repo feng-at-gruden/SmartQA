@@ -46,11 +46,20 @@
 
             <hr class="question" />
 
-            <h3 class="best-answer"><i class="glyphicon glyphicon-ok-circle"></i>最佳答案</h3>
+            <h3 class="best-answer"><i class="glyphicon glyphicon-ok-circle"></i>最佳回答</h3>
             @if (Model.BestAnswer != null)
             {
-                <text>@(new HtmlString(Model.BestAnswer.Content.FormatHtml()))</text>
+                <p>@(new HtmlString(Model.BestAnswer.Content.FormatHtml()))</p>
                 Model.AnswerCount--;
+                
+                <text>
+                    <div class="btn-group" style="float:right">
+                        <button type="button" class="btn btn-default like" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-up"></span>赞<i>@Model.BestAnswer.Likes</i></button>
+                        <button type="button" class="btn btn-default unlike" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-down"></span>踩<i>@Model.BestAnswer.Unlikes</i></button>
+                    </div>
+
+                    <br class="clear"/>
+                </text>
             }
             else
             {
@@ -83,7 +92,12 @@
                                 @if (User.IsInRole(Constants.Roles.ROLE_ADMIN) 
                                     || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
                                 {
-                                    <button type="button" class="btn btn-info btn-xs">采纳</button>    
+                                    <button type="button" class="btn btn-info btn-xs" onclick="javascript:uid=@answer.Id; $('#adoptAnswerModal').modal('show'); ">采纳</button>
+                                    using (Html.BeginForm("AdoptAnswer", "CMS", FormMethod.Post, new { id = "adoptAnswerForm_" + answer.Id, style = "display:none;" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@answer.Id" />
+                                    }
                                 }
                                 @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
                                     || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR)
@@ -151,7 +165,7 @@
 
 
             <div class="user-avatar"></div>
-            @currentUser.RealName
+            @currentUser.RealName <span class="user-level">LV1</span>
             <hr class="question" />
 
             <h3>其他类似问题</h3>
@@ -179,6 +193,23 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" onclick="$('#deleteAnswerForm_' + uid).submit();">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="adoptAnswerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">采纳回答</h4>
+            </div>
+            <div class="modal-body">确定要采纳该回答为最佳答案吗？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$('#adoptAnswerForm_' + uid).submit();">确认</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->

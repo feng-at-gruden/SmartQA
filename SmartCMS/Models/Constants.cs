@@ -38,10 +38,15 @@ namespace SmartCMS.Models
         }
 
 
+        public class UserScore
+        {
+            public const int AnswerScore = 2;
+            public const int LikeScore = 2;
+            public const int UnlikeScore = 1;
+            public const int AdoptedScore = 20;
+        }
 
-        public const int AnswerScore = 2;
-        public const int LikeScore = 2;
-        public const int UnlikeScore = 1;
+        
 
         //TODO
         public static String GetUserLevel(int score)
