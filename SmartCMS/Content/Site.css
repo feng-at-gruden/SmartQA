@@ -1361,7 +1361,7 @@ h3.other-answer i.glyphicon
 
 hr.question{
     width: 100%;
-    background: #d0c8c8;
+    background: #e6e6e6;
     height: 1px;
     margin: 10px 0 20px 0;
 }
@@ -1369,22 +1369,26 @@ hr.question{
 .question-left{
     width:960px; 
     padding:15px; 
-    border-right:1px solid #ddd;
+    border-right:1px solid #e6e6e6;
     float:left;
 }
 .question-right{
     float: left;
-    padding-left: 10px;
+    padding: 0 20px 0 20px;
     width: 300px;
     margin: auto;
 }
 
-.user-avatar{
-    display: block;
+.user-avatar{    
     width: 60px;
     height: 60px;
     background: url(./images/ava_2.png) no-repeat center top;
-    margin: auto;
+    margin: 0 10px 10px 15px;
+    float:left;
+}
+.user-info{
+    float:left;
+    margin: 8px 0 0 0;
 }
 
 .other-answer-container

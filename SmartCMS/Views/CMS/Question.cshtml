@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = Model.Question;
     SmartCMSPrincipal currentUser = (SmartCMSPrincipal)User;
+    UserViewModel me = (UserViewModel)ViewBag.CurrentUser;
 }
 
 
@@ -48,132 +49,151 @@
 
             <h3 class="best-answer"><i class="glyphicon glyphicon-ok-circle"></i>最佳回答</h3>
             @if (Model.BestAnswer != null)
-            {
+            {                
                 <p>@(new HtmlString(Model.BestAnswer.Content.FormatHtml()))</p>
                 Model.AnswerCount--;
-                
+
                 <text>
+                    <span class="question-info other">@Model.BestAnswer.AnswerBy.RealName <span class="user-level">@Model.BestAnswer.AnswerBy.Level</span> |  回答于<i>@Model.BestAnswer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i></span>
                     <div class="btn-group" style="float:right">
                         <button type="button" class="btn btn-default like" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-up"></span>赞<i>@Model.BestAnswer.Likes</i></button>
                         <button type="button" class="btn btn-default unlike" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-down"></span>踩<i>@Model.BestAnswer.Unlikes</i></button>
                     </div>
-
-                    <br class="clear"/>
+                    <br class="clear" />
                 </text>
             }
             else
             {
-                <div>暂无</div>                
+                <div>暂无</div>
             }
-            
-            <hr class="question" />
-            <h3 class="other-answer"><i class="glyphicon glyphicon-th-list"></i>其他<span>@Model.AnswerCount</span>条回答</h3>
-            @if(Model.Answers ==null && Model.Answers.Count()==0)
-            {
-                <text>暂无</text>
 
-                <hr class="question" />
-            }
-            @foreach (AnswerViewModel answer in Model.Answers)
-            {
-                if(Model.BestAnswer !=null && Model.BestAnswer.Id == answer.Id)
-                {
-                    continue;
-                }
-                <text>
-                    <div class="other-answer-container">
-                        <p>                            
-                            @(new HtmlString(answer.Content.FormatHtml()))
-                        </p>
-                        
-                        <div>
-                            <div class="question-info other">
-                                @answer.AnswerBy.RealName <span class="user-level">@answer.AnswerBy.Level</span> |  回答于<i>@answer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i>
-                                @if (User.IsInRole(Constants.Roles.ROLE_ADMIN) 
+<hr class="question" />
+<h3 class="other-answer"><i class="glyphicon glyphicon-th-list"></i>其他<span>@Model.AnswerCount</span>条回答</h3>
+@if (Model.Answers == null && Model.Answers.Count() == 0)
+{
+    <text>暂无</text>
+
+    <hr class="question" />
+}
+@foreach (AnswerViewModel answer in Model.Answers)
+{
+    if (Model.BestAnswer != null && Model.BestAnswer.Id == answer.Id)
+    {
+        continue;
+    }
+    <text>
+        <div class="other-answer-container">
+            <p>
+                @(new HtmlString(answer.Content.FormatHtml()))
+            </p>
+
+            <div>
+                <div class="question-info other">
+                    @answer.AnswerBy.RealName <span class="user-level">@answer.AnswerBy.Level</span> |  回答于<i>@answer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i>
+                    @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
                                     || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
-                                {
-                                    <button type="button" class="btn btn-info btn-xs" onclick="javascript:uid=@answer.Id; $('#adoptAnswerModal').modal('show'); ">采纳</button>
-                                    using (Html.BeginForm("AdoptAnswer", "CMS", FormMethod.Post, new { id = "adoptAnswerForm_" + answer.Id, style = "display:none;" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@answer.Id" />
-                                    }
-                                }
-                                @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+                    {
+                        <button type="button" class="btn btn-info btn-xs" onclick="javascript:uid=@answer.Id; $('#adoptAnswerModal').modal('show'); ">采纳</button>
+                        using (Html.BeginForm("AdoptAnswer", "CMS", FormMethod.Post, new { id = "adoptAnswerForm_" + answer.Id, style = "display:none;" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@answer.Id" />
+                        }
+                    }
+                    @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
                                     || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR)
                                     || currentUser.Id == answer.AnswerBy.ID)
-                                {
-                                    <button type="button" class="btn btn-warning btn-xs" onclick="javascript:uid=@answer.Id; $('#deleteAnswerModal').modal('show'); ">删除</button>
-                                    using (Html.BeginForm("DeleteAnswer", "CMS", FormMethod.Post, new { id = "deleteAnswerForm_" + answer.Id, style = "display:none;" }))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@answer.Id" />
-                                    }
-                                }
-                            </div>
-                            <div class="btn-group" style="float:right">
-                                <button type="button" class="btn btn-default like" aid="@answer.Id"><span class="glyphicon glyphicon-thumbs-up"></span>赞<i>@answer.Likes</i></button>
-                                <button type="button" class="btn btn-default unlike" aid="@answer.Id"><span class="glyphicon glyphicon-thumbs-down"></span>踩<i>@answer.Unlikes</i></button>
-                            </div>
-                            <br class="clear" />
-                        </div>
-                        
-                    </div>
-                    <hr class="question" />
-                </text>
-            }
-
-
-
-            @using (Html.BeginForm("Answer", "CMS", new { id = Model.Id }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
-            {
-            @Html.AntiForgeryToken()
-
-            <div style="width:100%; text-align:center;">
-
-                <div class="alert alert-info">
-                    如果您的回答被采纳，您将获得：系统奖励20（经验值）
+                    {
+                        <button type="button" class="btn btn-warning btn-xs" onclick="javascript:uid=@answer.Id; $('#deleteAnswerModal').modal('show'); ">删除</button>
+                        using (Html.BeginForm("DeleteAnswer", "CMS", FormMethod.Post, new { id = "deleteAnswerForm_" + answer.Id, style = "display:none;" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@answer.Id" />
+                        }
+                    }
                 </div>
-
-                <div class="form-group">
-                    <div class=''>
-                        @Html.TextAreaFor(m => m.Answer, new { id = "myEditor", style = "width:100%;height:320px;padding-left:10px;", value = Model.Answer, placeholder = "词条解析或问题解答", maxlength = 1000 })
-                    </div>
+                <div class="btn-group" style="float:right">
+                    <button type="button" class="btn btn-default like" aid="@answer.Id"><span class="glyphicon glyphicon-thumbs-up"></span>赞<i>@answer.Likes</i></button>
+                    <button type="button" class="btn btn-default unlike" aid="@answer.Id"><span class="glyphicon glyphicon-thumbs-down"></span>踩<i>@answer.Unlikes</i></button>
                 </div>
-
-                <!--
-                <div class="form-group" style="height:40px;">
-                    <a href="javascript:;" class="file">
-                        选择附件文件
-                        <input type="file" name="file" />
-                    </a><span id="selectedFile"></span>
-                </div>
-                    -->
-
-                <p style="text-align:right;">
-                    <a href="~/CMS/Questions/@Model.CategoryId" class="btn btn-success" style="color:white;">返 回</a>
-                    <button type="submit" class="btn btn-success">提交回答</button>
-                </p>
+                <br class="clear" />
             </div>
-            }
 
         </div>
+        <hr class="question" />
+    </text>
+}
+
+@using (Html.BeginForm("Answer", "CMS", new { id = Model.Id }, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div style="width:100%; text-align:center;">
+        <div class="alert alert-info">
+            如果您的回答被采纳，您将获得：系统奖励20（经验值）
+        </div>
+        <div class="form-group">
+            <div class=''>
+                @Html.TextAreaFor(m => m.Answer, new { id = "myEditor", style = "width:100%;height:320px;padding-left:10px;", value = Model.Answer, placeholder = "词条解析或问题解答", maxlength = 1000 })
+            </div>
+        </div>
+        <!--
+        <div class="form-group" style="height:40px;">
+            <a href="javascript:;" class="file">
+                选择附件文件
+                <input type="file" name="file" />
+            </a><span id="selectedFile"></span>
+        </div>
+            -->
+        <p style="text-align:right;">
+            <a href="~/CMS/Questions/@Model.CategoryId" class="btn btn-success" style="color:white;">返 回</a>
+            <button type="submit" class="btn btn-success">提交回答</button>
+        </p>
+    </div>
+}
+</div>
 
 
 
         <div class="question-right">
 
 
-            <div class="user-avatar"></div>
-            @currentUser.RealName <span class="user-level">LV1</span>
-            <hr class="question" />
-
-            <h3>其他类似问题</h3>
-            <hr class="question" />
-
-            <h3>等待您来回答</h3>
-            <hr class="question" />
-        </div>
+            <div class="user-avatar"> </div>
+            <div class="user-info">
+                @me.RealName <span class="user-level">@me.Level</span>
+                <br/>
+                <span class="question-info">上次登录： @me.LastLoginTime.Value.ToString("yyyy-MM-dd hh:mm")</span>
+            </div>              
+                <hr class="question" />
+                <h3>其他类似问题</h3>
+                @if(ViewBag.OtherQuestions!=null)
+                {
+                    IEnumerable<QuestionViewModel> otherQuestion = (IEnumerable<QuestionViewModel>)ViewBag.OtherQuestions;
+                    foreach (QuestionViewModel q in otherQuestion)
+                    {
+                        <a href="~/CMS/Question/@q.Id">@q.Question</a>
+                    }
+                }
+                else
+                {
+                    <text>暂无</text>
+                }
+                <hr class="question" />
+                <h3>等待您来回答</h3>
+                @if (ViewBag.NoAnswersQuestions != null)
+                {
+                    IEnumerable<QuestionViewModel> NoAnswersQuestions = (IEnumerable<QuestionViewModel>)ViewBag.NoAnswersQuestions;
+                    foreach (QuestionViewModel q in NoAnswersQuestions)
+                    {
+                        <a href="~/CMS/Question/@q.Id">@q.Question</a>
+                    }
+                }
+                else
+                {
+                    <text>暂无</text>
+                }
+                <hr class="question" />
+            </div>
 
         <br class="clear" />
     </div>

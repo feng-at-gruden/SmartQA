@@ -629,7 +629,38 @@ namespace SmartCMS.Controllers
                                   Content = a.Content,
                               }).SingleOrDefault(),
             };
-            
+
+            var user = CurrentUser;
+            ViewBag.CurrentUser = new UserViewModel
+            {
+                ID = user.Id,
+                RealName = user.RealName,
+                Score = user.Score,
+                LastLoginTime = user.LastLoginTime,
+                UserName = user.UserName,
+            };
+
+            ViewBag.OtherQuestions = (from r in db.Questions
+                         where r.Id != id && r.CategoryId == model.CategoryId
+                         orderby r.LastAskedAt                         
+                         select new QuestionViewModel
+                         {
+                             Id = r.Id,
+                             Question = r.Content,
+                             Hits = r.Hits,
+                             LastAskedAt = r.LastAskedAt
+                         }).Take(10);
+
+            ViewBag.NoAnswersQuestions = (from r in db.Questions
+                                      where r.Id != id && r.Answers.Count == 0
+                                      orderby r.LastAskedAt
+                                      select new QuestionViewModel
+                                      {
+                                          Id = r.Id,
+                                          Question = r.Content,
+                                          Hits = r.Hits,
+                                          LastAskedAt = r.LastAskedAt
+                                      }).Take(10);
             return View(model);
         }
 
