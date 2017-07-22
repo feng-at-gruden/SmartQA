@@ -14,6 +14,14 @@
 <div id="breadcrumbs">
     <ul>
         <li>@Html.ActionLink("问题管理", "QuestionCategories", "CMS") </li>
+        @if (ViewBag.Breadcrumbs != null)
+        {
+            foreach (string k in ViewBag.Breadcrumbs)
+            {
+                string[] v = k.Split('#');
+                <li><a href="/CMS/Questions/@v[0]">@v[1]</a></li>
+            }
+        }
         <li><a href="~/CMS/Questions/@Model.CategoryId">问题解答</a></li>
     </ul>
 </div>
@@ -27,7 +35,10 @@
             {
                 <div class="alert alert-success">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    @TempData["SuccessMessage"]
+                    @{
+                string html = TempData["SuccessMessage"].ToString().Replace("#这里#", "<a href=\"/CMS/AddArticle/" + Model.CategoryId + "?uid=" + Model.Id + "\" target=\"_blank\"><b>这里</b></a>");
+                    }
+                    @(new HtmlString(html))
                 </div>
             }
 
@@ -165,10 +176,12 @@
                 <span class="question-info">上次登录： @me.LastLoginTime.Value.ToString("yyyy-MM-dd hh:mm")</span>
             </div>              
                 <hr class="question" />
-                <h3>其他类似问题</h3>
-                @if(ViewBag.OtherQuestions!=null)
-                {
+                <h3 class="other-answer"><i class="glyphicon glyphicon-th-list"></i>其他类似问题</h3>
+                @{
                     IEnumerable<QuestionViewModel> otherQuestion = (IEnumerable<QuestionViewModel>)ViewBag.OtherQuestions;
+                }
+                @if (otherQuestion != null && otherQuestion.Count()>0)
+                {                    
                     foreach (QuestionViewModel q in otherQuestion)
                     {
                         <a href="~/CMS/Question/@q.Id">@q.Question</a>
@@ -179,10 +192,13 @@
                     <text>暂无</text>
                 }
                 <hr class="question" />
-                <h3>等待您来回答</h3>
-                @if (ViewBag.NoAnswersQuestions != null)
-                {
+                <h3 class="other-answer"><i class="glyphicon glyphicon-th-list"></i>等待您来回答</h3>
+                @{
                     IEnumerable<QuestionViewModel> NoAnswersQuestions = (IEnumerable<QuestionViewModel>)ViewBag.NoAnswersQuestions;
+                }
+                @if (NoAnswersQuestions != null && NoAnswersQuestions.Count()>0)
+                {
+                    
                     foreach (QuestionViewModel q in NoAnswersQuestions)
                     {
                         <a href="~/CMS/Question/@q.Id">@q.Question</a>

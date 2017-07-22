@@ -228,12 +228,12 @@ namespace SmartCMS.Controllers
             {
                 CategoryId = id,
             };
-            //TODO, Comment out
             if (uid.HasValue)
             {
                 var k = db.Questions.SingleOrDefault(m => m.Id == uid);
                 model.Question = k.Content;
                 model.PendingId = uid.Value;
+                model.Answer = db.Answers.FirstOrDefault(m => m.QuestionId == uid && m.Accepted).Content;
             }
             ViewBag.Category = db.Categories.SingleOrDefault(m => m.Id == id).Name;
             ViewBag.Breadcrumbs = setBreadcrumbs(id);
@@ -250,7 +250,7 @@ namespace SmartCMS.Controllers
                 var i = db.Knowledges.Count(m => m.Topic.Equals(model.Question, StringComparison.OrdinalIgnoreCase) && m.CategoryId == model.CategoryId);
                 if (i > 0)
                 {
-                    ModelState.AddModelError("", "同类别下相同问答已经存在，请勿重复添加!");
+                    ModelState.AddModelError("", "同类别下相同知识条目已经存在，请勿重复添加!");
                 }
                 else
                 {
@@ -284,13 +284,14 @@ namespace SmartCMS.Controllers
                     });
 
                     //If it's pending Question remove it
-                    //TODO
+                    /*
                     if (model.PendingId > 0)
                     {
                         var p = db.Questions.SingleOrDefault(m => m.Id == model.PendingId);
                         if (p != null)
                             db.Questions.Remove(p);
                     }
+                    */
                     
 
                     //Check and add hot words.
@@ -313,8 +314,8 @@ namespace SmartCMS.Controllers
                         }
                     }
                     db.SaveChanges();
-                    ViewBag.SuccessMessage = "问答添加成功！";
-                    Log("添加问答");
+                    ViewBag.SuccessMessage = "知识添加成功！";
+                    Log("添加知识");
                 }
             }
 
@@ -345,13 +346,13 @@ namespace SmartCMS.Controllers
                 }
                 db.Knowledges.Remove(u);
                 db.SaveChanges();
-                Log("删除问答");
-                ViewBag.SuccessMessage = "删除问答成功！";
+                Log("删除知识");
+                ViewBag.SuccessMessage = "删除知识成功！";
                 return RedirectToAction("Category", new { id = pid });
             }
             else
             {
-                ModelState.AddModelError("", "找不到指定问答");
+                ModelState.AddModelError("", "找不到指定知识条目");
                 return RedirectToAction("Categories");
             }
 
@@ -417,8 +418,8 @@ namespace SmartCMS.Controllers
                 c.Keywords = model.Keywords.Trim();
                 db.SaveChanges();
 
-                ViewBag.SuccessMessage = "问答修改成功！";
-                Log("修改问答");
+                ViewBag.SuccessMessage = "知识修改成功！";
+                Log("修改知识");
                 //Check and add hot words.
                 var keys = model.Keywords.Trim().Split(new char[1] { ' ' });
                 foreach (var k in keys)
@@ -475,8 +476,9 @@ namespace SmartCMS.Controllers
         public ActionResult DeleteHotWord(string id)
         {
             var r = db.HotWords.SingleOrDefault(m => id.Equals(m.KeyWord));
-            db.HotWords.Remove(r);
-            db.SaveChanges();
+            Log("删除关键词：" + r.KeyWord);
+            db.HotWords.Remove(r);            
+            db.SaveChanges();            
             return RedirectToAction("HotWords");
         }
 
@@ -546,6 +548,7 @@ namespace SmartCMS.Controllers
                             AnswerCount = row.Answers.Count(),
                             LastAskedAt = row.LastAskedAt,
                         };
+            ViewBag.Breadcrumbs = setBreadcrumbs(id.Value);
             return View(model);
         }
 
@@ -661,6 +664,8 @@ namespace SmartCMS.Controllers
                                           Hits = r.Hits,
                                           LastAskedAt = r.LastAskedAt
                                       }).Take(10);
+
+            ViewBag.Breadcrumbs = setBreadcrumbs(q.CategoryId.Value);
             return View(model);
         }
 
@@ -680,6 +685,7 @@ namespace SmartCMS.Controllers
                 });
                 CurrentUser.Score += Constants.UserScore.AnswerScore;
                 db.SaveChanges();
+                Log("回答问题");
                 TempData["SuccessMessage"] = "感谢您的回答。";
             }
             else
@@ -706,6 +712,7 @@ namespace SmartCMS.Controllers
                     db.Answers.Remove(answer);
                     db.SaveChanges();
                     TempData["SuccessMessage"] = "回答删除成功";
+                    Log("删除回答");
                 }
                 else
                 {
@@ -737,8 +744,8 @@ namespace SmartCMS.Controllers
                     var u = answer.User;
                     u.Score += Constants.UserScore.AdoptedScore;
                     db.SaveChanges();
-                    TempData["SuccessMessage"] = "回答采纳成功";
-                    //TODO, 录入知识库
+                    Log("采纳最佳回答");
+                    TempData["SuccessMessage"] = "回答采纳成功，点击#这里#把该问题收入知识库";                    
                 }
                 else
                 {
@@ -746,7 +753,7 @@ namespace SmartCMS.Controllers
                 }
             }
             return RedirectToAction("Question", new { id = qid });
-        }
+        }        
 
         [HttpGet]
         public JsonResult LikeAnswer(int id)
