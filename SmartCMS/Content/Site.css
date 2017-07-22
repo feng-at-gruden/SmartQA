@@ -1341,7 +1341,7 @@ h1.question{
 
 .question-info{
     color: #999;
-    font-size:10px;
+    font-size:12px;
 }
 i.glyphicon{
     color: #999;
@@ -1409,12 +1409,17 @@ hr.question{
 
 .other{
     float: left;
-    margin: 17px 0 0 0;
+    margin: 12px 0 0 0;
 }
 
+.answer-opt, 
 .other .btn-xs{
     margin: 0px !important;
     width: 64px !important;
-    border-radius: 10px;
+    border-radius: 10px !important;
     min-width: 20px;
+    margin-top:-5px !important;
+}
+.answer-opt {
+    margin: 8px 0 0 10px !important;
 }

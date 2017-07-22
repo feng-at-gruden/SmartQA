@@ -520,7 +520,7 @@ namespace SmartCMS.Controllers
                             ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,
-                            PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count() == 0),
+                            PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
                         };
 
             List<CategoryViewModel> result = new List<CategoryViewModel>();
@@ -831,7 +831,7 @@ namespace SmartCMS.Controllers
                                     ParentId = row.ParentCategoryId,
                                     Name = row.Name,
                                     Comment = row.Comment,
-                                    PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count()==0),
+                                    PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k=>k.Accepted)==0),
                                 };
 
             List<CategoryViewModel> r = new List<CategoryViewModel>();

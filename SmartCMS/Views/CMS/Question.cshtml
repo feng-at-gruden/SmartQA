@@ -66,6 +66,16 @@
 
                 <text>
                     <span class="question-info other">@Model.BestAnswer.AnswerBy.RealName <span class="user-level">@Model.BestAnswer.AnswerBy.Level</span> |  回答于<i>@Model.BestAnswer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i></span>
+                    @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+                                    || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+                    {
+                        <button type="button" class="btn btn-warning btn-xs answer-opt" onclick="javascript:uid=@Model.BestAnswer.Id; $('#deleteAnswerModal').modal('show'); ">删除</button>
+                        using (Html.BeginForm("DeleteAnswer", "CMS", FormMethod.Post, new { id = "deleteAnswerForm_" + Model.BestAnswer.Id, style = "display:none;" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.BestAnswer.Id" />
+                        }
+                    }
                     <div class="btn-group" style="float:right">
                         <button type="button" class="btn btn-default like" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-up"></span>赞<i>@Model.BestAnswer.Likes</i></button>
                         <button type="button" class="btn btn-default unlike" aid="@Model.BestAnswer.Id"><span class="glyphicon glyphicon-thumbs-down"></span>踩<i>@Model.BestAnswer.Unlikes</i></button>
@@ -100,7 +110,7 @@
 
             <div>
                 <div class="question-info other">
-                    @answer.AnswerBy.RealName <span class="user-level">@answer.AnswerBy.Level</span> |  回答于<i>@answer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i>
+                    @answer.AnswerBy.RealName <span class="user-level">@answer.AnswerBy.Level</span> |  回答于<i>@answer.AnswerAt.Value.ToString("yyyy-MM-dd HH:mm")</i>&nbsp;&nbsp;
                     @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
                                     || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
                     {

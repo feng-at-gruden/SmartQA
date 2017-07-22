@@ -2,13 +2,21 @@
 @model IEnumerable<SmartCMS.Models.QuestionViewModel>
 
 @{
-    ViewBag.Title = "问题解答";
+    ViewBag.Title = "问题一览";
 }
 
 
 <div id="breadcrumbs">
     <ul>
         <li>@Html.ActionLink("问题管理", "QuestionCategories", "CMS") </li>
+        @if (ViewBag.Breadcrumbs != null)
+        {
+            foreach (string k in ViewBag.Breadcrumbs)
+            {
+                string[] v = k.Split('#');
+                <li><a href="/CMS/Questions/@v[0]">@v[1]</a></li>
+            }
+        }
         <li><a href="#">@ViewBag.Title</a></li>
     </ul>
 </div>
