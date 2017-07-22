@@ -34,7 +34,9 @@ namespace SmartCMS.Models
 
         public DateTime? CreatedAt { get; set; }
 
-        public int Count { get; set; }
+        public int PendingQuestionCount { get; set; }
+
+
     }
 
 

@@ -313,6 +313,7 @@ namespace SmartCMS.Controllers
                             }
                         }
                     }
+                    CurrentUser.Score += Constants.UserScore.AddKnowedgeScore;
                     db.SaveChanges();
                     ViewBag.SuccessMessage = "知识添加成功！";
                     Log("添加知识");
@@ -519,7 +520,7 @@ namespace SmartCMS.Controllers
                             ParentId = row.ParentCategoryId,
                             Name = row.Name,
                             Comment = row.Comment,
-                            Count = db.Questions.Count(m => m.CategoryId == row.Id),
+                            PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count() == 0),
                         };
 
             List<CategoryViewModel> result = new List<CategoryViewModel>();
@@ -830,7 +831,7 @@ namespace SmartCMS.Controllers
                                     ParentId = row.ParentCategoryId,
                                     Name = row.Name,
                                     Comment = row.Comment,
-                                    Count = db.Questions.Count(m => m.CategoryId == row.Id),
+                                    PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count()==0),
                                 };
 
             List<CategoryViewModel> r = new List<CategoryViewModel>();

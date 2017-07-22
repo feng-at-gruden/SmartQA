@@ -39,7 +39,7 @@
 @helper DisplayCategory(SmartCMS.Models.CategoryViewModel category)
 {
     var className = category.ParentId == 0 ? "category" : "sub-category";
-    var count = category.Count > 0? new HtmlString("<span class=\"badge\">" + category.Count + "</span>") : null;
+    var count = category.PendingQuestionCount > 0 ? new HtmlString("<span class=\"badge\">" + category.PendingQuestionCount + "</span>") : null;
     <ul class="@className">
         @if(category.ParentId==0)
         {
