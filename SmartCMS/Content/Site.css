@@ -1423,3 +1423,15 @@ hr.question{
 .answer-opt {
     margin: 8px 0 0 10px !important;
 }
+
+.question-table{
+    border:none;
+}
+
+.question-table thead{
+    visibility:hidden;
+}
+
+..question-table td{
+    border:none;
+}

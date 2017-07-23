@@ -74,6 +74,25 @@ namespace SmartCMS.Controllers
         }
 
         [HttpGet]
+        public JsonResult GetCategoryHotQuestion(int? id, int? max)
+        {
+            int k = max.HasValue ? max.Value : 10;
+            
+            var ids = getSubCategoryIds(id.Value);
+            ids.Add(id.Value);            
+            var model = (from r in db.Questions
+                         where ids.Contains(r.CategoryId.Value) && r.Answers.Count(m=>m.Accepted)>0
+                        orderby r.Hits descending                        
+                        select new QuestionViewModel
+                        {
+                            Id = r.Id,
+                            Question = r.Content,
+                        }).Take(k);
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public JsonResult Search(int? id, string question)
         {            
             var model = (from r in db.Knowledges
@@ -170,7 +189,7 @@ namespace SmartCMS.Controllers
         }
 
         [HttpGet]
-        public JsonResult View(int id)
+        public JsonResult ViewKnowedge(int id)
         {
             var r = db.Knowledges.SingleOrDefault(m => m.Id == id);
             if(r!=null)
@@ -185,6 +204,29 @@ namespace SmartCMS.Controllers
                     Keywords = r.Keywords,
                     CategoryId = r.CategoryId.Value,
                     Attachment = r.Attachment,
+                };
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("找不到知识条目", JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult ViewQuestion(int id)
+        {
+            var r = db.Questions.SingleOrDefault(m => m.Id == id);
+            if (r != null)
+            {
+                r.Hits++;
+                db.SaveChanges();
+                var model = new QuestionViewModel
+                {
+                    Id = r.Id,
+                    Question = r.Content,
+                    Answer = r.Answers.FirstOrDefault(m=>m.Accepted).Content,
+                    CategoryId = r.CategoryId.Value,                    
                 };
                 return Json(model, JsonRequestBehavior.AllowGet);
             }

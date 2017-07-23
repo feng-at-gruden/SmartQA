@@ -45,7 +45,7 @@ function getHotTopic(id, name) {
         if (result.length > 0) {
             var html = name + "常见问题: <ol class='result'>";
             $.each(result, function (i, field) {
-                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")'>" + field.Question + "</a></li>";
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\", false)'>" + field.Question + "</a></li>";
             });
             html += "</ol>";
             displayResponse(html);
@@ -54,15 +54,15 @@ function getHotTopic(id, name) {
 }
 
 //热点问题
-function getHotTopic2(id, name) {
+function pullHotQuestions(id, name) {
     loading(true);
-    $.getJSON("/Home/GetCategoryHotTopic?id=" + id + "&max=20", function (result) {
+    $.getJSON("/Home/GetCategoryHotQuestion?id=" + id + "&max=20", function (result) {
         loading(false);
         var html;
         if (result.length > 0) {
             html = name + "常见问题: <ol class='result'>";
             $.each(result, function (i, field) {
-                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' >" + field.Question + "</a></li>";
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\", true)' >" + field.Question + "</a></li>";
             });
             html += "</ol>";
         }
@@ -82,7 +82,7 @@ function Search(keyword)
         if (result.length > 0) {
             var html = name + "系统中有以下答案匹配您的问题: <ol class='result'>";
             $.each(result, function (i, field) {
-                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\")' target='_blank'>" + field.Question + "</a></li>";
+                html += "<li><a href='javascript:Interpret(" + field.Id + ",\"" + field.Question + "\", false)' target='_blank'>" + field.Question + "</a></li>";
             });
             html += "</ol> <p style='margin-top:10px;'>不知道有没有帮到你呢？<a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved(" + selectedCategoryId + ", \"" + keyword + "\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
@@ -132,9 +132,12 @@ function Unresolved(id, q)
     });
 }
 
-function ViewAnswer(id) {
+function ViewAnswer(id, isQuestion) {
     loading(true);
-    $.getJSON("/Home/View/" + id, function (result) {
+    var url = "/Home/ViewKnowedge/" + id;
+    if (isQuestion)
+        url = "/Home/ViewQuestion/" + id
+    $.getJSON(url, function (result) {
         loading(false);
         if (result) {
             var html = result.Answer.replace(/\r/g, "<br>");
@@ -150,7 +153,7 @@ function ViewAnswer(id) {
     });
 }
 
-function Interpret(id, q)
+function Interpret(id, q, isQuestion)
 {
     var t = new Date().Format("hh:mm:ss");
     var c = questionTemplate.replace('##CONTENT##', q);
@@ -162,7 +165,7 @@ function Interpret(id, q)
     $("#chat-content-container").scrollTop(k);
     $('#myQuestion').val('')
     //Call ajax
-    ViewAnswer(id);
+    ViewAnswer(id, isQuestion);
 }
 
 function selectCategory(name, id)
@@ -207,7 +210,7 @@ function resetAutoComplete()
 }
 
 var hotTopicCategpriesHtml = "";
-function showHotTopic(name, id)
+function showHotQuestions(name, id)
 {
     if (selectedCategoryId != id)
         displayResponse("您已选择问题分类：" + name);
@@ -218,7 +221,7 @@ function showHotTopic(name, id)
     $('#current-category').html("当前问题分类: " + name);
     
     //Display category hot topic
-    getHotTopic2(id, name);
+    pullHotQuestions(id, name);
 }
 
 function hotTopicBack()
@@ -287,7 +290,7 @@ $(document).ready(function () {
         appendTo: "#chat-input-container",
         position: { my: "left bottom", at: "left top", collision: "none" },
         select: function (event, ui) {
-            Interpret(ui.item.Id, ui.item.label);            
+            Interpret(ui.item.Id, ui.item.label, false);            
             return false;
         },         
     });

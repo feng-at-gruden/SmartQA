@@ -64,13 +64,13 @@
                                 <div class="tab-pane" id="TabHotTopic">
                                     @foreach (var category in Model)
                                     {
-                                        <a href="javascript:showHotTopic('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
+                                        <a href="javascript:showHotQuestions('@category.Name','@category.Id')"><h5>@category.Name</h5></a>
                                         if (category.SubCategories != null)
                                         {
                                             <ul>
                                                 @foreach (var sc in category.SubCategories)
                                                 {
-                                                    <li><a href="javascript:showHotTopic('@sc.Name','@sc.Id')">@sc.Name</a></li>
+                                                    <li><a href="javascript:showHotQuestions('@sc.Name','@sc.Id')">@sc.Name</a></li>
                                                 }
                                             </ul>
                                         }

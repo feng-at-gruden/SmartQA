@@ -536,6 +536,27 @@ namespace SmartCMS.Controllers
 
         public ActionResult Questions(int? id)
         {
+            var topCategory = from row in db.Categories
+                        where row.ParentCategoryId == 0
+                        orderby row.Id
+                        select new CategoryViewModel
+                        {
+                            Id = row.Id,
+                            ParentId = row.ParentCategoryId,
+                            Name = row.Name,
+                            Comment = row.Comment,
+                            PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
+                        };
+
+            List<CategoryViewModel> result = new List<CategoryViewModel>();
+            for (int i = 0; i < topCategory.Count(); i++)
+            {
+                CategoryViewModel s = topCategory.ToArray()[i];
+                s.SubCategories = setSubCategoires(s);
+                result.Add(s);
+            }
+            ViewBag.Categories = result;
+
             var model = from row in db.Questions
                         where row.CategoryId == id.Value
                         orderby row.Hits descending
