@@ -241,7 +241,7 @@ namespace SmartCMS.Controllers
         {
             q = q.Trim();
             var model = (from r in db.Knowledges
-                         where r.Topic.Contains(q)
+                         where r.Keywords.Contains(q)
                          orderby r.Hits descending
                          select new KnowledgeViewModel
                          {

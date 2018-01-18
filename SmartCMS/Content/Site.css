@@ -1432,6 +1432,10 @@ hr.question{
     visibility:hidden;
 }
 
-..question-table td{
+.question-table td{
     border:none;
+}
+
+.badge{
+    background-color: #009ea1 !important;
 }

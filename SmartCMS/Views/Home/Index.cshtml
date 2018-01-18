@@ -28,7 +28,7 @@
                         </div>
 
                         <div id="chat-input-container">
-                            <div id="current-category">当前问题分类: 全部分类</div>
+                            <div id="current-category">当前知识分类: 全部分类</div>
                             <div id="question-input-container">
                                 <input type="text" name="myQuestion" id="myQuestion" placeholder="我的问题" />
                                 <button onclick="ask()" id="sendBtn">提问</button>
@@ -41,8 +41,8 @@
                         <div class="tabbable">
 
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#TabCategory" data-toggle="tab">知识分类</a></li>
-                                <li><a href="#TabHotTopic" data-toggle="tab">热门问答</a></li>
+                                <li class="active"><a href="#TabCategory" data-toggle="tab" onclick="hintType = 0;">知识分类</a></li>
+                                <li><a href="#TabHotTopic" data-toggle="tab" onclick="hintType = 1;">热门问答</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="TabCategory">
