@@ -134,6 +134,22 @@ function Unresolved(id, q)
     });
 }
 
+function ResetCategory(t)
+{
+    hintType = t;
+    selectedCategoryId = 0;
+
+    if (hintType == 0)
+    {
+        displayResponse("您已选择知识分类：" + name);
+        $('#current-category').html("当前知识分类: <span style='color:#009ea1;'>" + name + "</span>");
+    }else{
+        displayResponse("您已选择问答分类：" + name);
+        $('#current-category').html("当前问答分类: <span style='color:#009ea1;'>" + name + "</span>");
+    }
+    
+}
+
 function ViewAnswer(id, isQuestion) {
     loading(true);
     var url = "/Home/ViewKnowedge/" + id;
