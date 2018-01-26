@@ -136,14 +136,17 @@ function Unresolved(id, q)
 
 function ResetCategory(t)
 {
+    if (hintType == t)
+        return;
     hintType = t;
     selectedCategoryId = 0;
 
+    name = "全部分类";
     if (hintType == 0)
     {
         displayResponse("您已选择知识分类：" + name);
         $('#current-category').html("当前知识分类: <span style='color:#009ea1;'>" + name + "</span>");
-    }else{
+    } else {
         displayResponse("您已选择问答分类：" + name);
         $('#current-category').html("当前问答分类: <span style='color:#009ea1;'>" + name + "</span>");
     }
