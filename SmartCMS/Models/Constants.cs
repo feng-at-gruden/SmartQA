@@ -11,7 +11,7 @@ namespace SmartCMS.Models
     public class Constants 
     {
 
-        public const string APP_NAME = "漳州交警支队智库问答系统";
+        public const string APP_NAME = "漳州市公安局交警支队智库系统";
         public const string APP_VERSION = "v1.0";
 
         public static int Other_Category_Id { get { return int.Parse(ConfigurationManager.AppSettings["PendingQuestionsCategoryID"]); } }
