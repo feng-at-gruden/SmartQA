@@ -158,7 +158,7 @@ footer {
 
 .site-title a, .site-title a:hover, .site-title a:active {
     background: none;
-    color: #009EA1;
+    color: #457ee4;
     outline: none;
     text-decoration: none;
 }
@@ -464,7 +464,7 @@ textarea {
 }
 
     input:focus, textarea:focus {
-        border: 1px solid #7ac0da;
+        border: 1px solid #457ee4;
     }
 
     input[type="checkbox"] {
@@ -510,7 +510,7 @@ textarea {
 }
 
 .message-success {
-    color: #7ac0da;
+    color: #457ee4;
     font-size: 1.3em;
     font-weight: bold;
     margin: 20px 0 10px 0;
@@ -942,7 +942,7 @@ ul.dropdown-menu
 .chat-answer .answer-name,
 .chat-question .question-name
 {
-    color:#009EA1;
+    color:#457ee4;
 }
 .chat-question
 {
@@ -1018,6 +1018,8 @@ ul.dropdown-menu
     float: right;    
     z-index: 10000;
     margin: 10px 0;
+    background:#457ee4;
+    color:#fff;
 }
 #current-category
 {
@@ -1033,11 +1035,11 @@ ul.dropdown-menu
 #TabCategory a,
 #TabHotTopic a{
     padding: 0px;
-    color: #009EA1;
+    color: #457ee4;
     text-decoration:none;    
 }
 
-.result a{color: #009EA1;}
+.result a{color: #457ee4;}
 
 .answer-content{
     line-height: 1.6em;
@@ -1130,7 +1132,7 @@ ul.dropdown-menu
     list-style:none;
 }
 .ui-autocomplete.source:hover {
-    background: #7ac0da;
+    background: #457ee4;
 }
 
 .ui-menu .ui-menu-item a{
@@ -1142,7 +1144,7 @@ ul.dropdown-menu
     border-radius: 5px;
 }
 .ui-menu .ui-menu-item a:hover{
-    background-color:#009EA1;
+    background-color:#457ee4;
     color:#fff;
 
 }
@@ -1287,7 +1289,7 @@ ul.dropdown-menu
     left: -45px;
     display: inline-block;
     top: 15px;
-    background-color: #009ea1  !important;
+    background-color: #457ee4  !important;
 }
 .hot-word-container{
     display:inline-block;
@@ -1437,7 +1439,7 @@ hr.question{
 }
 
 .badge{
-    background-color: #009ea1 !important;
+    background-color: #457ee4 !important;
 }
 
 

@@ -145,10 +145,10 @@ function ResetCategory(t)
     if (hintType == 0)
     {
         displayResponse("您已选择知识分类：" + name);
-        $('#current-category').html("当前知识分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前知识分类: <span style='color:#457ee4;'>" + name + "</span>");
     } else {
         displayResponse("您已选择问答分类：" + name);
-        $('#current-category').html("当前问答分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前问答分类: <span style='color:#457ee4;'>" + name + "</span>");
     }
     
 }
@@ -164,7 +164,7 @@ function ViewAnswer(id, isQuestion) {
             var html = result.Answer.replace(/\r/g, "<br>");
             if (result.Attachment != "" && result.Attachment != null)
             {
-                html += "<p style='margin:10px 0 0 0px;'> 点击<a href='" + result.Attachment + "' target='_blank' style='color:#009ea1;'><b>这里</b></a>查看附件 </p>"
+                html += "<p style='margin:10px 0 0 0px;'> 点击<a href='" + result.Attachment + "' target='_blank' style='color:#457ee4;'><b>这里</b></a>查看附件 </p>"
             }
             html += "<p style='margin-top:10px;'> 以上答案是否解决了您的问题？ <a href='javascript:Resolved();'><img src='/content/images/veryGood1.png'>已解决</a> <a href='javascript:Unresolved("+result.CategoryId+",\""+result.Question+"\");'><img src='/content/images/veryGood2.png'>未解决(收录)</a> </p>";
             displayResponse(html);
@@ -195,9 +195,9 @@ function selectCategory(name, id)
         return;
     selectedCategoryId = id;
     if(hintType==0)
-        $('#current-category').html("当前知识分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前知识分类: <span style='color:#457ee4;'>" + name + "</span>");
     else
-        $('#current-category').html("当前问答分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前问答分类: <span style='color:#457ee4;'>" + name + "</span>");
 
     resetAutoComplete();
 
@@ -253,9 +253,9 @@ function showHotQuestions(name, id)
     selectedCategoryId = id;
     resetAutoComplete();
     if (hintType == 0)
-        $('#current-category').html("当前知识分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前知识分类: <span style='color:#457ee4;'>" + name + "</span>");
     else
-        $('#current-category').html("当前问答分类: <span style='color:#009ea1;'>" + name + "</span>");
+        $('#current-category').html("当前问答分类: <span style='color:#457ee4;'>" + name + "</span>");
     
     //Display category hot topic
     pullHotQuestions(id, name);
