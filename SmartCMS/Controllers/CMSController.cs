@@ -536,6 +536,7 @@ namespace SmartCMS.Controllers
 
         public ActionResult Questions(int? id)
         {
+            /*
             var topCategory = from row in db.Categories
                         where row.ParentCategoryId == 0
                         orderby row.Id
@@ -556,6 +557,7 @@ namespace SmartCMS.Controllers
                 result.Add(s);
             }
             ViewBag.Categories = result;
+            */
 
             var model = from row in db.Questions
                         where row.CategoryId == id.Value
@@ -569,7 +571,20 @@ namespace SmartCMS.Controllers
                             Hits = row.Hits,
                             AnswerCount = row.Answers.Count(),
                             LastAskedAt = row.LastAskedAt,
+                            BestAnswer = (from a in db.Answers
+                                          where a.QuestionId == row.Id && a.Accepted
+                                          select new AnswerViewModel
+                                          {
+                                              Id = a.Id,
+                                              Adopted = a.Accepted,
+                                              AnswerAt = a.AnswerAt,
+                                              QuestionId = row.Id,
+                                              Likes = a.Likes,
+                                              Unlikes = a.Unlikes,
+                                              Content = a.Content,
+                                          }).FirstOrDefault(),
                         };
+            
             ViewBag.Breadcrumbs = setBreadcrumbs(id.Value);
             return View(model);
         }

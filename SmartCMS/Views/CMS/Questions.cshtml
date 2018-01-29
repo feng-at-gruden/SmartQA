@@ -49,8 +49,10 @@
                         <tbody>
                             @foreach (SmartCMS.Models.QuestionViewModel item in Model)
                     {
+                        var str = item.BestAnswer==null ? "(未解决)" : "";
+                                
                     <tr class="odd">
-                        <td style="text-align: left;"><a href="~/CMS/Question/@item.Id">@Html.DisplayFor(modelItem => item.Question)</a></td>
+                        <td style="text-align: left;"><a href="~/CMS/Question/@item.Id">@Html.DisplayFor(modelItem => item.Question) @str</a></td>
                         <td style="text-align: left;">@Html.DisplayFor(modelItem => item.CategoryName)</td>
                         <td style="text-align: center;">@Html.DisplayFor(modelItem => item.LastAskedAt)</td>
                         <td style="text-align: center;">@Html.DisplayFor(modelItem => item.Hits)</td>

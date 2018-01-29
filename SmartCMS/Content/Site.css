@@ -6,7 +6,7 @@
 
 body {
     background-color: #fff;
-    border-top: solid 10px #000;
+    border-top: solid 15px #13419D;
     color: #333;
     font-size: .85em;
     margin: 0;
@@ -974,8 +974,8 @@ ul.dropdown-menu
 }
 
 .btn-success{
-    background-color: #009EA1 !important;
-    border-color: #097f82  !important;
+    background-color: #184DAD !important;
+    border-color: #13419D  !important;
 }
 
 .copyrights-footer{
@@ -1438,4 +1438,36 @@ hr.question{
 
 .badge{
     background-color: #009ea1 !important;
+}
+
+
+h4.all-category
+{
+    font-size: 14px;
+    color: #666;
+    font-weight: bold;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+header.home
+{
+    height: 95px;
+    background: #184DAD;
+    color: white;
+}
+
+header a{
+    color: white !important;
+}
+
+header.cms
+{
+    height: 136px;
+    background: #184DAD;
+    color: white;
+}
+
+nav a{
+    color:#333 !important;
 }
