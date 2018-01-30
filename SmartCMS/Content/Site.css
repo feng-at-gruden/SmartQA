@@ -1251,7 +1251,7 @@ ul.dropdown-menu
 }
 
 .panel-body .category-item{
-    margin: 10px 10px 10px 10px !important;
+    /*margin: 10px 10px 10px 10px !important;*/
 }
 
 .category-name{
@@ -1265,8 +1265,24 @@ ul.dropdown-menu
 }
 
 .category{
-    margin: 20px 0px 20px 100px;
+    margin: 0px 0px 0px 0px;
     font-size: 15px;
+    display:block;
+    min-height: 120px;
+    /*
+    border:1px solid #ddd;
+    background:#f5f9fb;*/
+   
+}
+.category-block{
+    padding:10px;
+}
+.category-item-root
+{
+    font-size:1.1em;
+}
+.category li{
+    list-style:none; 
 }
 
 .delete-hot-word:hover,

@@ -22,10 +22,12 @@
             </div>
             <div class="panel-body">
         
-                @foreach(SmartCMS.Models.CategoryViewModel category in Model)
-                {
-                    @DisplayCategory(category);           
-                }
+                <div class="row">
+                    @foreach (SmartCMS.Models.CategoryViewModel category in Model)
+                    {
+                        @DisplayCategory(category);
+                    }
+                </div>
             </div>
             <!-- /.panel-body -->
             <div class="panel-footer">
@@ -39,28 +41,31 @@
 @helper DisplayCategory(SmartCMS.Models.CategoryViewModel category)
 {
     var className = category.ParentId == 0 ? "category" : "sub-category";
+    var className2 = category.ParentId == 0 ? "category-block col-md-3" : " ";
     var count = category.PendingQuestionCount > 0 ? new HtmlString("<span class=\"badge\">" + category.PendingQuestionCount + "</span>") : null;
-    <ul class="@className">
-        @if(category.ParentId==0)
-        {
-            <li><a href="~/CMS/Questions/@category.Id" class="category-item-root"><b>@category.Name</b></a>@count</li>
-        }
-        else
-        {
-            <li><a href="~/CMS/Questions/@category.Id" class="category-item">@category.Name</a>@count</li>
-        }
-        
-        @if (category.SubCategories != null)
-        {
+    <div class="@className2">
+        <ul class="@className">
+            @if (category.ParentId == 0)
+            {
+                <li><a href="~/CMS/Questions/@category.Id" class="category-item-root"><b>@category.Name</b></a>@count</li>
+            }
+            else
+            {
+                <li><a href="~/CMS/Questions/@category.Id" class="category-item">@category.Name</a>@count</li>
+            }
+
+            @if (category.SubCategories != null)
+            {
                 foreach (SmartCMS.Models.CategoryViewModel sc in category.SubCategories)
                 {
                     @DisplayCategory(sc);
                 }
-        }
-    </ul>
-    if(category.ParentId==0)
-    { 
-        <hr style="width:500px; margin:10px 0 10px 100px;"/>
+            }
+        </ul>
+    </div>
+    if (category.ParentId == 0)
+    {
+        <!--<hr style="width:500px; margin:10px 0 10px 100px;"/>-->
     }
     
 }
