@@ -361,6 +361,27 @@ namespace SmartCMS.Controllers
 
         public ActionResult EditArticle(int id)
         {
+            var topCategory = from row in db.Categories
+                              where row.ParentCategoryId == 0
+                              orderby row.Id
+                              select new CategoryViewModel
+                              {
+                                  Id = row.Id,
+                                  ParentId = row.ParentCategoryId,
+                                  Name = row.Name,
+                                  Comment = row.Comment,
+                                  PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
+                              };
+
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            for (int i = 0; i < topCategory.Count(); i++)
+            {
+                CategoryViewModel s = topCategory.ToArray()[i];
+                s.SubCategories = setSubCategoires(s);
+                categories.Add(s);
+            }
+            ViewBag.Categories = categories.ToList();
+
             var model = from row in db.Knowledges
                         where row.Id == id
                         select new KnowledgeViewModel
@@ -375,6 +396,7 @@ namespace SmartCMS.Controllers
                             CreatedBy = row.User.RealName,
                             Attachment = row.Attachment,
                         };
+
             ViewBag.Breadcrumbs = setBreadcrumbs(model.SingleOrDefault().CategoryId);
             return View(model.SingleOrDefault());
         }
@@ -385,6 +407,27 @@ namespace SmartCMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                var topCategory = from row in db.Categories
+                                  where row.ParentCategoryId == 0
+                                  orderby row.Id
+                                  select new CategoryViewModel
+                                  {
+                                      Id = row.Id,
+                                      ParentId = row.ParentCategoryId,
+                                      Name = row.Name,
+                                      Comment = row.Comment,
+                                      PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
+                                  };
+
+                List<CategoryViewModel> categories = new List<CategoryViewModel>();
+                for (int i = 0; i < topCategory.Count(); i++)
+                {
+                    CategoryViewModel s = topCategory.ToArray()[i];
+                    s.SubCategories = setSubCategoires(s);
+                    categories.Add(s);
+                }
+                ViewBag.Categories = categories.ToList();
+
                 var c = db.Knowledges.SingleOrDefault(m => m.Id == model.Id);
 
                 //Check and save attachment,
@@ -417,6 +460,11 @@ namespace SmartCMS.Controllers
                 c.Topic = model.Question.Trim();
                 c.Content = model.Answer.Trim();
                 c.Keywords = model.Keywords.Trim();
+                int newCId = int.Parse(Request.Form["NewCategoryId"]);
+                if (newCId > 0 && newCId != c.CategoryId)
+                {
+                    c.CategoryId = newCId;
+                }
                 db.SaveChanges();
 
                 ViewBag.SuccessMessage = "知识修改成功！";

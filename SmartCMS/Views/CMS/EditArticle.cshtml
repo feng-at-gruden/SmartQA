@@ -57,7 +57,19 @@
                                 </span>
                             </div>
                         </div>
+                        @if(ViewBag.Categories != null)
+                        {
+                            var categoris = (List<SmartCMS.Models.CategoryViewModel>)ViewBag.Categories;
 
+                            <div class="form-group">
+                                <select class="form-control" name="NewCategoryId">
+                                    @foreach (var c in categoris)
+                                    {
+                                        @DisplayCategoryOption(Model.CategoryId, c);
+                                    }
+                                </select>
+                            </div>
+                        }
                         <div class="form-group">
                             <div class='input-group date'>
                                 @Html.TextAreaFor(m => m.Answer, new { id = "myEditor", style = "width:698px;height:320px;padding-left:10px;", value = Model.Answer, placeholder = "词条解析或问题解答", maxlength = 1000 })
@@ -117,3 +129,30 @@
             })
 
         </script>
+
+
+@helper DisplayCategoryOption(int id, SmartCMS.Models.CategoryViewModel c)
+{
+    string selected = "";
+    if (c.Id == id)
+    {
+        selected = "selected";
+    }
+
+    if (c.ParentId == 0)
+    {
+        <option value="@c.Id" @selected style="font-weight:bold;">@c.Name</option>
+    }
+    else
+    {
+        <option value="@c.Id" @selected style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@c.Name</option>
+    }
+    var scs = c.SubCategories;
+    if(scs != null )
+    {
+        foreach (var sc in scs)
+        {
+            @DisplayCategoryOption(id, sc);
+        }
+    }
+}
