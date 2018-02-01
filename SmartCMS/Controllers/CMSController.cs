@@ -361,26 +361,7 @@ namespace SmartCMS.Controllers
 
         public ActionResult EditArticle(int id)
         {
-            var topCategory = from row in db.Categories
-                              where row.ParentCategoryId == 0
-                              orderby row.Id
-                              select new CategoryViewModel
-                              {
-                                  Id = row.Id,
-                                  ParentId = row.ParentCategoryId,
-                                  Name = row.Name,
-                                  Comment = row.Comment,
-                                  PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
-                              };
-
-            List<CategoryViewModel> categories = new List<CategoryViewModel>();
-            for (int i = 0; i < topCategory.Count(); i++)
-            {
-                CategoryViewModel s = topCategory.ToArray()[i];
-                s.SubCategories = setSubCategoires(s);
-                categories.Add(s);
-            }
-            ViewBag.Categories = categories.ToList();
+            ViewBag.Categories = getCategories();
 
             var model = from row in db.Knowledges
                         where row.Id == id
@@ -407,26 +388,7 @@ namespace SmartCMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                var topCategory = from row in db.Categories
-                                  where row.ParentCategoryId == 0
-                                  orderby row.Id
-                                  select new CategoryViewModel
-                                  {
-                                      Id = row.Id,
-                                      ParentId = row.ParentCategoryId,
-                                      Name = row.Name,
-                                      Comment = row.Comment,
-                                      PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
-                                  };
-
-                List<CategoryViewModel> categories = new List<CategoryViewModel>();
-                for (int i = 0; i < topCategory.Count(); i++)
-                {
-                    CategoryViewModel s = topCategory.ToArray()[i];
-                    s.SubCategories = setSubCategoires(s);
-                    categories.Add(s);
-                }
-                ViewBag.Categories = categories.ToList();
+                ViewBag.Categories = getCategories();
 
                 var c = db.Knowledges.SingleOrDefault(m => m.Id == model.Id);
 
@@ -584,29 +546,7 @@ namespace SmartCMS.Controllers
 
         public ActionResult Questions(int? id)
         {
-            /*
-            var topCategory = from row in db.Categories
-                        where row.ParentCategoryId == 0
-                        orderby row.Id
-                        select new CategoryViewModel
-                        {
-                            Id = row.Id,
-                            ParentId = row.ParentCategoryId,
-                            Name = row.Name,
-                            Comment = row.Comment,
-                            PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
-                        };
-
-            List<CategoryViewModel> result = new List<CategoryViewModel>();
-            for (int i = 0; i < topCategory.Count(); i++)
-            {
-                CategoryViewModel s = topCategory.ToArray()[i];
-                s.SubCategories = setSubCategoires(s);
-                result.Add(s);
-            }
-            ViewBag.Categories = result;
-            */
-
+            
             var model = from row in db.Questions
                         where row.CategoryId == id.Value
                         orderby row.Hits descending
@@ -751,6 +691,7 @@ namespace SmartCMS.Controllers
                                       }).Take(10);
 
             ViewBag.Breadcrumbs = setBreadcrumbs(q.CategoryId.Value);
+            ViewBag.Categories = getCategories();
             return View(model);
         }
 
@@ -838,7 +779,18 @@ namespace SmartCMS.Controllers
                 }
             }
             return RedirectToAction("Question", new { id = qid });
-        }        
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SmartCMSAuth(Roles = Constants.Roles.ROLE_ADMIN + "," + Constants.Roles.ROLE_CHIEF_EDITOR)]
+        public ActionResult ChangeQuestionCategory(int id, int cid)
+        {
+            var q = db.Questions.SingleOrDefault(m => m.Id == id);
+            q.CategoryId = cid;
+            db.SaveChanges();
+            return RedirectToAction("Question", new { id = id });
+        }
 
         [HttpGet]
         public JsonResult LikeAnswer(int id)
@@ -930,7 +882,29 @@ namespace SmartCMS.Controllers
             return r;
         }
 
+        private List<CategoryViewModel> getCategories()
+        {
+            var topCategory = from row in db.Categories
+                              where row.ParentCategoryId == 0
+                              orderby row.Id
+                              select new CategoryViewModel
+                              {
+                                  Id = row.Id,
+                                  ParentId = row.ParentCategoryId,
+                                  Name = row.Name,
+                                  Comment = row.Comment,
+                                  PendingQuestionCount = db.Questions.Count(m => m.CategoryId == row.Id && m.Answers.Count(k => k.Accepted) == 0),
+                              };
 
+            List<CategoryViewModel> categories = new List<CategoryViewModel>();
+            for (int i = 0; i < topCategory.Count(); i++)
+            {
+                CategoryViewModel s = topCategory.ToArray()[i];
+                s.SubCategories = setSubCategoires(s);
+                categories.Add(s);
+            }
+            return categories;
+        }
 
         #endregion
 

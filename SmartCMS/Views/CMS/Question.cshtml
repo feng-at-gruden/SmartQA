@@ -54,8 +54,19 @@
 
 
             <span class="question-info">@Model.AskedBy.RealName <span class="user-level">@Model.AskedBy.Level</span> |  提问<text>@Model.Hits</text>次</span>
-            <span class="question-info" style="float:right;">分类:<a href="~/CMS/Questions/@Model.CategoryId">@Model.CategoryName</a> |  最近提问时间: @Model.LastAskedAt.Value.ToString("yyyy-MM-dd HH:mm")</span>
-
+            @if (User.IsInRole(Constants.Roles.ROLE_ADMIN)
+              || User.IsInRole(Constants.Roles.ROLE_CHIEF_EDITOR))
+            {
+                <span class="question-info" style="float:right;">分类:<a href="javascript:$('#changeCategory').modal('show');">@Model.CategoryName</a> |  最近提问时间: @Model.LastAskedAt.Value.ToString("yyyy-MM-dd HH:mm")</span>
+                using (Html.BeginForm("ChangeQuestionCategory", "CMS", FormMethod.Post, new { id = "changeCategoryForm", style = "display:none;" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="cid" id="NewPID" value="@Model.CategoryId" />
+                }
+            }else{
+                <span class="question-info" style="float:right;">分类:<a href="~/CMS/Questions/@Model.CategoryId">@Model.CategoryName</a> |  最近提问时间: @Model.LastAskedAt.Value.ToString("yyyy-MM-dd HH:mm")</span>
+            }
             <hr class="question" />
 
             <h3 class="best-answer"><i class="glyphicon glyphicon-ok-circle"></i>最佳回答</h3>
@@ -261,6 +272,37 @@
     </div><!-- /.modal -->
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="changeCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">设置分类</h4>
+            </div>
+            <div class="modal-body">请设置问题分类？</div>
+            
+
+            @if (ViewBag.Categories != null)
+            {
+                var categoris = (List<SmartCMS.Models.CategoryViewModel>)ViewBag.Categories;
+
+                <div class="form-group" style="margin:10px 50px 30px 50px;">
+                    <select class="form-control" name="NewCategoryId" id="NewCategoryId">
+                        @foreach (var c in categoris)
+                        {
+                            @DisplayCategoryOption(Model.CategoryId, c);
+                        }
+                    </select>
+                </div>
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$('#changeCategoryForm').submit();">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <script>
     $(".file").on("change", "input[type='file']", function () {
@@ -298,4 +340,36 @@
         });
         
     });
+
+    $("#NewCategoryId").on("change", function () {
+        var id = $(this).val();
+        $("#NewPID").val(id);
+    });
 </script>
+
+
+@helper DisplayCategoryOption(int id, SmartCMS.Models.CategoryViewModel c)
+{
+    string selected = "";
+    if (c.Id == id)
+    {
+        selected = "selected";
+    }
+
+    if (c.ParentId == 0)
+    {
+        <option value="@c.Id" @selected style="font-weight:bold;">@c.Name</option>
+    }
+    else
+    {
+        <option value="@c.Id" @selected style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@c.Name</option>
+    }
+    var scs = c.SubCategories;
+    if (scs != null)
+    {
+        foreach (var sc in scs)
+        {
+            @DisplayCategoryOption(id, sc);
+        }
+    }
+}
